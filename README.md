@@ -14,7 +14,7 @@ A modern, responsive website for Kafa'ah - an Islamic and Multiproject Company b
 - 🚀 Smooth scroll animations
 
 ## Live Site
-Visit the live site: [https://your-username.github.io/kafaah-website](https://your-username.github.io/kafaah-website)
+Visit the live site: [https://kafaahbd.github.io/frontend](https://your-username.github.io/kafaah-website)
 
 ## Technologies Used
 - React 18
