@@ -175,6 +175,25 @@ export const content: Record<string, Record<string, string>> = {
 		"profile.studyLevel": "Study Level",
 		"profile.group": "Group",
 		"profile.memberSince": "Member Since",
+
+		//verify
+		"verification.verifying": "Verifying your email...",
+		"verification.success": "Email Verified!",
+		"verification.failed": "Verification Failed",
+		"verification.goToLogin": "Go to Login",
+		"modal.registrationSuccess":
+			"Registration successful! Please check your email for verification.",
+		"modal.pleaseVerifyEmail":
+			"Please verify your email before logging in. Check your inbox.",
+		"modal.verificationRequired":
+			"Your email is not verified yet. Please verify your email to continue.",
+		"modal.resendVerification": "Resend Verification Email",
+		"modal.verificationEmailResent":
+			"Verification email sent! Please check your inbox.",
+		"modal.resendFailed":
+			"Failed to resend verification email. Please try again later.",
+		"modal.sending": "Sending...",
+		
 	},
 	bn: {
 		// Navbar
@@ -348,5 +367,22 @@ export const content: Record<string, Record<string, string>> = {
 		"profile.studyLevel": "শিক্ষা স্তর",
 		"profile.group": "গ্রুপ",
 		"profile.memberSince": "সদস্য হন",
+
+		//verify
+		"verification.verifying": "ইমেল ভেরিফাই করা হচ্ছে...",
+		"verification.success": "ইমেল ভেরিফাই হয়েছে!",
+		"verification.failed": "ভেরিফিকেশন ব্যর্থ",
+		"verification.goToLogin": "লগইন পৃষ্ঠায় যান",
+		"modal.registrationSuccess":
+			"রেজিস্ট্রেশন সফল! অনুগ্রহ করে আপনার ইমেল চেক করুন।",
+		"modal.pleaseVerifyEmail": "লগইন করার আগে আপনার ইমেল ভেরিফাই করুন।",
+		"modal.verificationRequired":
+			"আপনার ইমেল এখনও ভেরিফাই করা হয়নি। অনুগ্রহ করে ইমেল ভেরিফাই করে আবার চেষ্টা করুন।",
+		"modal.resendVerification": "ভেরিফিকেশন ইমেল পুনরায় পাঠান",
+		"modal.verificationEmailResent":
+			"ভেরিফিকেশন ইমেল পাঠানো হয়েছে! আপনার ইনবক্স চেক করুন।",
+		"modal.resendFailed":
+			"ভেরিফিকেশন ইমেল পাঠানো ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+		"modal.sending": "পাঠানো হচ্ছে...",
 	},
 };

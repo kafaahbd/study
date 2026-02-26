@@ -1,36 +1,34 @@
 import React, { createContext, useState, useContext, useEffect, useMemo } from "react";
 import axios from "axios";
 
-// interfaces same as before
-
 interface User {
-	id: string;
-	username: string;
-	name: string;
-	email: string;
-	phone?: string;
-	study_level: "SSC" | "HSC";
-	group: "Science" | "Arts" | "Commerce";
-	created_at: string;
+  id: string;
+  username: string;
+  name: string;
+  email: string;
+  phone?: string;
+  study_level: "SSC" | "HSC";
+  group: "Science" | "Arts" | "Commerce";
+  created_at: string;
 }
 
 interface AuthContextType {
-	user: User | null;
-	token: string | null;
-	login: (identifier: string, password: string) => Promise<void>;
-	register: (userData: RegisterData) => Promise<void>;
-	logout: () => void;
-	isLoading: boolean;
+  user: User | null;
+  token: string | null;
+  login: (identifier: string, password: string) => Promise<void>;
+  register: (userData: RegisterData) => Promise<any>;
+  logout: () => void;
+  isLoading: boolean;
 }
 
 interface RegisterData {
-	username: string;
-	name: string;
-	email: string;
-	phone: string;
-	study_level: "SSC" | "HSC";
-	group: "Science" | "Arts" | "Commerce";
-	password: string;
+  username: string;
+  name: string;
+  email: string;
+  phone: string;
+  study_level: "SSC" | "HSC";
+  group: "Science" | "Arts" | "Commerce";
+  password: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -82,7 +80,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(token);
       setUser(user);
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Login failed");
+      // পুরো error response data throw করুন
+      if (error.response?.data) {
+        throw error.response.data;
+      }
+      throw new Error("Login failed");
     } finally {
       setIsLoading(false);
     }
@@ -94,7 +96,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, userData);
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || "Registration failed");
+      if (error.response?.data) {
+        throw error.response.data;
+      }
+      throw new Error("Registration failed");
     } finally {
       setIsLoading(false);
     }

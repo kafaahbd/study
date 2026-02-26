@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { useLanguage } from "./contexts/LanguageContext";
-import { AuthProvider } from "./contexts/AuthContext"; // Add this
+import { AuthProvider } from "./contexts/AuthContext";
 import { Suspense, lazy } from "react";
 
 const Study = lazy(() => import("./pages/Study"));
@@ -10,7 +10,8 @@ const SSCCorner = lazy(() => import("./pages/SSCCorner"));
 const HSCCorner = lazy(() => import("./pages/HSCCorner"));
 const AdmissionCorner = lazy(() => import("./pages/AdmissionCorner"));
 const ExamCenter = lazy(() => import("./pages/ExamCenter"));
-const Profile = lazy(() => import("./pages/Profile")); // Add this
+const Profile = lazy(() => import("./pages/Profile"));
+const VerifyEmail = lazy(() => import("./pages/VerifyEmail")); // ← নতুন ইম্পোর্ট
 
 function App() {
   const { lang } = useLanguage();
@@ -42,6 +43,7 @@ function App() {
               <Route path="/admission" element={<AdmissionCorner />} />
               <Route path="/exam" element={<ExamCenter />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/verify-email" element={<VerifyEmail />} /> {/* ← নতুন রুট */}
             </Routes>
           </Suspense>
         </main>
