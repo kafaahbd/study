@@ -16,7 +16,7 @@ import 'katex/dist/katex.min.css';
   }
 })()
 
-const basename = '/frontend'; // আপনার GitHub Pages রিপোজিটরি নাম
+const basename = '/study'; // আপনার GitHub Pages রিপোজিটরি নাম
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
