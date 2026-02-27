@@ -32,7 +32,7 @@ const Study: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 py-16 px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-16 px-4 transition-colors">
       
       {/* SEO & Meta (Note: Consider using react-helmet) */}
       <title>{lang === "bn" ? "কাফআহ স্টাডি কর্নার | SSC, HSC ও এডমিশন" : "Kafa'ah Study Corner | SSC, HSC & Admission"}</title>

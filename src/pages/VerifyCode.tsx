@@ -83,7 +83,7 @@ const VerifyCode = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-slate-50 dark:bg-gray-950 transition-colors">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-slate-50 dark:bg-gray-800 transition-colors">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

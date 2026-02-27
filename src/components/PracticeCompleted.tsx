@@ -42,7 +42,7 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 py-8 px-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-8 px-4">
       {/* Navigation & Actions */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-8">
         <button onClick={handleBack} className="flex items-center text-green-600 font-bold hover:opacity-75">

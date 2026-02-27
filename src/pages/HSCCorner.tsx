@@ -68,7 +68,7 @@ const HSCCorner: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 py-12 px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-12 px-4 transition-colors">
       <Helmet>
         <title>{lang === "bn" ? "এইচএসসি কর্নার - কাফআহ" : "HSC Corner - Kafa'ah"}</title>
       </Helmet>

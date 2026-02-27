@@ -19,7 +19,7 @@ const ExamMode: React.FC<Props> = ({ state }) => {
   const answeredCount = Object.keys(userAnswers).length;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 py-6 px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-6 px-4 transition-colors">
       
       {/* Sticky Top Header with Timer and Progress */}
       <div className="sticky top-0 z-50 w-full mb-8 pt-2">

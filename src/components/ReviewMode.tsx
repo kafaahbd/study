@@ -43,7 +43,7 @@ const ReviewMode: React.FC<Props> = ({ state }) => {
   const handleBack = () => navigate(-1);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 py-6 px-4 transition-colors duration-500">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-6 px-4 transition-colors duration-500">
       {/* Header Area */}
       <div className="w-[95%] lg:w-[70%] mx-auto flex items-center justify-between mb-8">
         <button 
