@@ -30,7 +30,7 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 	const handleBack = () => navigate(-1);
 
 	return (
-		<div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-6 px-4 sm:px-6">
+		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-6 px-4 sm:px-6">
 			{/* Header Section */}
 			<div className="max-w-3xl mx-auto flex items-center justify-between mb-6">
 				<button

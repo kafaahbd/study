@@ -44,7 +44,7 @@ const ExamCenter: React.FC = () => {
         <Helmet>
           <title>{lang === "bn" ? "সাবজেক্ট পাওয়া যায়নি" : "Subject Not Found"} | Kafa'ah</title>
         </Helmet>
-        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg text-center">
+        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-4">
             {lang === "bn" ? "সাবজেক্ট পাওয়া যায়নি" : "Subject Not Found"}
           </h2>

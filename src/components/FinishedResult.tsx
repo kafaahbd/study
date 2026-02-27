@@ -48,7 +48,7 @@ const FinishedResult: React.FC<Props> = ({ state }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-800 py-8 px-4 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 transition-colors">
       {/* Navigation Layer */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-8 print:hidden">
         <button onClick={handleBack} className="flex items-center text-green-600 font-bold hover:underline">

@@ -31,7 +31,7 @@ const SetupScreen: React.FC<Props> = ({ state }) => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-8 px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 px-4 transition-colors">
       {/* Top Header */}
       <div className="w-[95%] lg:w-[70%] mx-auto flex items-center justify-between mb-8">
         <button onClick={handleBack} className="group flex items-center text-gray-500 hover:text-green-600 transition-colors font-bold">

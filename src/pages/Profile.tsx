@@ -41,7 +41,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-800 py-12 px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-12 px-4 transition-colors">
       <div className="w-[95%] lg:w-[75%] mx-auto">
         
         {/* Header with Title & Action */}

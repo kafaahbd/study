@@ -6,7 +6,7 @@ const NotFound = () => {
   const { t, lang } = useLanguage();
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-slate-50 dark:bg-gray-800 transition-colors overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-slate-50 dark:bg-gray-900 transition-colors overflow-hidden">
       <div className="relative max-w-2xl w-full text-center">
         
         {/* Background Decorative Circles */}
