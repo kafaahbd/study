@@ -4,9 +4,12 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
     plugins: [react()],
     base: "/study/",
-    server: { port: 5173, open: false },
+    server: { 
+        port: 5173, 
+        open: false 
+    },
     build: {
-        chunkSizeWarningLimit: 800, 
+        chunkSizeWarningLimit: 1000, 
         sourcemap: false,
         cssCodeSplit: true,
         rollupOptions: {
@@ -16,33 +19,53 @@ export default defineConfig({
                 entryFileNames: "assets/[name].[hash].js",
                 
                 manualChunks(id) {
+                    // 📦 node_modules splitting
                     if (id.includes("node_modules")) {
-                        // 1. Core React dependencies
-                        if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom") || id.includes("scheduler")) {
+                        
+                        // 1. Core React Engine (High Priority to avoid circular chunks)
+                        if (
+                            id.includes("/react/") || 
+                            id.includes("/react-dom/") || 
+                            id.includes("/react-router/") || 
+                            id.includes("/react-router-dom/") ||
+                            id.includes("/scheduler/")
+                        ) {
                             return "react-core";
                         }
-                        // 2. Heavy animations (Framer Motion)
+
+                        // 2. Math & Physics Rendering (Latex)
+                        if (id.includes("katex") || id.includes("react-latex-next")) {
+                            return "math-render";
+                        }
+
+                        // 3. Animations
                         if (id.includes("framer-motion")) {
                             return "animations";
                         }
-                        // 3. API & Utilities
+
+                        // 4. API & Utilities
                         if (id.includes("axios")) {
-                            return "network-layer";
+                            return "network";
                         }
-                        // 4. Large specific libraries
-                        if (id.includes("html2pdf.js")) {
+
+                        // 5. PDF Generation
+                        if (id.includes("html2pdf.js") || id.includes("html2pdf")) {
                             return "pdf-gen";
                         }
-                        // 5. Everything else from node_modules
+
+                        // 6. Default Vendor for other small libraries
                         return "vendor";
                     }
 
-                    // 🔥 Pages Splitting - Dynamic chunks for internal routes
+                    // 🔥 Pages Splitting - Internal Route Optimization
                     if (id.includes("src/pages/")) {
-                        const pageName = id.split("src/pages/")[1].split(".")[0].toLowerCase();
+                        // ফাইলপাথ থেকে পেজের নাম বের করা
+                        const pathParts = id.split("src/pages/")[1].split("/");
+                        const pageName = pathParts[pathParts.length - 1].split(".")[0].toLowerCase();
                         
-                        // নির্দিষ্ট বড় পেজগুলো আলাদা নাম পাবে
-                        if (["study", "ssccorner", "hsccorner", "admissioncorner", "examcenter", "profile"].includes(pageName)) {
+                        const mainPages = ["study", "ssccorner", "hsccorner", "admissioncorner", "examcenter", "profile", "verifyemail", "verifycode"];
+                        
+                        if (mainPages.includes(pageName)) {
                             return `pg-${pageName}`;
                         }
                         return "pages-common";
@@ -50,15 +73,26 @@ export default defineConfig({
                 },
             },
         },
-        minify: "terser", // Terser ব্যবহারে কোড আরও ছোট হয় (ইন্সটল না থাকলে esbuild রাখতে পারেন)
+        // Terser ব্যবহার করলে এটি নিশ্চিত করুন যে 'terser' ইনস্টল করা আছে
+        // npm install -D terser
+        minify: "terser", 
         terserOptions: {
           compress: {
-            drop_console: true, // প্রোডাকশনে কনসোল লগ রিমুভ করবে
+            drop_console: true, 
             drop_debugger: true,
           },
-        },
+        } as any, 
     },
     optimizeDeps: {
-        include: ["react", "react-dom", "react-router-dom", "react-helmet-async", "framer-motion", "axios"],
+        include: [
+            "react", 
+            "react-dom", 
+            "react-router-dom", 
+            "react-helmet-async", 
+            "framer-motion", 
+            "axios",
+            "katex",
+            "react-latex-next"
+        ],
     },
 });
