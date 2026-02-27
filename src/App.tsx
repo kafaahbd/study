@@ -25,41 +25,20 @@ const PageLoader = () => {
   const { lang } = useLanguage();
   
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-white/80 dark:bg-gray-950/80 backdrop-blur-md"
-    >
-      <div className="relative flex items-center justify-center">
-        {/* Outer Ring */}
-        <div className="h-24 w-24 rounded-full border-4 border-gray-100 dark:border-gray-800"></div>
-        {/* Animated Ring */}
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-          className="absolute h-24 w-24 rounded-full border-t-4 border-green-500 dark:border-blue-500"
-        ></motion.div>
-        {/* Logo/Icon in Center */}
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute"
-        >
-          <div className="h-4 w-4 bg-green-500 dark:bg-blue-500 rounded-full shadow-[0_0_15px_rgba(34,197,94,0.5)]"></div>
-        </motion.div>
+   
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="relative">
+        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-green-600 dark:border-blue-400"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="h-4 w-4 bg-green-600 dark:bg-blue-400 rounded-full animate-pulse"></div>
+        </div>
+        <p className="text-center mt-4 text-gray-600 dark:text-gray-400 font-medium">
+          {lang === 'bn' ? 'পৃষ্ঠা লোড হচ্ছে...' : 'Loading page...'}
+        </p>
       </div>
-      
-      <motion.p 
-        initial={{ y: 10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="mt-8 text-sm font-black uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400 animate-pulse"
-      >
-        {lang === "bn" ? "প্রক্রিয়াধীন..." : "Processing..."}
-      </motion.p>
-    </motion.div>
+    </div>
   );
+  
 };
 
 function App() {
