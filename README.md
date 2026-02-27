@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# frontend
-=======
 # Kafa'ah Islamic and Multiproject Company Website
 
 A modern, responsive website for Kafa'ah - an Islamic and Multiproject Company built with React, Vite, and Tailwind CSS.
@@ -64,4 +61,3 @@ npm install gh-pages --save-dev
 
 # Step 7: Deploy to GitHub Pages
 npm run deploy
->>>>>>> 64b197a (Initial commit - Kafa'ah website)

@@ -211,6 +211,12 @@ export const content: Record<string, Record<string, string>> = {
 
 		"modal.enterCode": "Enter verification code",
 		"modal.noAccount": "Don't have an account?",
+
+		//not found
+		"notFound.title": "Page Not Found",
+		"notFound.message":
+			"The page you are looking for does not exist or has been moved.",
+		"notFound.goHome": "Go Home",
 	},
 	bn: {
 		// Navbar
@@ -419,5 +425,11 @@ export const content: Record<string, Record<string, string>> = {
 
 		"modal.enterCode": "ভেরিফিকেশন কোড দিন",
 		"modal.noAccount": "একাউন্ট নেই?",
+
+		//not found
+		"notFound.title": "পৃষ্ঠা পাওয়া যায়নি",
+		"notFound.message":
+			"আপনি যে পৃষ্ঠাটি খুঁজছেন তা বিদ্যমান নয় বা স্থানান্তরিত হয়েছে।",
+		"notFound.goHome": "হোম পৃষ্ঠায় যান",
 	},
 };

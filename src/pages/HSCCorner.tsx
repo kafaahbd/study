@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import ScrollAnimation from "../components/ScrollAnimation";
-import { Helmet } from "react-helmet-async"; // ← ইম্পোর্ট যোগ করুন
+import { Helmet } from "react-helmet-async";
+import { motion } from "framer-motion";
 
-// টাইপ ডিফিনেশন
 interface Subject {
   name: string;
   path: string;
@@ -13,6 +13,7 @@ interface Group {
   name: string;
   icon: string;
   subjects: Subject[];
+  gradient: string;
 }
 
 const HSCCorner: React.FC = () => {
@@ -22,6 +23,7 @@ const HSCCorner: React.FC = () => {
     {
       name: t("study.hsc.common"),
       icon: "📚",
+      gradient: "from-blue-600 to-indigo-700",
       subjects: [
         { name: t("study.hsc.subjects.bangla"), path: "/exam?group=hsc&subject=bangla" },
         { name: t("study.hsc.subjects.english"), path: "/exam?group=hsc&subject=english" },
@@ -31,6 +33,7 @@ const HSCCorner: React.FC = () => {
     {
       name: t("study.hsc.science"),
       icon: "🔬",
+      gradient: "from-emerald-600 to-teal-700",
       subjects: [
         { name: t("study.hsc.subjects.physics"), path: "/exam?group=hsc&subject=physics" },
         { name: t("study.hsc.subjects.chemistry"), path: "/exam?group=hsc&subject=chemistry" },
@@ -41,6 +44,7 @@ const HSCCorner: React.FC = () => {
     {
       name: t("study.hsc.arts"),
       icon: "🎨",
+      gradient: "from-orange-500 to-red-600",
       subjects: [
         { name: t("study.hsc.subjects.history"), path: "/exam?group=hsc&subject=history" },
         { name: t("study.hsc.subjects.islamic"), path: "/exam?group=hsc&subject=islamic" },
@@ -52,6 +56,7 @@ const HSCCorner: React.FC = () => {
     {
       name: t("study.hsc.commerce"),
       icon: "💼",
+      gradient: "from-sky-600 to-blue-700",
       subjects: [
         { name: t("study.hsc.subjects.accounting"), path: "/exam?group=hsc&subject=accounting" },
         { name: t("study.hsc.subjects.management"), path: "/exam?group=hsc&subject=management" },
@@ -63,76 +68,72 @@ const HSCCorner: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-geometric-light dark:bg-geometric-dark py-16 px-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 py-12 px-4 transition-colors">
       <Helmet>
-        {lang === "bn" ? (
-          <>
-            <title>এইচএসসি কর্নার - কাফআহ | বিজ্ঞান, মানবিক ও বাণিজ্য গ্রুপ</title>
-            <meta
-              name="description"
-              content="এইচএসসি পরীক্ষার্থীদের জন্য পদার্থ, রসায়ন, জীববিজ্ঞান, হিসাববিজ্ঞান, অর্থনীতি ইত্যাদি বিষয়ের অধ্যায়ভিত্তিক টেস্ট।"
-            />
-            <meta property="og:title" content="এইচএসসি কর্নার - কাফআহ" />
-            <meta property="og:description" content="এইচএসসির সব গ্রুপের জন্য অধ্যায়ভিত্তিক মডেল টেস্ট।" />
-          </>
-        ) : (
-          <>
-            <title>HSC Corner - Kafa'ah | Science, Arts & Commerce Groups</title>
-            <meta
-              name="description"
-              content="Chapter-wise tests for HSC examinees: Physics, Chemistry, Biology, Accounting, Economics, and more."
-            />
-            <meta property="og:title" content="HSC Corner - Kafa'ah" />
-            <meta property="og:description" content="Chapter-wise model tests for all HSC groups." />
-          </>
-        )}
-        <meta property="og:url" content="https://kafaahbd.github.io/study-corner/hsc" />
+        <title>{lang === "bn" ? "এইচএসসি কর্নার - কাফআহ" : "HSC Corner - Kafa'ah"}</title>
       </Helmet>
 
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
+      <div className="w-[95%] lg:w-[95%] mx-auto">
+        {/* Header Section */}
+        <header className="mb-12">
           <Link
             to="/"
-            className="inline-flex items-center text-green-600 dark:text-blue-400 hover:underline mb-4"
+            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-6"
           >
-            <i className="fas fa-arrow-left mr-2"></i>
+            <i className="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
             {t("study.back")}
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            {t("study.hsc.title")}
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
-            {t("study.hsc.subtitle")}
-          </p>
-        </div>
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-8">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">
+                {t("study.hsc.title")}
+              </h1>
+              <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">
+                {t("study.hsc.subtitle")}
+              </p>
+            </div>
+            {/* Live Indicator Badge */}
+            <div className="flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-black uppercase tracking-widest border border-blue-200 dark:border-blue-800">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              </span>
+              Academic 2026
+            </div>
+          </div>
+        </header>
 
         {/* Groups Grid */}
         <div className="grid lg:grid-cols-2 gap-8">
           {groups.map((group, groupIdx) => (
             <ScrollAnimation key={groupIdx}>
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-                {/* Group Header */}
-                <div className="bg-green-600 dark:bg-blue-700 p-4 text-white">
-                  <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{group.icon}</span>
-                    <h2 className="text-xl font-bold">{group.name}</h2>
+              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col">
+                
+                {/* Group Header with Gradient */}
+                <div className={`bg-gradient-to-br ${group.gradient} p-6 text-white`}>
+                  <div className="flex items-center space-x-4">
+                    <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl shadow-inner">
+                      {group.icon}
+                    </div>
+                    <h2 className="text-2xl font-black tracking-tight">{group.name}</h2>
                   </div>
                 </div>
 
                 {/* Subjects List */}
-                <div className="p-4">
+                <div className="p-6 space-y-3 flex-grow">
                   {group.subjects.map((subject, subIdx) => (
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      target="_self"
-                      className="w-full text-left px-4 py-3 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition flex items-center justify-between group border-b border-gray-100 dark:border-gray-700 last:border-0"
+                      className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent hover:border-blue-500/20 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub"
                     >
-                      <span className="text-gray-700 dark:text-gray-300 group-hover:text-green-600 dark:group-hover:text-blue-400">
+                      <span className="font-bold text-gray-700 dark:text-gray-300 group-hover/sub:text-blue-600 dark:group-hover/sub:text-blue-400 transition-colors">
                         {subject.name}
                       </span>
-                      <i className="fas fa-arrow-right text-gray-400 group-hover:text-green-600 dark:group-hover:text-blue-400 text-sm"></i>
+                      <div className="w-8 h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm group-hover/sub:bg-blue-600 group-hover/sub:text-white transition-all">
+                        <i className="fas fa-chevron-right text-[10px]"></i>
+                      </div>
                     </Link>
                   ))}
                 </div>
@@ -141,15 +142,38 @@ const HSCCorner: React.FC = () => {
           ))}
         </div>
 
-        {/* Info Box */}
-        <div className="mt-12 bg-green-50 dark:bg-blue-900/20 border border-green-200 dark:border-blue-800 rounded-2xl p-6 text-center">
-          <i className="fas fa-info-circle text-green-600 dark:text-blue-400 text-3xl mb-3"></i>
-          <p className="text-gray-700 dark:text-gray-300">
-            {lang === "bn"
-              ? "এইচএসসি প্রতিটি সাবজেক্টের জন্য কন্টেন্ট খুব শীঘ্রই যোগ করা হবে ইনশাআল্লাহ। বর্তমানে লিঙ্কগুলো খালি আছে, যা পরবর্তীতে আপডেট করা হবে"
-              : "Content for each HSC subject will be added very soon InshaAllah. Currently the links are empty which will be updated later."}
-          </p>
-        </div>
+        {/* Improved Support Box */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-900 dark:to-black rounded-[2.5rem] p-8 md:p-12 text-center relative overflow-hidden shadow-2xl"
+        >
+          {/* Decorative background circle */}
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+          
+          <div className="relative z-10">
+            <div className="w-20 h-20 bg-blue-500/20 text-blue-400 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 border border-blue-500/30">
+              <i className="fas fa-rocket"></i>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-black text-white mb-4 uppercase tracking-tight">
+              {lang === "bn" ? "নতুন কন্টেন্ট আসছে!" : "New Content Coming Soon!"}
+            </h3>
+            <p className="text-gray-400 font-medium max-w-2xl mx-auto mb-8">
+              {lang === "bn"
+                ? "ইনশাআল্লাহ্, এইচএসসি-র প্রতিটি বিষয়ের প্রশ্নব্যাংক এবং মডেল টেস্ট দ্রুত আপডেট করা হচ্ছে। আমাদের সাথেই থাকুন।"
+                : "InshaAllah, question banks and model tests for every HSC subject are being updated rapidly. Stay tuned with us."}
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <div className="px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-xs font-bold tracking-widest uppercase">
+                Free Access
+              </div>
+              <div className="px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-xs font-bold tracking-widest uppercase">
+                Interactive Tests
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import ScrollAnimation from "../components/ScrollAnimation";
 import { Helmet } from "react-helmet-async";
+import { motion } from "framer-motion";
 
-// টাইপ ডিফিনেশন
 interface Subject {
   name: string;
   path: string;
@@ -12,8 +12,8 @@ interface Subject {
 interface Category {
   name: string;
   icon: string;
-  color: string;
-  hoverColor: string;
+  gradient: string;
+  accent: string;
   subjects: Subject[];
 }
 
@@ -24,8 +24,8 @@ const AdmissionCorner: React.FC = () => {
     {
       name: t("study.admission.engineering"),
       icon: "⚙️",
-      color: "bg-blue-600",
-      hoverColor: "hover:text-blue-600 dark:hover:text-blue-400",
+      gradient: "from-blue-600 to-cyan-600",
+      accent: "text-blue-600 dark:text-blue-400",
       subjects: [
         { name: t("study.admission.physics"), path: "/exam?group=admission&subject=engineering-physics" },
         { name: t("study.admission.chemistry"), path: "/exam?group=admission&subject=engineering-chemistry" },
@@ -36,8 +36,8 @@ const AdmissionCorner: React.FC = () => {
     {
       name: t("study.admission.medical"),
       icon: "🏥",
-      color: "bg-red-600",
-      hoverColor: "hover:text-red-600 dark:hover:text-red-400",
+      gradient: "from-red-500 to-rose-600",
+      accent: "text-red-600 dark:text-red-400",
       subjects: [
         { name: t("study.admission.physics"), path: "/exam?group=admission&subject=medical-physics" },
         { name: t("study.admission.chemistry"), path: "/exam?group=admission&subject=medical-chemistry" },
@@ -49,8 +49,8 @@ const AdmissionCorner: React.FC = () => {
     {
       name: t("study.admission.university"),
       icon: "🏛️",
-      color: "bg-purple-600",
-      hoverColor: "hover:text-purple-600 dark:hover:text-purple-400",
+      gradient: "from-purple-600 to-fuchsia-600",
+      accent: "text-purple-600 dark:text-purple-400",
       subjects: [
         { name: t("study.admission.bangla"), path: "/exam?group=admission&subject=university-bangla" },
         { name: t("study.admission.english"), path: "/exam?group=admission&subject=university-english" },
@@ -62,89 +62,83 @@ const AdmissionCorner: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-geometric-light dark:bg-geometric-dark py-16 px-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 py-12 px-4 transition-colors">
       <Helmet>
-        {lang === "bn" ? (
-          <>
-            <title>এডমিশন কর্নার - কাফআহ | ইঞ্জিনিয়ারিং, মেডিকেল ও বিশ্ববিদ্যালয়</title>
-            <meta
-              name="description"
-              content="ইঞ্জিনিয়ারিং, মেডিকেল ও বিশ্ববিদ্যালয় ভর্তি পরীক্ষার প্রস্তুতির জন্য অধ্যায়ভিত্তিক মডেল টেস্ট।"
-            />
-            <meta property="og:title" content="এডমিশন কর্নার - কাফআহ" />
-            <meta property="og:description" content="ইঞ্জিনিয়ারিং, মেডিকেল ও বিশ্ববিদ্যালয় ভর্তি পরীক্ষার প্রস্তুতি।" />
-          </>
-        ) : (
-          <>
-            <title>Admission Corner - Kafa'ah | Engineering, Medical & University</title>
-            <meta
-              name="description"
-              content="Chapter-wise model tests for Engineering, Medical, and University admission exams."
-            />
-            <meta property="og:title" content="Admission Corner - Kafa'ah" />
-            <meta property="og:description" content="Preparation for Engineering, Medical, and University admission exams." />
-          </>
-        )}
-        <meta property="og:url" content="https://kafaahbd.github.io/study-corner/admission" />
+        <title>{lang === "bn" ? "এডমিশন কর্নার - কাফআহ" : "Admission Corner - Kafa'ah"}</title>
       </Helmet>
 
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
+      <div className="w-[95%] lg:w-[95%] mx-auto">
+        {/* Header Section */}
+        <header className="mb-16">
           <Link
             to="/"
-            className="inline-flex items-center text-green-600 dark:text-blue-400 hover:underline mb-4"
+            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-6"
           >
-            <i className="fas fa-arrow-left mr-2"></i>
+            <i className="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
             {t("study.back")}
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            {t("study.admission.title")}
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
-            {t("study.admission.subtitle")}
-          </p>
-        </div>
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 dark:border-gray-800 pb-10 text-center md:text-left">
+            <div>
+              <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
+                {t("study.admission.title")}
+              </h1>
+              <p className="text-xl text-gray-600 dark:text-gray-400 font-medium">
+                {t("study.admission.subtitle")}
+              </p>
+            </div>
+            <div className="hidden md:flex flex-col items-end">
+              <span className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Status</span>
+              <div className="px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm flex items-center gap-2">
+                <span className="h-2 w-2 bg-amber-500 rounded-full animate-pulse"></span>
+                <span className="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-tighter uppercase">Curriculum 2026 Ready</span>
+              </div>
+            </div>
+          </div>
+        </header>
 
         {/* Categories Grid */}
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
-          {categories.map((category, catIdx) => (
-            <ScrollAnimation key={catIdx}>
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition h-full">
-                <div className={`${category.color} p-4 text-white`}>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{category.icon}</span>
-                    <h2 className="text-xl font-bold">{category.name}</h2>
+        <div className="grid lg:grid-cols-3 gap-8">
+          {categories.map((category, idx) => (
+            <ScrollAnimation key={idx}>
+              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-green-500/30 transition-all duration-500 h-full flex flex-col">
+                
+                {/* Header */}
+                <div className={`bg-gradient-to-br ${category.gradient} p-8 text-white relative`}>
+                  <div className="absolute top-0 right-0 p-6 opacity-20 text-6xl transform group-hover:scale-110 transition-transform">
+                    {category.icon}
+                  </div>
+                  <div className="relative z-10">
+                    <span className="text-sm font-black uppercase tracking-[0.2em] opacity-80 mb-2 block">Admission</span>
+                    <h2 className="text-2xl font-black">{category.name}</h2>
                   </div>
                 </div>
-                <div className="p-4">
-                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
-                    {catIdx === 0
-                      ? t("study.admission.engineering.subjects")
-                      : catIdx === 1
-                      ? t("study.admission.medical.subjects")
-                      : t("study.admission.university.subjects")}
-                  </h3>
+
+                {/* Subjects List */}
+                <div className="p-6 space-y-2 flex-grow">
                   {category.subjects.map((subject, subIdx) => (
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      target="_self"
-                      className={`w-full text-left px-4 py-3 hover:bg-green-50 dark:hover:bg-gray-700 rounded-lg transition flex items-center justify-between group border-b border-gray-100 dark:border-gray-700 last:border-0 ${category.hoverColor}`}
+                      className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-800 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-md transition-all group/sub"
                     >
-                      <span className="text-gray-700 dark:text-gray-300 group-hover:text-inherit">
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 group-hover/sub:${category.accent.split(' ')[0]} transition-colors`}>
                         {subject.name}
                       </span>
-                      <i className="fas fa-arrow-right text-gray-400 group-hover:text-inherit text-sm"></i>
+                      <i className={`fas fa-chevron-right text-[10px] text-gray-300 group-hover/sub:${category.accent.split(' ')[0]}`}></i>
                     </Link>
                   ))}
                 </div>
-                <div className="px-4 pb-4">
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm text-gray-600 dark:text-gray-400">
-                    <i className="fas fa-clock mr-2"></i>
-                    {lang === "bn"
-                      ? "মডেল টেস্ট ও লেকচার শীট শীঘ্রই আসছে"
-                      : "Model tests & lecture sheets coming soon"}
+
+                {/* Coming Soon Badge */}
+                <div className="px-6 pb-6">
+                  <div className="bg-gray-50 dark:bg-gray-800/80 rounded-2xl p-3 flex items-center gap-3 border border-gray-100 dark:border-gray-700">
+                    <div className={`w-8 h-8 rounded-xl bg-white dark:bg-gray-900 shadow-sm flex items-center justify-center ${category.accent}`}>
+                      <i className="fas fa-bolt text-xs"></i>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-tighter text-gray-500 dark:text-gray-400">
+                      Tests & Sheets coming soon
+                    </span>
                   </div>
                 </div>
               </div>
@@ -152,44 +146,38 @@ const AdmissionCorner: React.FC = () => {
           ))}
         </div>
 
-        {/* Features Section */}
-        <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="bg-green-50 dark:bg-blue-900/20 p-6 rounded-xl text-center">
-            <i className="fas fa-calendar-alt text-green-600 dark:text-blue-400 text-3xl mb-3"></i>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-              {lang === "bn" ? "এডমিশন ক্যালেন্ডার" : "Admission Calendar"}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {lang === "bn" ? "শীঘ্রই আসছে" : "Coming soon"}
-            </p>
-          </div>
-          <div className="bg-green-50 dark:bg-blue-900/20 p-6 rounded-xl text-center">
-            <i className="fas fa-question-circle text-green-600 dark:text-blue-400 text-3xl mb-3"></i>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-              {lang === "bn" ? "মডেল টেস্ট" : "Model Tests"}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {lang === "bn" ? "শীঘ্রই আসছে" : "Coming soon"}
-            </p>
-          </div>
-          <div className="bg-green-50 dark:bg-blue-900/20 p-6 rounded-xl text-center">
-            <i className="fas fa-chart-line text-green-600 dark:text-blue-400 text-3xl mb-3"></i>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-              {lang === "bn" ? "রেজাল্ট অ্যানালাইসিস" : "Result Analysis"}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {lang === "bn" ? "শীঘ্রই আসছে" : "Coming soon"}
-            </p>
-          </div>
+        {/* Feature Highlights */}
+        <div className="mt-20 grid md:grid-cols-3 gap-6">
+          {[
+            { icon: "fa-calendar-check", label: lang === 'bn' ? "এডমিশন ক্যালেন্ডার" : "Calendar", color: "text-blue-500" },
+            { icon: "fa-vial", label: lang === 'bn' ? "লাইভ মডেল টেস্ট" : "Live Tests", color: "text-purple-500" },
+            { icon: "fa-chart-pie", label: lang === 'bn' ? "পারফরম্যান্স রিপোর্ট" : "Analysis", color: "text-emerald-500" },
+          ].map((feature, i) => (
+            <motion.div 
+              key={i}
+              whileHover={{ y: -5 }}
+              className="bg-white dark:bg-gray-900 p-8 rounded-[2rem] border border-gray-100 dark:border-gray-800 flex items-center gap-6 shadow-sm"
+            >
+              <div className={`w-14 h-14 rounded-2xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-xl ${feature.color}`}>
+                <i className={`fas ${feature.icon}`}></i>
+              </div>
+              <div>
+                <h3 className="font-black text-gray-900 dark:text-white uppercase tracking-tighter">{feature.label}</h3>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest italic">Upcoming</span>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Info Box */}
-        <div className="mt-12 bg-green-50 dark:bg-blue-900/20 border border-green-200 dark:border-blue-800 rounded-2xl p-6 text-center">
-          <i className="fas fa-info-circle text-green-600 dark:text-blue-400 text-3xl mb-3"></i>
-          <p className="text-gray-700 dark:text-gray-300">
-            {lang === "bn"
-              ? "ইঞ্জিনিয়ারিং, মেডিকেল ও ইউনিভার্সিটি এডমিশনের জন্য সম্পূর্ণ প্রস্তুতি খুব শীঘ্রই আসছে ইনশাআল্লাহ। বর্তমানে লিঙ্কগুলো খালি আছে, যা পরবর্তীতে আপডেট করা হবে ।"
-              : "Complete preparation for Engineering, Medical, and University Admission will be available very soon InshaAllah. Currently the links are empty which will be updated later."}
+        {/* Support Note */}
+        <div className="mt-16 bg-green-50/50 dark:bg-blue-900/10 rounded-[2.5rem] p-10 border border-green-100 dark:border-blue-900/30 text-center">
+          <div className="w-16 h-16 bg-white dark:bg-gray-900 rounded-3xl flex items-center justify-center text-2xl mx-auto mb-6 shadow-sm">
+             <i className="fas fa-info-circle text-green-600 dark:text-blue-400"></i>
+          </div>
+          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 font-medium max-w-3xl mx-auto leading-relaxed italic">
+            "{lang === "bn"
+              ? "ইঞ্জিনিয়ারিং, মেডিকেল ও ইউনিভার্সিটি এডমিশনের জন্য সম্পূর্ণ প্রস্তুতি খুব শীঘ্রই আসছে ইনশাআল্লাহ।"
+              : "Complete preparation for Engineering, Medical, and University Admission will be available very soon InshaAllah."}"
           </p>
         </div>
       </div>

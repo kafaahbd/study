@@ -39,6 +39,8 @@ export default defineConfig({
 					if (id.includes("src/pages/HSCCorner")) return "hsc";
 					if (id.includes("src/pages/AdmissionCorner")) return "admission";
 					if (id.includes("src/pages/ExamCenter")) return "exam";
+
+					if (id.includes("src/pages/Profile")) return "profile";
 				},
 				chunkFileNames: "assets/[name].[hash].js",
 				entryFileNames: "assets/[name].[hash].js",
