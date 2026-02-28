@@ -3,7 +3,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { getUserStats } from '../services/examService';
+import { getUserExamHistory } from '../services/examService';
 
 const Profile = () => {
   const { user, isLoading, logout } = useAuth();
@@ -17,7 +17,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const data = await getUserStats();
+        const data = await getUserExamHistory();
         setStats(data);
       } catch (err) {
         console.error("Error fetching stats:", err);

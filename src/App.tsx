@@ -6,6 +6,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+
 // কম্পোনেন্ট ইম্পোর্ট
 import VerifyCode from "./pages/VerifyCode";
 import Login from "./pages/Login";
@@ -19,6 +20,8 @@ const AdmissionCorner = lazy(() => import("./pages/AdmissionCorner"));
 const ExamCenter = lazy(() => import("./pages/ExamCenter"));
 const Profile = lazy(() => import("./pages/Profile"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
+const Dashboard = lazy(()=> import("./pages/Dashboard"))
+
 
 // প্রিমিয়াম পেজ লোডার
 const PageLoader = () => {
@@ -72,6 +75,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="*" element={<NotFound />} />
+                  <Route path="/dashboard" element={<Dashboard/>}/>
                 </Routes>
               </motion.div>
             </AnimatePresence>

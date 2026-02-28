@@ -14,15 +14,16 @@ export default defineConfig({
         cssCodeSplit: true,
         rollupOptions: {
             output: {
+                // ফাইল নেমিং স্ট্রাকচার
                 assetFileNames: "assets/[name].[hash].[ext]",
                 chunkFileNames: "assets/[name].[hash].js",
                 entryFileNames: "assets/[name].[hash].js",
                 
                 manualChunks(id) {
-                    // 📦 node_modules splitting
+                    // 📦 ১. লাইব্রেরি বা node_modules বিভাজন (Vendor Splitting)
                     if (id.includes("node_modules")) {
                         
-                        // 1. Core React Engine (High Priority to avoid circular chunks)
+                        // React Core
                         if (
                             id.includes("/react/") || 
                             id.includes("/react-dom/") || 
@@ -33,52 +34,46 @@ export default defineConfig({
                             return "react-core";
                         }
 
-                        // 2. Math & Physics Rendering (Latex)
+                        // Math & Latex Rendering
                         if (id.includes("katex") || id.includes("react-latex-next")) {
                             return "math-render";
                         }
 
-                        // 3. Animations
+                        // Animations
                         if (id.includes("framer-motion")) {
                             return "animations";
                         }
 
-                        // 4. API & Utilities
-                        if (id.includes("axios")) {
-                            return "network";
-                        }
+                        // Networking & PDF
+                        if (id.includes("axios")) return "network";
+                        if (id.includes("html2pdf.js") || id.includes("html2pdf")) return "pdf-gen";
 
-                        // 5. PDF Generation
-                        if (id.includes("html2pdf.js") || id.includes("html2pdf")) {
-                            return "pdf-gen";
-                        }
-
-                        // 6. Default Vendor for other small libraries
+                        // অন্যান্য ছোট লাইব্রেরিগুলো 'vendor' এ যাবে
                         return "vendor";
                     }
 
-                    // 🔥 Pages Splitting - Internal Route Optimization
+                    // 🔥 ২. পেজ বিভাজন (Internal Route Optimization)
                     if (id.includes("src/pages/")) {
-                        // ফাইলপাথ থেকে পেজের নাম বের করা
+                        // পাথ থেকে ফাইলের নাম বের করা
                         const pathParts = id.split("src/pages/")[1].split("/");
-                        const pageName = pathParts[pathParts.length - 1].split(".")[0].toLowerCase();
+                        const fileName = pathParts[pathParts.length - 1].split(".")[0].toLowerCase();
                         
-                        const mainPages = ["study", "ssccorner", "hsccorner", "admissioncorner", "examcenter", "profile", "verifyemail", "verifycode"];
-                        
-                        if (mainPages.includes(pageName)) {
-                            return `pg-${pageName}`;
+                        // নির্দিষ্টভাবে ExamCenter কে আলাদা চাঙ্ক 'pg-examcenter' এ রাখা হচ্ছে
+                        if (fileName === "examcenter") {
+                            return "pg-examcenter";
                         }
+                        
+                        // বাকি সব পেজকে (Home, Profile, Dashboard ইত্যাদি) 'pages-common' এ রাখা হচ্ছে
                         return "pages-common";
                     }
                 },
             },
         },
-        // Terser ব্যবহার করলে এটি নিশ্চিত করুন যে 'terser' ইনস্টল করা আছে
-        // npm install -D terser
+        // কোড ছোট (Minify) করার জন্য Terser ব্যবহার
         minify: "terser", 
         terserOptions: {
           compress: {
-            drop_console: true, 
+            drop_console: true, // প্রোডাকশন বিল্ডে কনসোল লগ রিমুভ করবে
             drop_debugger: true,
           },
         } as any, 
