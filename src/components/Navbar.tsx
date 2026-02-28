@@ -7,7 +7,9 @@ import { motion } from 'framer-motion';
 
 const Navbar: React.FC = () => {
   const { t } = useLanguage();
-  const { user, logout } = useAuth();
+  
+  // ১. logout এর সাথে confirmLogout ফাংশনটি নিয়ে আসলাম
+  const { user, confirmLogout } = useAuth();
 
   return (
     <>
@@ -60,7 +62,8 @@ const Navbar: React.FC = () => {
 
                   {/* Logout Button */}
                   <button
-                    onClick={logout}
+                    // ২. এখানে logout এর বদলে confirmLogout কল করা হয়েছে
+                    onClick={confirmLogout}
                     className="flex items-center justify-center h-9 w-9 md:h-10 md:w-auto md:px-5 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 rounded-xl font-bold text-sm hover:bg-red-600 hover:text-white dark:hover:bg-red-500 transition-all active:scale-95"
                     title={t('nav.logout')}
                   >

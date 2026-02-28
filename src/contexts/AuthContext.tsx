@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useMemo } from "react";
 import axios from "axios";
+// ১. এখানে LogoutModal ইম্পোর্ট করতে হবে (বানাচ্ছেন যেটা)
+import LogoutModal from "../components/LogoutModal"; 
 
 interface User {
   id: string;
@@ -18,6 +20,7 @@ interface AuthContextType {
   login: (identifier: string, password: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<any>;
   logout: () => void;
+  confirmLogout: () => void; // ২. নতুন ফাংশন ইন্টারফেসে যোগ হলো
   isLoading: boolean;
 }
 
@@ -37,6 +40,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [isLoading, setIsLoading] = useState(false);
+  
+  // ৩. পপ-আপ দেখানোর জন্য স্টেট
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const api = useMemo(() => {
     const instance = axios.create({
@@ -80,7 +86,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(token);
       setUser(user);
     } catch (error: any) {
-      // পুরো error response data throw করুন
       if (error.response?.data) {
         throw error.response.data;
       }
@@ -109,11 +114,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);
+    setIsLogoutModalOpen(false); // লগআউট হলে মোডাল বন্ধ করে দাও
+  };
+
+  // ৪. এই ফাংশনটি পেজ থেকে কল করা হবে
+  const confirmLogout = () => {
+    setIsLogoutModalOpen(true);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, confirmLogout, isLoading }}>
       {children}
+      
+      {/* ৫. গ্লোবাল মোডাল এখানে রেন্ডার হবে */}
+      <LogoutModal 
+        isOpen={isLogoutModalOpen} 
+        onClose={() => setIsLogoutModalOpen(false)} 
+        onConfirm={logout} 
+      />
     </AuthContext.Provider>
   );
 };

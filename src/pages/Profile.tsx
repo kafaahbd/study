@@ -6,18 +6,18 @@ import { useEffect, useState } from 'react';
 import { getUserExamHistory } from '../services/examService';
 
 const Profile = () => {
-  const { user, isLoading, logout } = useAuth();
+  // ১. এখানে logout এর পাশাপাশি confirmLogout নিয়ে আসা হয়েছে
+  const { user, isLoading, confirmLogout } = useAuth();
   const { t, lang } = useLanguage();
   
   const [stats, setStats] = useState<any[]>([]);
   const [isStatsLoading, setIsStatsLoading] = useState(true);
 
-  // ব্যাকএন্ড থেকে ডাটা ফেচ করা
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const data = await getUserExamHistory();
-        setStats(data);
+        setStats(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching stats:", err);
       } finally {
@@ -45,22 +45,18 @@ const Profile = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // --- ক্যালকুলেশনস (ফিক্সড) ---
   const totalExams = stats.length;
 
-  // গড় স্কোর বের করার লজিক (১৬০০% ফিক্স)
   const avgScore = totalExams > 0 
     ? Math.round(
         stats.reduce((acc, curr) => {
-          // যদি ডাটাবেজে পুরনো ভুল ডাটা (score > total) থাকে তবে সেটা হ্যান্ডেল করা
-          const actualScore = curr.score > curr.total_questions ? curr.correct_answers : curr.score;
-          const percentage = (actualScore / curr.total_questions) * 100;
+          const actualScore = Number(curr.score) > Number(curr.total_questions) ? Number(curr.correct_answers) : Number(curr.score);
+          const percentage = (actualScore / Number(curr.total_questions)) * 100;
           return acc + percentage;
         }, 0) / totalExams
       )
     : 0;
 
-  // ইউনিক কয়দিন পরীক্ষা দিয়েছে (Active Days)
   const activeDays = totalExams > 0 
     ? new Set(stats.map(s => new Date(s.created_at).toDateString())).size 
     : 0;
@@ -97,9 +93,11 @@ const Profile = () => {
               {lang === 'bn' ? 'আপনার ব্যক্তিগত ড্যাশবোর্ড' : 'Your personal dashboard'}
             </p>
           </div>
+          
+          {/* ২. এখানে onClick এ confirmLogout ফাংশনটি বসানো হয়েছে */}
           <button 
-            onClick={logout}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all duration-300 shadow-sm"
+            onClick={confirmLogout}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all duration-300 shadow-sm active:scale-95"
           >
             <i className="fas fa-sign-out-alt"></i>
             {lang === 'bn' ? 'লগ আউট' : 'Logout'}
@@ -108,12 +106,12 @@ const Profile = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* Identity Card */}
-          <div className="lg:col-span-1 space-y-6">
+          {/* Identity Card & Navigation */}
+          <div className="lg:col-span-1 space-y-4">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-[2.5rem] p-8 shadow-xl border border-gray-100 dark:border-gray-700 text-center relative overflow-hidden"
+              className="bg-white dark:bg-gray-800 rounded-[2.5rem] p-8 shadow-xl border border-gray-100 dark:border-gray-700 text-center relative overflow-hidden mb-2"
             >
               <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-r from-green-500 to-emerald-600 opacity-10"></div>
               
@@ -138,17 +136,21 @@ const Profile = () => {
               </div>
             </motion.div>
 
-            <Link to="/exam" className="p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:border-green-500 transition-all group shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600">
+            <Link to="/dashboard" className="p-4 bg-blue-600 text-white rounded-2xl flex items-center justify-center gap-3 hover:bg-blue-700 transition-all shadow-lg font-bold active:scale-95">
+              <i className="fas fa-th-large"></i>
+              <span>{lang === 'bn' ? 'ড্যাশবোর্ডে যান' : 'Go to Dashboard'}</span>
+            </Link>
+
+            <Link to="/exam" className="p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center justify-center gap-3 hover:border-green-500 transition-all group shadow-sm font-bold active:scale-95">
+              <div className="w-8 h-8 rounded-lg bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600">
                 <i className="fas fa-edit"></i>
               </div>
-              <span className="font-bold text-gray-700 dark:text-gray-300 group-hover:text-green-600">Start New Exam</span>
+              <span className="text-gray-700 dark:text-gray-300 group-hover:text-green-600">Start New Exam</span>
             </Link>
           </div>
 
           {/* Stats & History */}
           <div className="lg:col-span-2 space-y-8">
-            
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
                 { label: lang === 'bn' ? 'মোট পরীক্ষা' : 'Exams Taken', val: totalExams.toString().padStart(2, '0'), color: 'text-blue-500' },
@@ -177,7 +179,8 @@ const Profile = () => {
                    <p className="text-center py-4 text-gray-400">Loading activity...</p>
                 ) : stats.length > 0 ? (
                   stats.slice(0, 5).map((exam, index) => {
-                    const displayScore = exam.score > exam.total_questions ? exam.correct_answers : exam.score;
+                    const displayScore = Number(exam.score) > Number(exam.total_questions) ? Number(exam.correct_answers) : Number(exam.score);
+                    const accuracy = Math.round((displayScore/Number(exam.total_questions))*100);
                     return (
                       <div key={index} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-2xl border border-gray-100 dark:border-gray-700">
                         <div>
@@ -187,7 +190,7 @@ const Profile = () => {
                         <div className="text-right">
                           <p className="font-black text-green-600">{displayScore}/{exam.total_questions}</p>
                           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
-                            {Math.round((displayScore/exam.total_questions)*100)}%
+                            {accuracy}%
                           </p>
                         </div>
                       </div>
@@ -201,17 +204,14 @@ const Profile = () => {
                 )}
               </div>
             </motion.div>
-
           </div>
         </div>
 
-        {/* Support Note */}
         <div className="mt-12 bg-gray-100 dark:bg-gray-800/50 rounded-3xl p-6 text-center border border-dashed border-gray-300 dark:border-gray-700">
           <p className="text-xs text-gray-500 font-medium italic">
             {lang === 'bn' ? 'প্রোফাইল এডিট এবং পারফরম্যান্স গ্রাফ শীঘ্রই যুক্ত করা হবে।' : 'Profile editing and performance graphs will be added soon.'}
           </p>
         </div>
-
       </div>
     </div>
   );
