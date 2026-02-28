@@ -38,7 +38,7 @@ export const subjectChapters: SubjectChapters = {
     islam: [{ name: "ইসলাম শিক্ষা অধ্যায় ১", url: "#" }],
     // Science
     physics: [
-      { name: "পদার্থ ১ম পত্র অধ্যায় ৩", url: "#" },
+      { name: "পদার্থ ১ম পত্র অধ্যায় ২", url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Physics_2_ssc" },
       { name: "পদার্থ ১ম পত্র অধ্যায় ৪", url: "#" },
     ],
     chemistry: [{ name: "রসায়ন ১ম পত্র অধ্যায় ১", url: "#" }],

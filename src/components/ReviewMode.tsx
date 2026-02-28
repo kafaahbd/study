@@ -74,7 +74,7 @@ const ReviewMode: React.FC<Props> = ({ state }) => {
 
       {/* Main Review Card */}
       <main className="flex justify-center">
-        <div className="w-[95%] lg:w-[70%] bg-white dark:bg-gray-900 p-6 md:p-10 rounded-[2.5rem] shadow-2xl shadow-red-100 dark:shadow-none border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+        <div className="w-[95%] lg:w-[70%] bg-white dark:bg-gray-900 p-6 md:p-10 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 relative overflow-hidden animate-glow-pulse dark:animate-dark-glow-pulse">
           
           {/* Subtle Background Accent */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 dark:bg-red-900/10 rounded-full -mr-16 -mt-16 transition-all"></div>

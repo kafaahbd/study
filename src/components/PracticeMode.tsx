@@ -132,8 +132,8 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 							>
 								{isLast
 									? lang === "bn"
-										? "ফলাফল দেখুন"
-										: "View Results"
+										? "ভুল সংশোধন করুন"
+										: "Fix Mistakes"
 									: lang === "bn"
 										? "পরবর্তী প্রশ্ন"
 										: "Next Question"}
