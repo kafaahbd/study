@@ -19,33 +19,33 @@ const FinishedResult: React.FC<Props> = ({ state }) => {
 
     // ১. ডাটা সেভ করার লজিক
     useEffect(() => {
-        const performSave = async () => {
-            // সেভ করার শর্ত: ইউজার থাকতে হবে, রেজাল্ট থাকতে হবে এবং আগে সেভ হওয়া যাবে না
-            if (user && result && !isSaved) {
-                try {
-                    // ডিবাগ করার জন্য পাঠানো ডাটা কনসোলে দেখা
-                    console.log("Attempting to save result for:", user.email);
+    const performSave = async () => {
+        if (user && result && !isSaved) {
+            try {
+                console.log("Saving result data...", result);
 
-                    // ব্যাকএন্ড কন্ট্রোলার অনুযায়ী ডাটা ম্যাপিং
-                    await saveResult({
-                        subject_name: subjectName || "General",
-                        // result.score যদি না থাকে, তবে শতাংশ হিসাব করে পাঠানো বা ০ দেওয়া
-                        score: typeof result.score === 'number' ? result.score : Math.round((result.correct / result.total) * 100), 
-                        total_questions: result.total || 0,
-                        correct_answers: result.correct || 0,
-                        wrong_answers: result.wrong || 0,
-                        time_taken: result.timeSpent || 0 // আপনার প্রপস অনুযায়ী নাম
-                    });
+                await saveResult({
+                    subject_name: subjectName || "General",
+                    /** * ফিক্স: score কলামে আমরা শতাংশ (৮০) না পাঠিয়ে 
+                     * প্রাপ্ত নম্বর (correct) পাঠাব। 
+                     * এতে প্রোফাইল পেজে হিসাব সঠিক আসবে।
+                     */
+                    score: result.correct ?? 0, 
+                    total_questions: result.total || 0,
+                    correct_answers: result.correct || 0,
+                    wrong_answers: result.wrong || 0,
+                    time_taken: result.timeSpent || 0 
+                });
 
-                    setIsSaved(true);
-                } catch (err: any) {
-                    console.error("Save failed details:", err);
-                }
+                setIsSaved(true);
+            } catch (err: any) {
+                console.error("Save failed details:", err);
             }
-        };
+        }
+    };
 
-        performSave();
-    }, [user, result, isSaved, subjectName]); // dependency array-তে subjectName যোগ করা ভালো
+    performSave();
+}, [user, result, isSaved, subjectName]);
 
     if (!result) return null;
 	
