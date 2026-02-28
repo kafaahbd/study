@@ -1,18 +1,47 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState ,useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import Latex from "react-latex-next";
 import html2pdf from "html2pdf.js";
+import { saveResult } from "../services/examService";
+import { useAuth } from "../contexts/AuthContext";
 
 interface Props {
   state: any;
 }
 
 const FinishedResult: React.FC<Props> = ({ state }) => {
+
+  const { user } = useAuth(); //
+  const { lang, result, subjectName } = state; 
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    const performSave = async () => {
+      if (user && result && !isSaved) {
+        try {
+          await saveResult({
+            subject_name: subjectName || "General",
+            score: result.score,
+            total_questions: result.total,
+            correct_answers: result.correct,
+            wrong_answers: result.wrong,
+            time_taken: result.timeSpent // আপনার স্টেট অনুযায়ী নাম ঠিক করে নিন
+          });
+          setIsSaved(true);
+          console.log("Result saved to database");
+        } catch (err) {
+          console.error("Failed to save result:", err);
+        }
+      }
+    };
+    performSave();
+  }, [user, result, isSaved]);
+
   const navigate = useNavigate();
   const reportTemplateRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   
-  const { lang, result, resetToSetup } = state;
+  const {  resetToSetup } = state;
   const handleBack = () => navigate(-1);
 
   if (!result) return null;

@@ -2,10 +2,34 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { getUserStats } from '../services/examService';
 
 const Profile = () => {
   const { user, isLoading, logout } = useAuth();
   const { t, lang } = useLanguage();
+  
+  // Stats and Activity States
+  const [stats, setStats] = useState<any[]>([]);
+  const [isStatsLoading, setIsStatsLoading] = useState(true);
+
+  // ব্যাকএন্ড থেকে ডাটা ফেচ করা
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const data = await getUserStats();
+        setStats(data);
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      } finally {
+        setIsStatsLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchStats();
+    }
+  }, [user]);
 
   if (isLoading) {
     return (
@@ -21,6 +45,12 @@ const Profile = () => {
   if (!user) {
     return <Navigate to="/login" replace />;
   }
+
+  // ক্যালকুলেশনস
+  const totalExams = stats.length;
+  const avgScore = totalExams > 0 
+    ? Math.round(stats.reduce((acc, curr) => acc + (curr.score / curr.total_questions * 100), 0) / totalExams)
+    : 0;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -101,7 +131,7 @@ const Profile = () => {
                 <div className="w-10 h-10 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600">
                   <i className="fas fa-edit"></i>
                 </div>
-                <span className="font-bold text-gray-700 dark:text-gray-300 group-hover:text-green-600 transition-colors">My Exams</span>
+                <span className="font-bold text-gray-700 dark:text-gray-300 group-hover:text-green-600 transition-colors">Start New Exam</span>
               </Link>
             </div>
           </div>
@@ -109,78 +139,57 @@ const Profile = () => {
           {/* Right Column: Detailed Info & Stats */}
           <div className="lg:col-span-2 space-y-8">
             
-            {/* Detailed Info Grid */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-10 shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800"
-            >
-              <h3 className="text-lg font-black text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-sm">
-                  <i className="fas fa-info-circle text-green-600"></i>
-                </span>
-                {lang === 'bn' ? 'একাউন্ট ইনফরমেশন' : 'Account Details'}
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
-                    {t('profile.email')}
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <i className="fas fa-envelope text-gray-300"></i>
-                    <p className="font-bold text-gray-700 dark:text-gray-200 truncate">{user.email}</p>
-                  </div>
-                </div>
-
-                {user.phone && (
-                  <div>
-                    <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
-                      {t('profile.phone')}
-                    </label>
-                    <div className="flex items-center gap-3">
-                      <i className="fas fa-phone text-gray-300"></i>
-                      <p className="font-bold text-gray-700 dark:text-gray-200">{user.phone}</p>
-                    </div>
-                  </div>
-                )}
-
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
-                    {t('profile.memberSince')}
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <i className="fas fa-calendar-alt text-gray-300"></i>
-                    <p className="font-bold text-gray-700 dark:text-gray-200">{formatDate(user.created_at)}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">
-                    Account Status
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-black uppercase rounded-full border border-green-200 dark:border-green-800">
-                      Active Participant
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Mini Dashboard Stats Placeholder */}
+            {/* Real Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
-                { label: lang === 'bn' ? 'মোট পরীক্ষা' : 'Exams Taken', val: '00', color: 'text-blue-500' },
-                { label: lang === 'bn' ? 'গড় স্কোর' : 'Avg Score', val: '0%', color: 'text-purple-500' },
-                { label: lang === 'bn' ? 'স্টাডি টাইম' : 'Study Time', val: '0h', color: 'text-orange-500' },
+                { label: lang === 'bn' ? 'মোট পরীক্ষা' : 'Exams Taken', val: totalExams.toString().padStart(2, '0'), color: 'text-blue-500' },
+                { label: lang === 'bn' ? 'গড় স্কোর' : 'Avg Score', val: `${avgScore}%`, color: 'text-purple-500' },
+                { label: lang === 'bn' ? 'অ্যাক্টিভ দিন' : 'Active Days', val: totalExams > 0 ? '01' : '00', color: 'text-orange-500' },
               ].map((stat, i) => (
                 <div key={i} className="bg-white dark:bg-gray-900 p-6 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-sm text-center">
-                  <span className="text-2xl font-black block mb-1 text-gray-900 dark:text-white tracking-tighter">{stat.val}</span>
+                  <span className="text-2xl font-black block mb-1 text-gray-900 dark:text-white tracking-tighter">{isStatsLoading ? '...' : stat.val}</span>
                   <span className={`text-[10px] font-black uppercase tracking-widest ${stat.color}`}>{stat.label}</span>
                 </div>
               ))}
             </div>
+
+            {/* Account Details */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800"
+            >
+              <h3 className="text-lg font-black text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                <i className="fas fa-history text-green-600"></i>
+                {lang === 'bn' ? 'সাম্প্রতিক পরীক্ষা' : 'Recent Exams'}
+              </h3>
+
+              <div className="space-y-4">
+                {isStatsLoading ? (
+                   <p className="text-center py-4 text-gray-400">Loading activity...</p>
+                ) : stats.length > 0 ? (
+                  stats.slice(0, 5).map((exam, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-800">
+                      <div>
+                        <p className="font-black text-gray-800 dark:text-gray-200">{exam.subject_name}</p>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{formatDate(exam.created_at)}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-black text-green-600">{exam.score}/{exam.total_questions}</p>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+                          {Math.round((exam.score/exam.total_questions)*100)}%
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-10">
+                     <p className="text-gray-400 font-medium">{lang === 'bn' ? 'এখনো কোনো পরীক্ষা দেওয়া হয়নি' : 'No exams taken yet'}</p>
+                     <Link to="/exam" className="text-green-500 font-bold text-sm underline mt-2 block">Take your first exam</Link>
+                  </div>
+                )}
+              </div>
+            </motion.div>
 
           </div>
         </div>
@@ -188,7 +197,7 @@ const Profile = () => {
         {/* Support Note */}
         <div className="mt-12 bg-gray-100 dark:bg-gray-900/50 rounded-3xl p-6 text-center border border-dashed border-gray-300 dark:border-gray-800">
           <p className="text-xs text-gray-500 dark:text-gray-500 font-medium italic">
-            {lang === 'bn' ? 'প্রোফাইল এডিট এবং আরও অপশন শীঘ্রই যুক্ত করা হবে।' : 'Profile editing and more options will be added soon.'}
+            {lang === 'bn' ? 'প্রোফাইল এডিট এবং পারফরম্যান্স গ্রাফ শীঘ্রই যুক্ত করা হবে।' : 'Profile editing and performance graphs will be added soon.'}
           </p>
         </div>
 
