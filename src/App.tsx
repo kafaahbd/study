@@ -24,7 +24,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Forum = lazy(() => import("./pages/Forum"));
-
+const PostDetails = lazy(() => import("./pages/PostDetails"));
 
 // প্রিমিয়াম পেজ লোডার
 const PageLoader = () => {
@@ -70,23 +70,21 @@ function App() {
 									<Route path="/hsc" element={<HSCCorner />} />
 									<Route path="/admission" element={<AdmissionCorner />} />
 									<Route path="/exam" element={<ExamCenter />} />
-									<Route path="/profile" element={<Profile />} />
+
 									<Route path="/verify-email" element={<VerifyEmail />} />
 									<Route path="/verify-code" element={<VerifyCode />} />
 									<Route path="/login" element={<Login />} />
 									<Route path="/signup" element={<SignUp />} />
 									<Route path="*" element={<NotFound />} />
-									<Route path="/dashboard" element={<Dashboard />} />
-									<Route
-										path="/forum"
-										element={
-											<ProtectedRoute>
-												<Forum />
-											</ProtectedRoute>
-										}
-									/>
+
 									<Route path="/forgot-password" element={<ForgotPassword />} />
 									<Route path="/reset-password" element={<ResetPassword />} />
+									<Route element={<ProtectedRoute />}>
+										<Route path="/forum" element={<Forum />} />
+										<Route path="/post/:postId" element={<PostDetails />} />
+										<Route path="/profile" element={<Profile />} />
+										<Route path="/dashboard" element={<Dashboard />} />
+									</Route>
 								</Routes>
 							</motion.div>
 						</AnimatePresence>
