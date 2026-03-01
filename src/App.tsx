@@ -11,7 +11,9 @@ import VerifyCode from "./pages/VerifyCode";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
-import ProtectedRoute from './components/ProtectedRoute'
+import ProtectedRoute from "./components/ProtectedRoute";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const Study = lazy(() => import("./pages/Study"));
 const SSCCorner = lazy(() => import("./pages/SSCCorner"));
@@ -22,6 +24,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Forum = lazy(() => import("./pages/Forum"));
+
 
 // প্রিমিয়াম পেজ লোডার
 const PageLoader = () => {
@@ -82,6 +85,8 @@ function App() {
 											</ProtectedRoute>
 										}
 									/>
+									<Route path="/forgot-password" element={<ForgotPassword />} />
+									<Route path="/reset-password" element={<ResetPassword />} />
 								</Routes>
 							</motion.div>
 						</AnimatePresence>

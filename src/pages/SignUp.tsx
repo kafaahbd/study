@@ -9,14 +9,13 @@ const SignUp = () => {
   const { register, isLoading, user } = useAuth();
   const navigate = useNavigate();
   
-  // পাসওয়ার্ড দেখানো বা লুকানোর জন্য স্টেট
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
     name: "",
     email: "",
-    phone: "",
+    phone: "", // ফোন নম্বর এখানে স্টোর হবে
     study_level: "SSC" as "SSC" | "HSC",
     group: "Science" as "Science" | "Arts" | "Commerce",
     exam_year: "", 
@@ -36,14 +35,12 @@ const SignUp = () => {
   ) => {
     const { name, value } = e.target;
 
-    if (name === "exam_year") {
+    // শুধুমাত্র সংখ্যা ইনপুট নেওয়ার জন্য ফিল্টার (ফোন এবং বছরের জন্য)
+    if (name === "exam_year" || name === "phone") {
       const onlyNums = value.replace(/\D/g, "");
       setFormData({ ...formData, [name]: onlyNums });
     } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      setFormData({ ...formData, [name]: value });
     }
   };
 
@@ -77,7 +74,7 @@ const SignUp = () => {
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-2xl w-full"
       >
-        {/* Brand/Header */}
+        {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-block mb-4 hover:scale-105 transition-transform">
             <img 
@@ -108,6 +105,7 @@ const SignUp = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
               {/* Personal Info Section */}
               <div className="space-y-4">
                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2 border-b border-gray-100 dark:border-gray-800 pb-1">
@@ -144,6 +142,18 @@ const SignUp = () => {
                     type="email" name="email" value={formData.email} onChange={handleChange} required
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
                     placeholder="example@email.com"
+                  />
+                </div>
+
+                {/* --- ADDED PHONE FIELD --- */}
+                <div>
+                  <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 mb-1 block">
+                    {lang === 'bn' ? 'ফোন নম্বর' : 'Phone Number'}
+                  </label>
+                  <input
+                    type="text" name="phone" value={formData.phone} onChange={handleChange} required
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
+                    placeholder="017XXXXXXXX"
                   />
                 </div>
               </div>
@@ -193,19 +203,18 @@ const SignUp = () => {
                   />
                 </div>
 
-                {/* Password Section with Show/Hide Option */}
+                {/* Password Section */}
                 <div className="grid grid-cols-1 gap-4">
                   <div className="relative">
                     <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 mb-1 block">
                       {t("modal.password")}
                     </label>
                     <input
-                      type={showPassword ? "text" : "password"} // টাইপ পরিবর্তন হবে
+                      type={showPassword ? "text" : "password"}
                       name="password" value={formData.password} onChange={handleChange} required minLength={6}
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
                       placeholder="••••••••"
                     />
-                    {/* Show/Hide Toggle Button */}
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
@@ -220,7 +229,7 @@ const SignUp = () => {
                       {t("modal.confirmPassword")}
                     </label>
                     <input
-                      type={showPassword ? "text" : "password"} // কনফার্ম পাসওয়ার্ডেও একই লজিক
+                      type={showPassword ? "text" : "password"}
                       name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
                       placeholder="••••••••"
@@ -259,9 +268,9 @@ const SignUp = () => {
         </div>
         
         <div className="mt-8 text-center">
-           <Link to="/" className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] hover:text-gray-600 transition">
+           <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">
              &copy; 2026 Kafa'ah Platform
-           </Link>
+           </p>
         </div>
       </motion.div>
     </div>

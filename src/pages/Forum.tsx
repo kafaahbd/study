@@ -62,10 +62,31 @@ const Forum: React.FC = () => {
   const handleCommentSubmit = async (postId: string) => {
     if (!commentText.trim()) return;
     try {
-      await forumService.addComment(postId, commentText);
-      setCommentText('');
-      fetchPosts();
-    } catch (err) {}
+      // ১. ডাটাবেসে কমেন্ট সেভ করা
+      const response = await forumService.addComment(postId, commentText);
+      
+      // ২. ফ্রন্টএন্ড স্টেট সরাসরি আপডেট করা যাতে সাথে সাথে শো করে
+      setPosts(prevPosts => prevPosts.map(post => {
+        if (post.id === postId) {
+          const newCommentObj = {
+            id: response.id || Math.random().toString(), // ব্যাকএন্ড আইডি অথবা টেম্পোরারি আইডি
+            author_name: user?.name,
+            comment_text: commentText,
+            created_at: new Date().toISOString()
+          };
+          return {
+            ...post,
+            comments: [...(post.comments || []), newCommentObj], // নতুন কমেন্ট যুক্ত করা
+            comment_count: (parseInt(post.comment_count) || 0) + 1 // কাউন্ট বাড়ানো
+          };
+        }
+        return post;
+      }));
+
+      setCommentText(''); // ইনপুট ক্লিয়ার করা
+    } catch (err) {
+      setToast({ msg: t('forum.error'), type: 'error' });
+    }
   };
 
   return (
