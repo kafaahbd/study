@@ -13,7 +13,10 @@ interface Group {
   name: string;
   icon: string;
   subjects: Subject[];
-  gradient: string; // প্রতিটি গ্রুপের জন্য আলাদা থিম গ্র্যাডিয়েন্ট
+  gradient: string;
+  hoverText: string;   // হোভার করলে টেক্সট কালার
+  hoverBorder: string; // হোভার করলে বর্ডার কালার
+  bgIcon: string;      // হোভার করলে আইকন ব্যাকগ্রাউন্ড
 }
 
 const SSCCorner: React.FC = () => {
@@ -24,6 +27,9 @@ const SSCCorner: React.FC = () => {
       name: t("study.common"),
       icon: "📚",
       gradient: "from-blue-600 to-indigo-700",
+      hoverText: "group-hover/sub:text-blue-600",
+      hoverBorder: "hover:border-blue-500/30",
+      bgIcon: "group-hover/sub:bg-blue-600",
       subjects: [
         { name: t("study.subjects.bangla"), path: "/exam?group=ssc&subject=bangla" },
         { name: t("study.subjects.english"), path: "/exam?group=ssc&subject=english" },
@@ -36,6 +42,9 @@ const SSCCorner: React.FC = () => {
       name: t("study.science"),
       icon: "🔬",
       gradient: "from-emerald-600 to-teal-700",
+      hoverText: "group-hover/sub:text-emerald-600",
+      hoverBorder: "hover:border-emerald-500/30",
+      bgIcon: "group-hover/sub:bg-emerald-600",
       subjects: [
         { name: t("study.subjects.physics"), path: "/exam?group=ssc&subject=physics" },
         { name: t("study.subjects.chemistry"), path: "/exam?group=ssc&subject=chemistry" },
@@ -47,6 +56,9 @@ const SSCCorner: React.FC = () => {
       name: t("study.arts"),
       icon: "🎨",
       gradient: "from-orange-500 to-red-600",
+      hoverText: "group-hover/sub:text-orange-600",
+      hoverBorder: "hover:border-orange-500/30",
+      bgIcon: "group-hover/sub:bg-orange-600",
       subjects: [
         { name: t("study.subjects.history"), path: "/exam?group=ssc&subject=history" },
         { name: t("study.subjects.civics"), path: "/exam?group=ssc&subject=civics" },
@@ -58,6 +70,9 @@ const SSCCorner: React.FC = () => {
       name: t("study.commerce"),
       icon: "💼",
       gradient: "from-sky-600 to-blue-700",
+      hoverText: "group-hover/sub:text-sky-600",
+      hoverBorder: "hover:border-sky-500/30",
+      bgIcon: "group-hover/sub:bg-sky-600",
       subjects: [
         { name: t("study.subjects.accounting"), path: "/exam?group=ssc&subject=accounting" },
         { name: t("study.subjects.business"), path: "/exam?group=ssc&subject=business" },
@@ -69,6 +84,9 @@ const SSCCorner: React.FC = () => {
       name: t("study.optional"),
       icon: "⭐",
       gradient: "from-purple-600 to-fuchsia-700",
+      hoverText: "group-hover/sub:text-purple-600",
+      hoverBorder: "hover:border-purple-500/30",
+      bgIcon: "group-hover/sub:bg-purple-600",
       subjects: [
         { name: t("study.subjects.highermath"), path: "/exam?group=ssc&subject=highermath" },
         { name: t("study.subjects.agriculture"), path: "/exam?group=ssc&subject=agriculture" },
@@ -103,7 +121,7 @@ const SSCCorner: React.FC = () => {
                 {t("study.ssc.subtitle")}
               </p>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs font-black uppercase tracking-widest">
+            <div className="flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs font-black uppercase tracking-widest border border-green-200 dark:border-green-800">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -117,17 +135,15 @@ const SSCCorner: React.FC = () => {
         <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
           {groups.map((group, groupIdx) => (
             <ScrollAnimation key={groupIdx}>
-              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-green-500/30 transition-all duration-300">
+              <div className={`group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden ${group.hoverBorder} transition-all duration-300`}>
                 
                 {/* Group Header with Gradient */}
                 <div className={`bg-gradient-to-br ${group.gradient} p-6 text-white`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl">
-                        {group.icon}
-                      </div>
-                      <h2 className="text-xl font-black tracking-tight">{group.name}</h2>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-inner">
+                      {group.icon}
                     </div>
+                    <h2 className="text-xl font-black tracking-tight">{group.name}</h2>
                   </div>
                 </div>
 
@@ -137,12 +153,12 @@ const SSCCorner: React.FC = () => {
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent hover:border-green-500/20 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub"
+                      className={`flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub`}
                     >
-                      <span className="font-bold text-gray-700 dark:text-gray-300 group-hover/sub:text-green-600 dark:group-hover/sub:text-blue-400 transition-colors">
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors`}>
                         {subject.name}
                       </span>
-                      <div className="w-8 h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm group-hover/sub:bg-green-600 group-hover/sub:text-white transition-all">
+                      <div className={`w-8 h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm ${group.bgIcon} group-hover/sub:text-white transition-all`}>
                         <i className="fas fa-chevron-right text-[10px]"></i>
                       </div>
                     </Link>
@@ -153,7 +169,7 @@ const SSCCorner: React.FC = () => {
           ))}
         </div>
 
-        {/* Improved Info Box */}
+        {/* Update Info Box */}
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

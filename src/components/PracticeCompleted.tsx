@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import Latex from "react-latex-next";
-import html2pdf from "html2pdf.js";
+
 
 interface Props {
   state: any;
@@ -10,36 +10,26 @@ interface Props {
 const PracticeCompleted: React.FC<Props> = ({ state }) => {
   const navigate = useNavigate();
   const reportTemplateRef = useRef<HTMLDivElement>(null);
-  const [isDownloading, setIsDownloading] = useState(false);
+
   
   const { lang, result, resetToSetup } = state;
   const handleBack = () => navigate(-1);
 
   if (!result) return null;
 
-  const handleDownloadPdf = async () => {
-    const element = reportTemplateRef.current;
-    if (!element) return;
+  const handleDownloadPdf = () => {
+    // ১. প্রিন্ট হওয়ার সময় পেজের টাইটেল যা থাকবে সেটিই ফাইলের নাম হিসেবে কাজ করবে
+    const originalTitle = document.title;
+    const date = new Date().toLocaleDateString().replace(/\//g, '-');
+    document.title = `Practice_Result_${date}`;
 
-    setIsDownloading(true);
-    element.classList.add("pdf-export-mode"); // পিডিএফ এর জন্য স্টাইল ফিক্স
-
-    const options = {
-      margin: [10, 10, 10, 10] as [number, number, number, number],
-      filename: `Practice_Result_${new Date().getTime()}.pdf`,
-      image: { type: 'jpeg' as const, quality: 1.0 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-      jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] as const }
-    };
-
-    try {
-      await html2pdf().set(options).from(element).save();
-    } finally {
-      element.classList.remove("pdf-export-mode");
-      setIsDownloading(false);
-    }
-  };
+    // ২. সামান্য ডিলে দিয়ে প্রিন্ট কমান্ড ট্রিগার করা (স্মুথ এক্সপেরিয়েন্সের জন্য)
+    setTimeout(() => {
+        window.print();
+        // ৩. প্রিন্ট উইন্ডো বন্ধ হওয়ার পর টাইটেল আগের মতো করে দেওয়া
+        document.title = originalTitle;
+    }, 500);
+};
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 px-4">
@@ -52,13 +42,12 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
         
         <div className="flex gap-3">
           <button 
-            onClick={handleDownloadPdf}
-            disabled={isDownloading}
-            className="flex items-center gap-2 px-5 py-2 bg-red-500 text-white rounded-full font-bold shadow-lg hover:bg-red-600 transition-all active:scale-95 disabled:opacity-50"
-          >
-            <i className={isDownloading ? "fas fa-spinner animate-spin" : "fas fa-file-pdf"}></i>
-            {lang === "bn" ? "PDF ডাউনলোড" : "Download PDF"}
-          </button>
+    onClick={handleDownloadPdf}
+    className="flex items-center gap-2 px-5 py-2 bg-red-500 text-white rounded-full font-bold shadow-lg hover:bg-red-600 transition-all active:scale-95"
+>
+    <i className="fas fa-file-pdf"></i>
+    {lang === "bn" ? "PDF ডাউনলোড" : "Download PDF"}
+</button>
           <img
             src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png"
             alt="Kafa'ah"
@@ -164,19 +153,50 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
       </div>
 
       <style>{`
-        .pdf-export-mode {
-          background-color: white !important;
-          color: black !important;
-        }
-        .pdf-export-mode * {
-          color: black !important;
-          border-color: #e5e7eb !important;
-        }
-        .pdf-export-mode .text-green-600 { color: #16a34a !important; }
-        .pdf-export-mode .text-red-600 { color: #dc2626 !important; }
-        .pdf-export-mode .text-yellow-600 { color: #ca8a04 !important; }
-        .pdf-export-mode .bg-green-50 { background-color: #f0fdf4 !important; }
-      `}</style>
+  @media print {
+    /* ১. পেজের মার্জিন সেট করা */
+    @page {
+      margin: 15mm;
+    }
+
+    /* ২. ডার্ক মোড থাকলেও প্রিন্টে সাদা ব্যাকগ্রাউন্ড নিশ্চিত করা */
+    body {
+      background-color: white !important;
+      color: black !important;
+      -webkit-print-color-adjust: exact; /* কালার এবং গ্রাফিক্স ঠিক রাখতে */
+    }
+
+    /* ৩. অপ্রয়োজনীয় বাটন, ন্যাববার বা ফুটার হাইড করা */
+    .print-hidden, 
+    button, 
+    nav, 
+    footer,
+    .back-button {
+      display: none !important;
+    }
+
+    /* ৪. কন্টেন্ট যাতে মাঝপথে না ভেঙে যায় (Page Break) */
+    .question-box, .result-card, .group {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      margin-bottom: 20px !important;
+      display: block !important;
+    }
+
+    /* ৫. লাইন বা টেক্সট যাতে গায়ে গায়ে লেগে না থাকে */
+    p, span, div {
+      orphans: 3; /* লাইনের শুরুতে কমপক্ষে ৩টি লাইন একসাথে রাখবে */
+      widows: 3;  /* লাইনের শেষে কমপক্ষে ৩টি লাইন একসাথে রাখবে */
+    }
+
+    /* ৬. ল্যাটেক্স (Latex) সমীকরণ ফিক্স */
+    .mjx-container, .katex {
+      display: inline-block !important;
+      vertical-align: middle !important;
+      max-width: 100% !important;
+    }
+  }
+`}</style>
     </div>
   );
 };

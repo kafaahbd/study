@@ -14,6 +14,9 @@ interface Group {
   icon: string;
   subjects: Subject[];
   gradient: string;
+  hoverText: string;   // নতুন ফিল্ড: হোভার টেক্সট কালার
+  hoverBorder: string; // নতুন ফিল্ড: হোভার বর্ডার কালার
+  bgIcon: string;      // নতুন ফিল্ড: হোভার আইকন ব্যাকগ্রাউন্ড
 }
 
 const HSCCorner: React.FC = () => {
@@ -24,6 +27,9 @@ const HSCCorner: React.FC = () => {
       name: t("study.hsc.common"),
       icon: "📚",
       gradient: "from-blue-600 to-indigo-700",
+      hoverText: "group-hover/sub:text-blue-600",
+      hoverBorder: "hover:border-blue-500/30",
+      bgIcon: "group-hover/sub:bg-blue-600",
       subjects: [
         { name: t("study.hsc.subjects.bangla"), path: "/exam?group=hsc&subject=bangla" },
         { name: t("study.hsc.subjects.english"), path: "/exam?group=hsc&subject=english" },
@@ -34,6 +40,9 @@ const HSCCorner: React.FC = () => {
       name: t("study.hsc.science"),
       icon: "🔬",
       gradient: "from-emerald-600 to-teal-700",
+      hoverText: "group-hover/sub:text-emerald-600",
+      hoverBorder: "hover:border-emerald-500/30",
+      bgIcon: "group-hover/sub:bg-emerald-600",
       subjects: [
         { name: t("study.hsc.subjects.physics"), path: "/exam?group=hsc&subject=physics" },
         { name: t("study.hsc.subjects.chemistry"), path: "/exam?group=hsc&subject=chemistry" },
@@ -45,6 +54,9 @@ const HSCCorner: React.FC = () => {
       name: t("study.hsc.arts"),
       icon: "🎨",
       gradient: "from-orange-500 to-red-600",
+      hoverText: "group-hover/sub:text-orange-600",
+      hoverBorder: "hover:border-orange-500/30",
+      bgIcon: "group-hover/sub:bg-orange-600",
       subjects: [
         { name: t("study.hsc.subjects.history"), path: "/exam?group=hsc&subject=history" },
         { name: t("study.hsc.subjects.islamic"), path: "/exam?group=hsc&subject=islamic" },
@@ -57,6 +69,9 @@ const HSCCorner: React.FC = () => {
       name: t("study.hsc.commerce"),
       icon: "💼",
       gradient: "from-sky-600 to-blue-700",
+      hoverText: "group-hover/sub:text-sky-600",
+      hoverBorder: "hover:border-sky-500/30",
+      bgIcon: "group-hover/sub:bg-sky-600",
       subjects: [
         { name: t("study.hsc.subjects.accounting"), path: "/exam?group=hsc&subject=accounting" },
         { name: t("study.hsc.subjects.management"), path: "/exam?group=hsc&subject=management" },
@@ -93,7 +108,6 @@ const HSCCorner: React.FC = () => {
                 {t("study.hsc.subtitle")}
               </p>
             </div>
-            {/* Live Indicator Badge */}
             <div className="flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-black uppercase tracking-widest border border-blue-200 dark:border-blue-800">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -108,9 +122,9 @@ const HSCCorner: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-8">
           {groups.map((group, groupIdx) => (
             <ScrollAnimation key={groupIdx}>
-              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col">
+              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300 h-full flex flex-col">
                 
-                {/* Group Header with Gradient */}
+                {/* Group Header */}
                 <div className={`bg-gradient-to-br ${group.gradient} p-6 text-white`}>
                   <div className="flex items-center space-x-4">
                     <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl shadow-inner">
@@ -126,12 +140,12 @@ const HSCCorner: React.FC = () => {
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent hover:border-blue-500/20 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub"
+                      className={`flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub`}
                     >
-                      <span className="font-bold text-gray-700 dark:text-gray-300 group-hover/sub:text-blue-600 dark:group-hover/sub:text-blue-400 transition-colors">
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors`}>
                         {subject.name}
                       </span>
-                      <div className="w-8 h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm group-hover/sub:bg-blue-600 group-hover/sub:text-white transition-all">
+                      <div className={`w-8 h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm ${group.bgIcon} group-hover/sub:text-white transition-all`}>
                         <i className="fas fa-chevron-right text-[10px]"></i>
                       </div>
                     </Link>

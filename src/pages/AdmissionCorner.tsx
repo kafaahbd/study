@@ -13,7 +13,8 @@ interface Category {
   name: string;
   icon: string;
   gradient: string;
-  accent: string;
+  accent: string;      // text color class
+  hoverBorder: string; // hover border color class
   subjects: Subject[];
 }
 
@@ -25,7 +26,8 @@ const AdmissionCorner: React.FC = () => {
       name: t("study.admission.engineering"),
       icon: "⚙️",
       gradient: "from-blue-600 to-cyan-600",
-      accent: "text-blue-600 dark:text-blue-400",
+      accent: "group-hover/sub:text-blue-600 dark:group-hover/sub:text-blue-400",
+      hoverBorder: "hover:border-blue-500/30",
       subjects: [
         { name: t("study.admission.physics"), path: "/exam?group=admission&subject=engineering-physics" },
         { name: t("study.admission.chemistry"), path: "/exam?group=admission&subject=engineering-chemistry" },
@@ -37,7 +39,8 @@ const AdmissionCorner: React.FC = () => {
       name: t("study.admission.medical"),
       icon: "🏥",
       gradient: "from-red-500 to-rose-600",
-      accent: "text-red-600 dark:text-red-400",
+      accent: "group-hover/sub:text-red-600 dark:group-hover/sub:text-red-400",
+      hoverBorder: "hover:border-red-500/30",
       subjects: [
         { name: t("study.admission.physics"), path: "/exam?group=admission&subject=medical-physics" },
         { name: t("study.admission.chemistry"), path: "/exam?group=admission&subject=medical-chemistry" },
@@ -50,7 +53,8 @@ const AdmissionCorner: React.FC = () => {
       name: t("study.admission.university"),
       icon: "🏛️",
       gradient: "from-purple-600 to-fuchsia-600",
-      accent: "text-purple-600 dark:text-purple-400",
+      accent: "group-hover/sub:text-purple-600 dark:group-hover/sub:text-purple-400",
+      hoverBorder: "hover:border-purple-500/30",
       subjects: [
         { name: t("study.admission.bangla"), path: "/exam?group=admission&subject=university-bangla" },
         { name: t("study.admission.english"), path: "/exam?group=admission&subject=university-english" },
@@ -78,7 +82,7 @@ const AdmissionCorner: React.FC = () => {
             {t("study.back")}
           </Link>
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 dark:border-gray-800 pb-10 text-center md:text-left">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 dark:border-gray-800 pb-10">
             <div>
               <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
                 {t("study.admission.title")}
@@ -101,7 +105,7 @@ const AdmissionCorner: React.FC = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {categories.map((category, idx) => (
             <ScrollAnimation key={idx}>
-              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden hover:border-green-500/30 transition-all duration-500 h-full flex flex-col">
+              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-500 h-full flex flex-col">
                 
                 {/* Header */}
                 <div className={`bg-gradient-to-br ${category.gradient} p-8 text-white relative`}>
@@ -120,21 +124,21 @@ const AdmissionCorner: React.FC = () => {
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-800 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-md transition-all group/sub"
+                      className={`flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-800 border border-transparent ${category.hoverBorder} hover:shadow-md transition-all group/sub`}
                     >
-                      <span className={`font-bold text-gray-700 dark:text-gray-300 group-hover/sub:${category.accent.split(' ')[0]} transition-colors`}>
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${category.accent} transition-colors`}>
                         {subject.name}
                       </span>
-                      <i className={`fas fa-chevron-right text-[10px] text-gray-300 group-hover/sub:${category.accent.split(' ')[0]}`}></i>
+                      <i className={`fas fa-chevron-right text-[10px] text-gray-300 ${category.accent}`}></i>
                     </Link>
                   ))}
                 </div>
 
-                {/* Coming Soon Badge */}
+                {/* Footer Badge */}
                 <div className="px-6 pb-6">
                   <div className="bg-gray-50 dark:bg-gray-800/80 rounded-2xl p-3 flex items-center gap-3 border border-gray-100 dark:border-gray-700">
-                    <div className={`w-8 h-8 rounded-xl bg-white dark:bg-gray-900 shadow-sm flex items-center justify-center ${category.accent}`}>
-                      <i className="fas fa-bolt text-xs"></i>
+                    <div className="w-8 h-8 rounded-xl bg-white dark:bg-gray-900 shadow-sm flex items-center justify-center">
+                      <i className={`fas fa-bolt text-xs ${category.accent.split(' ')[0].replace('group-hover/sub:', '')}`}></i>
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-tighter text-gray-500 dark:text-gray-400">
                       Tests & Sheets coming soon

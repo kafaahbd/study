@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Latex from "react-latex-next";
-import html2pdf from "html2pdf.js";
 import { saveResult } from "../services/examService";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -11,83 +10,60 @@ interface Props {
 
 const FinishedResult: React.FC<Props> = ({ state }) => {
 	const { user } = useAuth();
-    const { lang, result, subjectName, resetToSetup } = state; 
-    const [isSaved, setIsSaved] = useState(false);
-    const navigate = useNavigate();
-    const reportTemplateRef = useRef<HTMLDivElement>(null);
-    const [isDownloading, setIsDownloading] = useState(false);
+	const { lang, result, subjectName, resetToSetup } = state;
+	const [isSaved, setIsSaved] = useState(false);
+	const navigate = useNavigate();
+	const reportTemplateRef = useRef<HTMLDivElement>(null);
+	const [isDownloading, setIsDownloading] = useState(false);
 
-    // ১. ডাটা সেভ করার লজিক
-    useEffect(() => {
-    const performSave = async () => {
-        if (user && result && !isSaved) {
-            try {
-                console.log("Saving result data...", result);
+	// ১. ডাটা সেভ করার লজিক
+	useEffect(() => {
+		const performSave = async () => {
+			if (user && result && !isSaved) {
+				try {
+					console.log("Saving result data...", result);
 
-                await saveResult({
-                    subject_name: subjectName || "General",
-                    /** * ফিক্স: score কলামে আমরা শতাংশ (৮০) না পাঠিয়ে 
-                     * প্রাপ্ত নম্বর (correct) পাঠাব। 
-                     * এতে প্রোফাইল পেজে হিসাব সঠিক আসবে।
-                     */
-                    score: result.correct ?? 0, 
-                    total_questions: result.total || 0,
-                    correct_answers: result.correct || 0,
-                    wrong_answers: result.wrong || 0,
-                    time_taken: result.timeSpent || 0 
-                });
+					await saveResult({
+						subject_name: subjectName || "General",
+						/** * ফিক্স: score কলামে আমরা শতাংশ (৮০) না পাঠিয়ে
+						 * প্রাপ্ত নম্বর (correct) পাঠাব।
+						 * এতে প্রোফাইল পেজে হিসাব সঠিক আসবে।
+						 */
+						score: result.correct ?? 0,
+						total_questions: result.total || 0,
+						correct_answers: result.correct || 0,
+						wrong_answers: result.wrong || 0,
+						time_taken: result.timeSpent || 0,
+					});
 
-                setIsSaved(true);
-            } catch (err: any) {
-                console.error("Save failed details:", err);
-            }
-        }
-    };
+					setIsSaved(true);
+				} catch (err: any) {
+					console.error("Save failed details:", err);
+				}
+			}
+		};
 
-    performSave();
-}, [user, result, isSaved, subjectName]);
+		performSave();
+	}, [user, result, isSaved, subjectName]);
 
-    if (!result) return null;
-	
+	if (!result) return null;
 
-	
 	const handleBack = () => navigate(-1);
 
 	if (!result) return null;
 
-	const handleDownloadPdf = async () => {
-		const element = reportTemplateRef.current;
-		if (!element) return;
+const handleDownloadPdf = () => {
+    // ১. প্রিন্ট হওয়ার সময় ফাইলের নাম যা হবে (টাইটেল হিসেবে সেট করা)
+    const originalTitle = document.title;
+    const fileName = `Result_${subjectName || 'Exam'}_${new Date().toLocaleDateString()}`;
+    document.title = fileName;
 
-		setIsDownloading(true);
+    // ২. প্রিন্ট কমান্ড দেওয়া (ইউজার শুধু 'Save as PDF' এ ক্লিক করবে)
+    window.print();
 
-		// ডার্ক মোডে থাকলেও পিডিএফ যাতে লাইট মোডে আসে তার জন্য টেম্পোরারি ক্লাস
-		element.classList.add("pdf-light-mode");
-
-		const options = {
-			margin: [10, 10, 10, 10] as [number, number, number, number],
-			filename: `Result_${new Date().getTime()}.pdf`,
-			image: { type: "jpeg" as const, quality: 1.0 },
-			html2canvas: {
-				scale: 2,
-				useCORS: true,
-				backgroundColor: "#ffffff", // সাদা ব্যাকগ্রাউন্ড নিশ্চিত করা
-			},
-			jsPDF: {
-				unit: "mm" as const,
-				format: "a4" as const,
-				orientation: "portrait" as const,
-			},
-			pagebreak: { mode: ["avoid-all", "css", "legacy"] as const },
-		};
-
-		try {
-			await html2pdf().set(options).from(element).save();
-		} finally {
-			element.classList.remove("pdf-light-mode");
-			setIsDownloading(false);
-		}
-	};
+    // ৩. প্রিন্ট শেষ হলে টাইটেল আগের মতো করা
+    document.title = originalTitle;
+};
 
 	useEffect(() => {
 		if (isSaved) {
@@ -252,24 +228,50 @@ const FinishedResult: React.FC<Props> = ({ state }) => {
 
 			{/* Light Mode PDF Hack CSS */}
 			<style>{`
-        .pdf-light-mode {
-          background-color: white !important;
-          color: #1a1a1a !important;
-        }
-        .pdf-light-mode * {
-          color: #1a1a1a !important;
-          border-color: #e5e7eb !important;
-        }
-        .pdf-light-mode .bg-green-50, .pdf-light-mode .bg-blue-50, .pdf-light-mode .bg-yellow-50 {
-          background-color: #f0fdf4 !important; /* Force light green */
-        }
-        .pdf-light-mode .text-green-600, .pdf-light-mode .text-green-700 {
-          color: #15803d !important;
-        }
-        .pdf-light-mode .text-red-700 {
-          color: #b91c1c !important;
-        }
-      `}</style>
+  @media print {
+    /* ১. পেজের মার্জিন সেট করা */
+    @page {
+      margin: 15mm;
+    }
+
+    /* ২. ডার্ক মোড থাকলেও প্রিন্টে সাদা ব্যাকগ্রাউন্ড নিশ্চিত করা */
+    body {
+      background-color: white !important;
+      color: black !important;
+      -webkit-print-color-adjust: exact; /* কালার এবং গ্রাফিক্স ঠিক রাখতে */
+    }
+
+    /* ৩. অপ্রয়োজনীয় বাটন, ন্যাববার বা ফুটার হাইড করা */
+    .print-hidden, 
+    button, 
+    nav, 
+    footer,
+    .back-button {
+      display: none !important;
+    }
+
+    /* ৪. কন্টেন্ট যাতে মাঝপথে না ভেঙে যায় (Page Break) */
+    .question-box, .result-card, .group {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      margin-bottom: 20px !important;
+      display: block !important;
+    }
+
+    /* ৫. লাইন বা টেক্সট যাতে গায়ে গায়ে লেগে না থাকে */
+    p, span, div {
+      orphans: 3; /* লাইনের শুরুতে কমপক্ষে ৩টি লাইন একসাথে রাখবে */
+      widows: 3;  /* লাইনের শেষে কমপক্ষে ৩টি লাইন একসাথে রাখবে */
+    }
+
+    /* ৬. ল্যাটেক্স (Latex) সমীকরণ ফিক্স */
+    .mjx-container, .katex {
+      display: inline-block !important;
+      vertical-align: middle !important;
+      max-width: 100% !important;
+    }
+  }
+`}</style>
 		</div>
 	);
 };
