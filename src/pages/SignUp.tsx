@@ -8,6 +8,10 @@ const SignUp = () => {
   const { t, lang } = useLanguage();
   const { register, isLoading, user } = useAuth();
   const navigate = useNavigate();
+  
+  // পাসওয়ার্ড দেখানো বা লুকানোর জন্য স্টেট
+  const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -15,6 +19,7 @@ const SignUp = () => {
     phone: "",
     study_level: "SSC" as "SSC" | "HSC",
     group: "Science" as "Science" | "Arts" | "Commerce",
+    exam_year: "", 
     password: "",
     confirmPassword: "",
   });
@@ -29,10 +34,17 @@ const SignUp = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    if (name === "exam_year") {
+      const onlyNums = value.replace(/\D/g, "");
+      setFormData({ ...formData, [name]: onlyNums });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -59,7 +71,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex items-center justify-center px-4 py-16 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex items-center justify-center px-4 py-16 transition-colors font-sans">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -78,12 +90,11 @@ const SignUp = () => {
             {t("modal.signUp")}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium italic text-sm">
-            {lang === 'bn' ? 'কাফআহ পরিবারের সদস্য হয়ে আপনার যাত্রা শুরু করুন' : 'Join the Kafa\'ah family and start your journey'}
+            {lang === 'bn' ? 'কাফআহ পরিবারের সদস্য হয়ে আপনার যাত্রা শুরু করুন' : 'Join the Kafa\'ah family and start your journey'}
           </p>
         </div>
 
         <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-6 md:p-10 relative overflow-hidden">
-          {/* Decorative side accent */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/5 dark:bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
 
           {error && (
@@ -173,24 +184,48 @@ const SignUp = () => {
 
                 <div>
                   <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 mb-1 block">
-                    {t("modal.password")}
+                    {lang === 'bn' ? 'পরীক্ষার বছর' : 'Exam Year'}
                   </label>
                   <input
-                    type="password" name="password" value={formData.password} onChange={handleChange} required minLength={6}
+                    type="text" name="exam_year" value={formData.exam_year} onChange={handleChange}
+                    maxLength={4} placeholder="2025"
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
-                    placeholder="••••••••"
                   />
                 </div>
 
-                <div>
-                  <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 mb-1 block">
-                    {t("modal.confirmPassword")}
-                  </label>
-                  <input
-                    type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
-                    placeholder="••••••••"
-                  />
+                {/* Password Section with Show/Hide Option */}
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="relative">
+                    <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 mb-1 block">
+                      {t("modal.password")}
+                    </label>
+                    <input
+                      type={showPassword ? "text" : "password"} // টাইপ পরিবর্তন হবে
+                      name="password" value={formData.password} onChange={handleChange} required minLength={6}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
+                      placeholder="••••••••"
+                    />
+                    {/* Show/Hide Toggle Button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-[34px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors px-2 py-1"
+                    >
+                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 mb-1 block">
+                      {t("modal.confirmPassword")}
+                    </label>
+                    <input
+                      type={showPassword ? "text" : "password"} // কনফার্ম পাসওয়ার্ডেও একই লজিক
+                      name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800 border-none rounded-xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium text-sm"
+                      placeholder="••••••••"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

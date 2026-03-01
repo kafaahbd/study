@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, useEffect, useMemo } from "react";
 import axios from "axios";
-// ১. এখানে LogoutModal ইম্পোর্ট করতে হবে (বানাচ্ছেন যেটা)
 import LogoutModal from "../components/LogoutModal"; 
 
+// ১. User ইন্টারফেসে exam_year যোগ করা হয়েছে
 interface User {
   id: string;
   username: string;
@@ -11,6 +11,7 @@ interface User {
   phone?: string;
   study_level: "SSC" | "HSC";
   group: "Science" | "Arts" | "Commerce";
+  exam_year?: string; // ঐচ্ছিক ফিল্ড
   created_at: string;
 }
 
@@ -19,11 +20,13 @@ interface AuthContextType {
   token: string | null;
   login: (identifier: string, password: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<any>;
+  updateUser: (updatedData: Partial<User>) => Promise<void>;
   logout: () => void;
-  confirmLogout: () => void; // ২. নতুন ফাংশন ইন্টারফেসে যোগ হলো
+  confirmLogout: () => void;
   isLoading: boolean;
 }
 
+// ২. RegisterData ইন্টারফেসে exam_year যোগ করা হয়েছে
 interface RegisterData {
   username: string;
   name: string;
@@ -32,6 +35,7 @@ interface RegisterData {
   study_level: "SSC" | "HSC";
   group: "Science" | "Arts" | "Commerce";
   password: string;
+  exam_year?: string; // ঐচ্ছিক ফিল্ড
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -40,10 +44,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [isLoading, setIsLoading] = useState(false);
-  
-  // ৩. পপ-আপ দেখানোর জন্য স্টেট
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
+  // API Instance: বারবার হেডার সেট করা থেকে মুক্তি পেতে
   const api = useMemo(() => {
     const instance = axios.create({
       baseURL: import.meta.env.VITE_API_URL,
@@ -81,14 +84,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         identifier,
         password,
       });
-      const { token, user } = response.data;
+      const { token, user: loggedInUser } = response.data;
       localStorage.setItem("token", token);
       setToken(token);
-      setUser(user);
+      setUser(loggedInUser);
     } catch (error: any) {
-      if (error.response?.data) {
-        throw error.response.data;
-      }
+      if (error.response?.data) throw error.response.data;
       throw new Error("Login failed");
     } finally {
       setIsLoading(false);
@@ -101,10 +102,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, userData);
       return response.data;
     } catch (error: any) {
-      if (error.response?.data) {
-        throw error.response.data;
-      }
+      if (error.response?.data) throw error.response.data;
       throw new Error("Registration failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // ==================== প্রোফাইল আপডেট ফাংশন ====================
+  const updateUser = async (updatedData: Partial<User>) => {
+    setIsLoading(true);
+    try {
+      // ব্যাকএন্ডের PUT /auth/update-profile রাউটে ডাটা পাঠানো
+      const response = await api.put("/auth/update-profile", updatedData);
+      
+      // যদি ব্যাকএন্ড আপডেট হওয়া ইউজার অবজেক্ট পাঠায়, তবে সেটি সেট করা
+      if (response.data.user) {
+        setUser(response.data.user);
+      } else {
+        // ব্যাকএন্ডে শুধু মেসেজ পাঠালে ফ্রন্টএন্ড স্টেট মার্জ করা
+        setUser(prev => prev ? { ...prev, ...updatedData } : null);
+      }
+    } catch (error: any) {
+      if (error.response?.data) throw error.response.data;
+      throw new Error("Update failed");
     } finally {
       setIsLoading(false);
     }
@@ -114,19 +135,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);
-    setIsLogoutModalOpen(false); // লগআউট হলে মোডাল বন্ধ করে দাও
+    setIsLogoutModalOpen(false);
   };
 
-  // ৪. এই ফাংশনটি পেজ থেকে কল করা হবে
   const confirmLogout = () => {
     setIsLogoutModalOpen(true);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, confirmLogout, isLoading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      login, 
+      register, 
+      updateUser, 
+      logout, 
+      confirmLogout, 
+      isLoading 
+    }}>
       {children}
       
-      {/* ৫. গ্লোবাল মোডাল এখানে রেন্ডার হবে */}
+      {/* গ্লোবাল লগআউট কনফার্মেশন মোডাল */}
       <LogoutModal 
         isOpen={isLogoutModalOpen} 
         onClose={() => setIsLogoutModalOpen(false)} 

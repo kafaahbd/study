@@ -11,6 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // পাসওয়ার্ড দেখানোর স্টেট
   const [error, setError] = useState("");
   const [needsVerification, setNeedsVerification] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState("");
@@ -152,13 +153,21 @@ const Login = () => {
                       <i className="fas fa-lock"></i>
                     </span>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"} // শো/হাইড লজিক
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="w-full pl-11 pr-4 py-4 bg-slate-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium"
+                      className="w-full pl-11 pr-12 py-4 bg-slate-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 focus:ring-green-500/50 dark:focus:ring-blue-500/50 dark:text-white transition-all outline-none font-medium"
                       placeholder="••••••••"
                     />
+                    {/* চোখের আইকন বাটন */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                    >
+                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    </button>
                   </div>
                 </div>
               </div>
