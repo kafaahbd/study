@@ -217,6 +217,23 @@ export const content: Record<string, Record<string, string>> = {
 		"notFound.message":
 			"The page you are looking for does not exist or has been moved.",
 		"notFound.goHome": "Go Home",
+		
+		//forum
+		
+    "forum.placeholder": "Share something about your studies...",
+    "forum.postBtn": "Post",
+    "forum.common": "🌍 Common",
+    "forum.science": "🧪 Science",
+    "forum.arts": "🎨 Arts",
+    "forum.commerce": "📊 Commerce",
+    "forum.allBatches": "🎓 All Batches",
+    "forum.comment": "Comment",
+    "forum.writeComment": "Write a comment...",
+    "forum.noComments": "Be the first to comment!",
+    "forum.success": "Post created successfully!",
+    "forum.validationError": "Please write something before posting!",
+    "forum.error": "Failed to post!",
+	"forum.noPosts": "No posts posted yet",
 	},
 	bn: {
 		// Navbar
@@ -431,5 +448,21 @@ export const content: Record<string, Record<string, string>> = {
 		"notFound.message":
 			"আপনি যে পৃষ্ঠাটি খুঁজছেন তা বিদ্যমান নয় বা স্থানান্তরিত হয়েছে।",
 		"notFound.goHome": "হোম পৃষ্ঠায় যান",
+
+		//forum
+		"forum.placeholder": "আপনার পড়াশোনা নিয়ে কিছু শেয়ার করুন...",
+    "forum.postBtn": "পোস্ট",
+    "forum.common": "🌍 সাধারণ",
+    "forum.science": "🧪 বিজ্ঞান",
+    "forum.arts":"🎨 মানবিক",
+    "forum.commerce": "📊 ব্যবসায় শিক্ষা",
+    "forum.allBatches": "🎓 সকল ব্যাচ",
+    "forum.comment": "কমেন্ট",
+    "forum.writeComment": "মতামত লিখুন...",
+    "forum.noComments": "প্রথম কমেন্টটি আপনিই করুন!",
+    "forum.success": "প্রথম কমেন্টটি আপনিই করুন!",
+    "forum.validationError": "পোস্ট করার আগে কিছু লিখুন!",
+    "forum.error": "পোস্ট করা যায়নি!",
+	"forum.noPosts": "এখনও কোনো পোস্ট করা হয়নি",
 	},
 };
