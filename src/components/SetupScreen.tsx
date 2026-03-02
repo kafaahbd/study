@@ -133,7 +133,7 @@ const SetupScreen: React.FC<Props> = ({ state }) => {
               {lang === "bn" ? "৩. প্রশ্ন সংখ্যা" : "3. Questions"}
             </h2>
             <div className="flex flex-wrap gap-2">
-              {[5, 15, 25, 50].map((num) => (
+              {[5, 15, 25,30, 50].map((num) => (
                 <button
                   key={num}
                   onClick={() => setQuestionCount(num)}
