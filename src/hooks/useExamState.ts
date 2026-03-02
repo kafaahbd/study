@@ -6,6 +6,7 @@ import {
 	type ResultItem,
 	type ExamState,
 } from "../typescriptfile/types";
+import * as examService from "../services/examService"; // পাথ ঠিক আছে কি না দেখে নিও
 
 export const useExamState = () => {
 	const { lang } = useLanguage();
@@ -149,23 +150,43 @@ export const useExamState = () => {
 	};
 
 	// --- Exam mode submit ---
-	const handleSubmitExam = () => {
-		let correct = 0;
-		const results: ResultItem[] = questions.map((q) => {
-			const userAns = userAnswers[q.id];
-			const isCorrect = userAns === q.correct_answer;
-			if (isCorrect) correct++;
-			return {
-				...q,
-				userAnswer: userAns,
-				isCorrect,
-				correctAnswer: q.correct_answer,
-			};
-		});
-		setResult({ total: questions.length, correct, results });
-		setExamState("finished");
-	};
+	// --- Exam mode submit ---
+const handleSubmitExam = async () => { // এখানে async যোগ করা হয়েছে
+    let correct = 0;
+    const results: ResultItem[] = questions.map((q) => {
+        const userAns = userAnswers[q.id];
+        const isCorrect = userAns === q.correct_answer;
+        if (isCorrect) correct++;
+        return {
+            ...q,
+            userAnswer: userAns,
+            isCorrect,
+            correctAnswer: q.correct_answer,
+        };
+    });
 
+    const totalQuestions = questions.length;
+    const wrongAnswers = totalQuestions - correct;
+    const timeTaken = duration * 60 - timeLeft; // মোট সময় থেকে বাকি সময় বিয়োগ
+
+    setResult({ total: totalQuestions, correct, results });
+    setExamState("finished");
+
+    // ব্যাকএন্ডে ফুল রেজাল্ট এবং সাবজেক্টের নাম পাঠানো
+    try {
+        await examService.saveResult({
+            subject_name: subject, // তোমার স্টেট থেকে সাবজেক্টের নাম যাচ্ছে
+            score: correct,
+            total_questions: totalQuestions,
+            correct_answers: correct,
+            wrong_answers: wrongAnswers,
+            time_taken: timeTaken
+        });
+        console.log("Result saved successfully with subject name!");
+    } catch (error) {
+        console.error("Failed to save result to database:", error);
+    }
+};
 	// --- Practice mode: check answer ---
 	const handleCheckAnswer = (
 		questionId: number,
