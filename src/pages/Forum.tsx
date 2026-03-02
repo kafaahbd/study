@@ -12,7 +12,7 @@ import ConfirmModal from "../components/ConfirmModal";
 
 const Forum: React.FC = () => {
     const { user } = useAuth();
-    const { t, lang } = useLanguage();
+    const { lang } = useLanguage(); // 't' রিমুভ করা হয়েছে কারণ এটি ব্যবহৃত হচ্ছিল না
     const navigate = useNavigate();
 
     // UI States
@@ -21,30 +21,31 @@ const Forum: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     // Post Creation Selection
-    const [category, setCategory] = useState("Common");
-    const [batch, setBatch] = useState("SSC"); // Default Batch
+    // টাইপ এরর ফিক্স করতে এখানে <string> টাইপ ব্যবহার করা হয়েছে
+    const [category, setCategory] = useState<string>("Common");
+    const [batch, setBatch] = useState<string>("SSC"); 
     const [isCatOpen, setIsCatOpen] = useState(false);
     const [isBatchOpen, setIsBatchOpen] = useState(false);
 
     // --- Filtering States ---
-    const [activeCategory, setActiveCategory] = useState("All");
-    const [activeBatch, setActiveBatch] = useState("All");
+    const [activeCategory, setActiveCategory] = useState<string>("All");
+    const [activeBatch, setActiveBatch] = useState<string>("All");
 
     const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
     const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; postId: string | null }>({
         isOpen: false, postId: null,
     });
 
+    // কনস্ট্যান্ট ভ্যালুগুলো
     const categories = ["Common", "Science", "Arts", "Commerce"];
     const filterCategories = ["All", ...categories];
-    const batches = ["SSC", "HSC"];
-    const filterBatches = ["All", ...batches];
+    const postBatches = ["SSC", "HSC", "All"];
+    const filterBatches = ["All", "SSC", "HSC"];
 
-    // পোস্ট ফেচ করার মেইন ফাংশন
+    // পোস্ট ফেচ করার ফাংশন
     const fetchPosts = async () => {
         setLoading(true);
         try {
-            // সার্ভিস এ ফিল্টার ভ্যালু পাস করা হচ্ছে
             const data = await forumService.getPosts(activeCategory, activeBatch);
             setPosts(data);
         } catch (err) {
@@ -54,12 +55,10 @@ const Forum: React.FC = () => {
         }
     };
 
-    // যখনই ফিল্টার পরিবর্তন হবে, এই useEffect কল হবে
     useEffect(() => {
         fetchPosts();
     }, [activeCategory, activeBatch]);
 
-    // সাকসেস/এরর মেসেজ টাইমার
     useEffect(() => {
         if (toast) {
             const timer = setTimeout(() => setToast(null), 3000);
@@ -73,17 +72,16 @@ const Forum: React.FC = () => {
         try {
             await forumService.createPost(newPost, category, batch);
             setNewPost("");
-            setToast({ msg: t("forum.success"), type: "success" });
-            fetchPosts(); // নতুন পোস্ট করার পর লিস্ট রিফ্রেশ
+            setToast({ msg: lang === "bn" ? "পোস্ট শেয়ার হয়েছে!" : "Post shared!", type: "success" });
+            fetchPosts(); 
         } catch (err) {
-            setToast({ msg: t("forum.error"), type: "error" });
+            setToast({ msg: lang === "bn" ? "পোস্ট করা সম্ভব হয়নি" : "Failed to post", type: "error" });
         }
     };
 
     const handleToggleReact = async (postId: string) => {
         try {
             await forumService.toggleReact(postId);
-            // রিঅ্যাক্ট দিলে পুরো লিস্ট ফেচ না করে লোকাললি আপডেট করা ভালো, তবে আপাতত সিম্পল রাখছি
             fetchPosts();
         } catch (err) { console.error(err); }
     };
@@ -104,7 +102,7 @@ const Forum: React.FC = () => {
                 isOpen={deleteModal.isOpen}
                 onClose={() => setDeleteModal({ isOpen: false, postId: null })}
                 onConfirm={confirmDelete}
-                title="Delete Post?"
+                title={lang === "bn" ? "পোস্ট ডিলিট করবেন?" : "Delete Post?"}
             />
 
             {/* Toast UI */}
@@ -119,7 +117,7 @@ const Forum: React.FC = () => {
                 )}
             </AnimatePresence>
 
-            {/* Post Box */}
+            {/* Post Creation Box */}
             <motion.div className="bg-white dark:bg-gray-800 rounded-[45px] shadow-2xl shadow-blue-500/5 border border-white dark:border-gray-700/50 p-3 mb-8">
                 <div className="bg-gray-50/50 dark:bg-gray-900/40 rounded-[40px] p-6">
                     <div className="flex gap-4 items-start">
@@ -129,7 +127,7 @@ const Forum: React.FC = () => {
                         <div className="flex-1">
                             <textarea
                                 className="w-full bg-transparent border-none p-2 text-[16px] outline-none resize-none dark:text-white placeholder:text-gray-400 font-medium mt-2"
-                                placeholder={t("forum.placeholder")}
+                                placeholder={lang === "bn" ? "আপনার মনে কি আছে?" : "What's on your mind?"}
                                 rows={3}
                                 value={newPost}
                                 onChange={(e) => setNewPost(e.target.value)}
@@ -139,7 +137,7 @@ const Forum: React.FC = () => {
 
                     <div className="flex flex-wrap items-center justify-between mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/50 gap-4">
                         <div className="flex gap-3">
-                            {/* Category Dropdown */}
+                            {/* Post Category Selector */}
                             <div className="relative">
                                 <button onClick={() => { setIsCatOpen(!isCatOpen); setIsBatchOpen(false); }}
                                     className="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2.5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-[11px] font-black dark:text-gray-200"
@@ -165,7 +163,7 @@ const Forum: React.FC = () => {
                                 </AnimatePresence>
                             </div>
 
-                            {/* Batch Dropdown */}
+                            {/* Post Batch Selector */}
                             <div className="relative">
                                 <button onClick={() => { setIsBatchOpen(!isBatchOpen); setIsCatOpen(false); }}
                                     className="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2.5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-[11px] font-black dark:text-gray-200"
@@ -179,7 +177,7 @@ const Forum: React.FC = () => {
                                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 5 }} exit={{ opacity: 0, y: 10 }}
                                             className="absolute left-0 top-full z-[120] w-40 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden p-1"
                                         >
-                                            {batches.map((b) => (
+                                            {postBatches.map((b) => (
                                                 <button key={b} onClick={() => { setBatch(b); setIsBatchOpen(false); }}
                                                     className={`flex items-center justify-between w-full px-4 py-2.5 text-[11px] font-bold rounded-xl ${batch === b ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
                                                 >
@@ -241,7 +239,9 @@ const Forum: React.FC = () => {
             {/* Feed List */}
             <div className="space-y-8">
                 {loading ? (
-                    <div className="text-center py-10 text-gray-400">Loading posts...</div>
+                    <div className="text-center py-10 text-gray-400 font-bold uppercase tracking-widest animate-pulse">
+                        {lang === "bn" ? "পোস্ট লোড হচ্ছে..." : "Loading posts..."}
+                    </div>
                 ) : (
                     <AnimatePresence mode="popLayout">
                         {posts.length > 0 ? (
@@ -251,7 +251,7 @@ const Forum: React.FC = () => {
                                 >
                                     <div className="flex justify-between items-start mb-6">
                                         <div className="flex gap-4">
-                                            <div className="h-12 w-12 rounded-2xl bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-blue-600 font-black text-lg border dark:border-gray-700">
+                                            <div className="h-12 w-12 rounded-2xl bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-blue-600 font-black text-lg border dark:border-gray-700 uppercase">
                                                 {post.author_name?.[0]}
                                             </div>
                                             <div>
