@@ -1,15 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useAuth } from "../contexts/AuthContext";
 import { subjectChapters } from "../data/subjectChapters";
+import { getSubjectName } from "../typescriptfile/utils";
 import {
 	type Question,
 	type ResultItem,
 	type ExamState,
 } from "../typescriptfile/types";
-import * as examService from "../services/examService"; // পাথ ঠিক আছে কি না দেখে নিও
+import * as examService from "../services/examService";
 
 export const useExamState = () => {
 	const { lang } = useLanguage();
+	const { user } = useAuth();
 
 	const [group, setGroup] = useState<string | null>(null);
 	const [subject, setSubject] = useState<string | null>(null);
@@ -28,9 +31,14 @@ export const useExamState = () => {
 		total: number;
 		correct: number;
 		results: ResultItem[];
+		timeSpent?: number;
 	} | null>(null);
 
-	// Practice/review state
+	const [isSaved, setIsSaved] = useState(false);
+	const isSubmitting = useRef(false);
+
+	const subjectName = getSubjectName(subject, lang);
+
 	const [mistakes, setMistakes] = useState<number[]>([]);
 	const [reviewIndex, setReviewIndex] = useState<number>(0);
 	const [practiceMessage, setPracticeMessage] = useState<string>("");
@@ -150,43 +158,52 @@ export const useExamState = () => {
 	};
 
 	// --- Exam mode submit ---
-	// --- Exam mode submit ---
-const handleSubmitExam = async () => { // এখানে async যোগ করা হয়েছে
-    let correct = 0;
-    const results: ResultItem[] = questions.map((q) => {
-        const userAns = userAnswers[q.id];
-        const isCorrect = userAns === q.correct_answer;
-        if (isCorrect) correct++;
-        return {
-            ...q,
-            userAnswer: userAns,
-            isCorrect,
-            correctAnswer: q.correct_answer,
-        };
-    });
+	const handleSubmitExam = async () => {
+		if (isSubmitting.current) return;
+		isSubmitting.current = true;
 
-    const totalQuestions = questions.length;
-    const wrongAnswers = totalQuestions - correct;
-    const timeTaken = duration * 60 - timeLeft; // মোট সময় থেকে বাকি সময় বিয়োগ
+		let correct = 0;
+		const results: ResultItem[] = questions.map((q) => {
+			const userAns = userAnswers[q.id];
+			const isCorrect = userAns === q.correct_answer;
+			if (isCorrect) correct++;
+			return {
+				...q,
+				userAnswer: userAns,
+				isCorrect,
+				correctAnswer: q.correct_answer,
+			};
+		});
 
-    setResult({ total: totalQuestions, correct, results });
-    setExamState("finished");
+		const totalQuestions = questions.length;
+		const wrongAnswers = totalQuestions - correct;
+		const timeTaken = duration * 60 - timeLeft;
 
-    // ব্যাকএন্ডে ফুল রেজাল্ট এবং সাবজেক্টের নাম পাঠানো
-    try {
-        await examService.saveResult({
-            subject_name: subject, // তোমার স্টেট থেকে সাবজেক্টের নাম যাচ্ছে
-            score: correct,
-            total_questions: totalQuestions,
-            correct_answers: correct,
-            wrong_answers: wrongAnswers,
-            time_taken: timeTaken
-        });
-        console.log("Result saved successfully with subject name!");
-    } catch (error) {
-        console.error("Failed to save result to database:", error);
-    }
-};
+		setResult({
+			total: totalQuestions,
+			correct,
+			results,
+			timeSpent: timeTaken,
+		});
+		setExamState("finished");
+
+		if (user) {
+			try {
+				await examService.saveResult({
+					subject_name: subjectName || "General",
+					score: correct,
+					total_questions: totalQuestions,
+					correct_answers: correct,
+					wrong_answers: wrongAnswers,
+					time_taken: timeTaken,
+				});
+				setIsSaved(true);
+				console.log("Result saved successfully!");
+			} catch (error) {
+				console.error("Failed to save result:", error);
+			}
+		}
+	};
 	// --- Practice mode: check answer ---
 	const handleCheckAnswer = (
 		questionId: number,
@@ -381,6 +398,8 @@ const handleSubmitExam = async () => { // এখানে async যোগ কর
 
 	// --- Reset to setup ---
 	const resetToSetup = () => {
+		isSubmitting.current = false;
+		setIsSaved(false);
 		setExamState("setup");
 		setSelectedChapters([]);
 		setUserAnswers({});
@@ -429,6 +448,8 @@ const handleSubmitExam = async () => { // এখানে async যোগ কর
 		hasChecked,
 		selectedOptionColor,
 		everWrong,
+		isSaved,
+		subjectName,
 		loadQuestions,
 		handleAnswerSelect,
 		handleSubmitExam,

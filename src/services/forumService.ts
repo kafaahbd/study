@@ -24,19 +24,14 @@ export const forumService = {
    * @param batch - যেমন: 'SSC', 'HSC' (ঐচ্ছিক)
    */
   getPosts: async (category?: string, batch?: string) => {
-    let url = `${API_URL}/posts`;
-    
-    // কুয়েরি প্যারামিটার ডাইনামিকালি যোগ করা
-    const params = new URLSearchParams();
-    if (category && category !== 'All') params.append('category', category);
-    if (batch && batch !== 'All') params.append('batch', batch);
-    
-    const queryString = params.toString();
-    if (queryString) {
-      url += `?${queryString}`;
-    }
+    const params: any = {};
+    if (category && category !== "All") params.category = category;
+    if (batch && batch !== "All") params.batch = batch;
 
-    const response = await axios.get(url, getAuthHeader());
+    const response = await axios.get(`${API_URL}/posts`, {
+      ...getAuthHeader(),
+      params,
+    });
     return response.data;
   },
 

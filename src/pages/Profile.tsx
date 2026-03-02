@@ -124,12 +124,21 @@ const Profile = () => {
 						</button>
 					</div>
 
-					<button
-						onClick={confirmLogout}
-						className="px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm"
-					>
-						{lang === "bn" ? "লগ আউট" : "Logout"}
-					</button>
+					<div className="flex gap-3">
+						<Link
+							to="/dashboard"
+							className="px-6 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-sm flex items-center gap-2"
+						>
+							<i className="fas fa-chart-line"></i>
+							{lang === "bn" ? "ড্যাশবোর্ড" : "Dashboard"}
+						</Link>
+						<button
+							onClick={confirmLogout}
+							className="px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm"
+						>
+							{lang === "bn" ? "লগ আউট" : "Logout"}
+						</button>
+					</div>
 				</div>
 
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

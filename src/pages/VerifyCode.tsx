@@ -9,42 +9,57 @@ const VerifyCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // State management
   const [code, setCode] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [email, setEmail] = useState('');
   
-  // এটি পাসওয়ার্ড রিসেট কি না তা চেক করার জন্য
-  const isPasswordReset = location.state?.isPasswordReset || false;
+  // --- নতুন টাইমার স্টেট ---
+  const [timeLeft, setTimeLeft] = useState(120); // ২ মিনিট = ১২০ সেকেন্ড
+  const [canResend, setCanResend] = useState(false);
 
   useEffect(() => {
     const stateEmail = location.state?.email;
     if (!stateEmail) {
-      // ইমেইল না থাকলে সাইনআপ পেজে ফেরত পাঠানো
       navigate('/signup');
       return;
     }
     setEmail(stateEmail);
   }, [location, navigate]);
 
-  // ইনপুট পরিবর্তন হ্যান্ডল করা
-  const handleChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return; // শুধু সংখ্যা গ্রহণ করবে
+  // --- টাইমার লজিক ---
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      setCanResend(true);
+      return;
+    }
 
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  // সেকেন্ডকে মিনিট:সেকেন্ড ফরম্যাটে দেখানোর ফাংশন
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  const handleChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
     const newCode = [...code];
     newCode[index] = value.slice(-1);
     setCode(newCode);
-
-    // অটো-ফোকাস পরবর্তী ইনপুটে
     if (value && index < 5) {
       const nextInput = document.getElementById(`code-${index + 1}`);
       nextInput?.focus();
     }
   };
 
-  // ব্যাকস্পেস হ্যান্ডল করা
   const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === 'Backspace' && !code[index] && index > 0) {
       const prevInput = document.getElementById(`code-${index - 1}`);
@@ -52,11 +67,11 @@ const VerifyCode = () => {
     }
   };
 
-  // কোড সাবমিট করা
+  const isPasswordReset = location.state?.isPasswordReset || false;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
     const fullCode = code.join('');
     if (fullCode.length !== 6) {
       setError(lang === 'bn' ? '৬ ডিজিটের কোডটি দিন' : 'Enter 6 digit code');
@@ -65,39 +80,41 @@ const VerifyCode = () => {
 
     setIsLoading(true);
     try {
-      // এন্ডপয়েন্ট নির্ধারণ (পাসওয়ার্ড রিসেট না কি অ্যাকাউন্ট ভেরিফিকেশন)
       const endpoint = isPasswordReset ? '/auth/verify-reset-code' : '/auth/verify-code';
-      
       await axios.post(`${import.meta.env.VITE_API_URL}${endpoint}`, {
         email,
         code: fullCode,
       });
 
       if (isPasswordReset) {
-        // পাসওয়ার্ড রিসেট হলে নতুন পাসওয়ার্ড সেট করার পেজে যাবে
         navigate('/reset-password', { state: { email, code: fullCode } });
       } else {
-        // নতুন অ্যাকাউন্ট হলে লগইন পেজে যাবে
         navigate('/login', { 
           state: { message: lang === 'bn' ? 'ভেরিফিকেশন সফল! লগইন করুন।' : 'Verification success! Please login.' } 
         });
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || (lang === 'bn' ? 'কোডটি সঠিক নয়' : 'Invalid code'));
+      setError(err.response?.data?.message || (lang === 'bn' ? 'কোডটি সঠিক নয়' : 'Invalid code'));
     } finally {
       setIsLoading(false);
     }
   };
 
-  // কোড পুনরায় পাঠানো
   const handleResend = async () => {
+    if (!canResend) return; // টাইমার শেষ না হলে কাজ করবে না
+
     setResendLoading(true);
     setError('');
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/auth/resend-code`, { email });
       setCode(['', '', '', '', '', '']);
       document.getElementById('code-0')?.focus();
-      alert(lang === 'bn' ? 'নতুন কোড পাঠানো হয়েছে' : 'New code sent successfully');
+      
+      // রিসেন্ড সফল হলে টাইমার আবার শুরু হবে
+      setTimeLeft(120);
+      setCanResend(false);
+      
+      alert(lang === 'bn' ? 'নতুন কোড পাঠানো হয়েছে' : 'New code sent successfully');
     } catch (err: any) {
       setError(err.response?.data?.message || (lang === 'bn' ? 'কোড পাঠাতে ব্যর্থ' : 'Failed to resend code'));
     } finally {
@@ -114,7 +131,6 @@ const VerifyCode = () => {
       >
         <div className="bg-white dark:bg-gray-900 p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-gray-800 relative overflow-hidden">
           
-          {/* Header */}
           <div className="text-center mb-10">
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border ${isPasswordReset ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-100' : 'bg-green-50 dark:bg-green-900/20 border-green-100'}`}>
               <i className={`fas ${isPasswordReset ? 'fa-key text-orange-600' : 'fa-shield-alt text-green-600'} text-2xl`}></i>
@@ -123,7 +139,7 @@ const VerifyCode = () => {
               {isPasswordReset ? (lang === 'bn' ? 'কোডটি দিন' : 'Enter Code') : (t('verify.title') || 'Verify Account')}
             </h2>
             <p className="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2">
-              {lang === 'bn' ? 'আমরা এই ইমেইলে একটি কোড পাঠিয়েছি:' : 'We sent a code to:'} <br/>
+              {lang === 'bn' ? 'আমরা এই ইমেইলে একটি কোড পাঠিয়েছি:' : 'We sent a code to:'} <br/>
               <span className="text-gray-900 dark:text-gray-200 font-bold">{email}</span>
             </p>
           </div>
@@ -174,6 +190,7 @@ const VerifyCode = () => {
             </button>
           </form>
 
+          {/* --- আপডেট করা রিসেন্ড সেকশন --- */}
           <div className="mt-10 text-center border-t border-gray-50 dark:border-gray-800 pt-6">
             <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-3">
               {lang === 'bn' ? 'কোড পাননি?' : "Didn't receive the code?"}
@@ -181,16 +198,18 @@ const VerifyCode = () => {
             <button
               onClick={handleResend}
               type="button"
-              disabled={resendLoading}
+              disabled={resendLoading || !canResend}
               className={`${isPasswordReset ? 'text-orange-600' : 'text-green-600'} dark:text-blue-400 font-black uppercase text-xs tracking-widest hover:underline underline-offset-8 disabled:opacity-50 transition-all`}
             >
               {resendLoading ? (
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2 justify-center">
                   <i className="fas fa-circle-notch animate-spin"></i>
                   {lang === 'bn' ? 'পাঠানো হচ্ছে...' : 'Sending...'}
                 </span>
               ) : (
-                lang === 'bn' ? 'আবার পাঠান' : 'Resend Code'
+                canResend 
+                ? (lang === 'bn' ? 'আবার পাঠান' : 'Resend Code')
+                : (lang === 'bn' ? `${formatTime(timeLeft)} পর আবার পাঠান` : `Resend in ${formatTime(timeLeft)}`)
               )}
             </button>
           </div>

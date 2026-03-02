@@ -10,41 +10,10 @@ interface Props {
 
 const FinishedResult: React.FC<Props> = ({ state }) => {
 	const { user } = useAuth();
-	const { lang, result, subjectName, resetToSetup } = state;
-	const [isSaved, setIsSaved] = useState(false);
+	const { lang, result, subjectName, resetToSetup, isSaved } = state;
 	const navigate = useNavigate();
 	const reportTemplateRef = useRef<HTMLDivElement>(null);
 	const [isDownloading, setIsDownloading] = useState(false);
-
-	// ১. ডাটা সেভ করার লজিক
-	useEffect(() => {
-		const performSave = async () => {
-			if (user && result && !isSaved) {
-				try {
-					console.log("Saving result data...", result);
-
-					await saveResult({
-						subject_name: subjectName || "General",
-						/** * ফিক্স: score কলামে আমরা শতাংশ (৮০) না পাঠিয়ে
-						 * প্রাপ্ত নম্বর (correct) পাঠাব।
-						 * এতে প্রোফাইল পেজে হিসাব সঠিক আসবে।
-						 */
-						score: result.correct ?? 0,
-						total_questions: result.total || 0,
-						correct_answers: result.correct || 0,
-						wrong_answers: result.wrong || 0,
-						time_taken: result.timeSpent || 0,
-					});
-
-					setIsSaved(true);
-				} catch (err: any) {
-					console.error("Save failed details:", err);
-				}
-			}
-		};
-
-		performSave();
-	}, [user, result, isSaved, subjectName]);
 
 	if (!result) return null;
 

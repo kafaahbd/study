@@ -210,7 +210,7 @@ const Forum: React.FC = () => {
                                 <button key={cat} onClick={() => setActiveCategory(cat)}
                                     className={`px-4 py-1.5 rounded-2xl text-[11px] font-black transition-all ${activeCategory === cat ? "bg-blue-600 text-white shadow-lg" : "bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-gray-600"}`}
                                 >
-                                    {cat}
+                                    {cat === "All" ? (lang === "bn" ? "সব" : "All") : cat}
                                 </button>
                             ))}
                         </div>
@@ -220,7 +220,7 @@ const Forum: React.FC = () => {
                                 <button key={b} onClick={() => setActiveBatch(b)}
                                     className={`px-4 py-1.5 rounded-2xl text-[11px] font-black transition-all ${activeBatch === b ? "bg-indigo-600 text-white shadow-lg" : "bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-gray-600"}`}
                                 >
-                                    {b}
+                                    {b === "All" ? (lang === "bn" ? "সব" : "All") : b}
                                 </button>
                             ))}
                         </div>
