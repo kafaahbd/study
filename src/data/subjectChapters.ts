@@ -51,7 +51,7 @@ export const subjectChapters: SubjectChapters = {
 		biology: [{ name: "জীববিজ্ঞান অধ্যায় ১", url: "#" }],
 		// Arts
 		history: [{ name: "ইতিহাস অধ্যায় ১", url: "#" }],
-		civics: [{ name: "পৌরনীতি অধ্যায় ১", url: "#" }],
+		civics: [{ name: "পৌরনীতি অধ্যায় ৪", url: "#" }],
 		geography: [{ name: "ভূগোল অধ্যায় ১", url: "#" }],
 		// Commerce
 		accounting: [{ name: "হিসাববিজ্ঞান অধ্যায় ১", url: "#" }],
@@ -152,7 +152,12 @@ export const subjectChapters: SubjectChapters = {
 		// Arts
 		history: [{ name: "ইতিহাস অধ্যায় ১", url: "#" }],
 		islamic: [{ name: "ইসলামের ইতিহাস অধ্যায় ১", url: "#" }],
-		civics: [{ name: "পৌরনীতি অধ্যায় ১", url: "#" }],
+		civics: [
+			{
+				name: "পৌরনীতি 2য় পত্র অধ্যায় 4",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Civic_2nd_4",
+			},
+		],
 		economics: [{ name: "অর্থনীতি অধ্যায় ১", url: "#" }],
 		geography: [{ name: "ভূগোল অধ্যায় ১", url: "#" }],
 		// Commerce
