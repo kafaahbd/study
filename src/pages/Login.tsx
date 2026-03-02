@@ -38,8 +38,8 @@ const Login = () => {
       await login(identifier, password);
       navigate("/");
     } catch (err: any) {
-      // যদি ব্যাকএন্ড থেকে ভেরিফিকেশন প্রয়োজন এমন মেসেজ আসে (status 403)
-      if (err.needsVerification) {
+      // ব্যাকএন্ড যদি ৪0৩ এরর এবং needsVerification: true পাঠায়
+      if (err.needsVerification || err.status === 403) {
         setNeedsVerification(true);
         setUnverifiedEmail(err.email || identifier);
         setError(lang === 'bn' ? "আপনার অ্যাকাউন্টটি ভেরিফাই করা নেই।" : "Your account is not verified.");
@@ -60,7 +60,7 @@ const Login = () => {
       });
       setResendSuccess(lang === 'bn' ? "কোড পুনরায় পাঠানো হয়েছে!" : "Verification code resent!");
     } catch (err: any) {
-      setError(err.response?.data?.message || (lang === 'bn' ? "কোড পাঠাতে ব্যর্থ হয়েছে।" : "Failed to resend code."));
+      setError(err.response?.data?.message || (lang === 'bn' ? "কোড পাঠাতে ব্যর্থ হয়েছে।" : "Failed to resend code."));
     } finally {
       setResendLoading(false);
     }
@@ -93,17 +93,17 @@ const Login = () => {
         </div>
 
         <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-8 md:p-10 relative overflow-hidden">
-          {/* Decorative bar */}
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 to-blue-500"></div>
+          {/* Decorative Top Bar */}
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
 
           <AnimatePresence mode="wait">
             {needsVerification ? (
-              /* ভেরিফিকেশন কার্ড */
+              /* ভেরিফিকেশন কার্ড যখন ইউজার আনভেরিফাইড */
               <motion.div 
                 key="verification"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
                 className="space-y-6"
               >
                 <div className="text-center p-6 bg-amber-50 dark:bg-amber-900/20 rounded-3xl border border-amber-100 dark:border-amber-800">
@@ -112,8 +112,8 @@ const Login = () => {
                   </div>
                   <p className="text-sm text-gray-700 dark:text-gray-300 font-bold leading-relaxed">
                     {lang === 'bn' 
-                      ? `আমরা ${unverifiedEmail} এ একটি কোড পাঠিয়েছি। অ্যাকাউন্ট সক্রিয় করতে কোডটি দিন।`
-                      : `We've sent a code to ${unverifiedEmail}. Please verify to continue.`}
+                      ? `আমরা আপনার ইমেইলে একটি কোড পাঠিয়েছি। অ্যাকাউন্ট সক্রিয় করতে কোডটি দিন।`
+                      : `We've sent a code to your email. Please verify to continue.`}
                   </p>
                 </div>
 
@@ -192,32 +192,24 @@ const Login = () => {
                     to="/forgot-password"
                     className="text-[10px] font-black uppercase text-gray-400 hover:text-orange-500 tracking-widest transition-colors"
                   >
-                    {t("modal.forgotPassword") || "Forgot Password?"}
+                    {lang === 'bn' ? "পাসওয়ার্ড ভুলে গেছেন?" : "Forgot Password?"}
                   </Link>
                 </div>
 
                 {/* Error/Success Messages */}
                 <AnimatePresence>
-                  {error && (
+                  {(error || resendSuccess) && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 text-red-700 dark:text-red-400 text-xs font-bold rounded-r-xl flex items-center gap-3 overflow-hidden"
+                      className={`p-4 border-l-4 rounded-r-xl flex items-center gap-3 overflow-hidden ${
+                        error ? 'bg-red-50 dark:bg-red-900/20 border-red-500 text-red-700 dark:text-red-400' : 
+                        'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400'
+                      } text-xs font-bold`}
                     >
-                      <i className="fas fa-circle-exclamation text-base"></i>
-                      {error}
-                    </motion.div>
-                  )}
-                  {resendSuccess && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="p-4 bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 text-green-700 dark:text-green-400 text-xs font-bold rounded-r-xl flex items-center gap-3 overflow-hidden"
-                    >
-                      <i className="fas fa-check-circle text-base"></i>
-                      {resendSuccess}
+                      <i className={`fas ${error ? 'fa-circle-exclamation' : 'fa-check-circle'} text-base`}></i>
+                      {error || resendSuccess}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -238,7 +230,7 @@ const Login = () => {
           </AnimatePresence>
 
           <div className="mt-10 pt-8 border-t border-gray-50 dark:border-gray-800 text-center">
-            <p className="text-gray-500 dark:text-gray-400 font-medium">
+            <p className="text-gray-500 dark:text-gray-400 font-medium text-sm">
               {t("modal.noAccount")}{" "}
               <Link
                 to="/signup"
@@ -250,7 +242,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Home Link */}
+        {/* Back to Home Link */}
         <div className="mt-8 text-center">
           <Link
             to="/"
