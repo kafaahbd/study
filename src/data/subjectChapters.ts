@@ -37,7 +37,16 @@ export const subjectChapters: SubjectChapters = {
 			},
 		],
 		ict: [{ name: "ICT অধ্যায় ১", url: "#" }],
-		math: [{ name: "সাধারণ গণিত অধ্যায় ১", url: "#" }],
+		math: [
+			{
+				name: "সাধারণ গণিত অধ্যায় ২",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Ssc_math_2.json",
+			},
+			{
+				name: "সাধারণ গণিত অধ্যায় ৩",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Math_3_ssc.json",
+			},
+		],
 		islam: [{ name: "ইসলাম শিক্ষা অধ্যায় ১", url: "#" }],
 		// Science
 		physics: [
@@ -197,6 +206,6 @@ export const subjectChapters: SubjectChapters = {
 		"university-english": [
 			{ name: "ইংরেজি (বিশ্ববিদ্যালয়) অধ্যায় ১", url: "#" },
 		],
-		"university-gk": [{ name: "সাধারণ জ্ঞান অধ্যায় ১", url: "#" }],
+		"university-gk": [{ name: "সাধারণ জ্ঞান বাংলাদেশ বিষয়ক", url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/University_gk_bd.json" }],
 	},
 };
