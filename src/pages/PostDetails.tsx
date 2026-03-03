@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { forumService } from '../services/forumService';
 import { useAuth } from '../contexts/AuthContext';
-import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight } from 'lucide-react';
+import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
 
@@ -57,6 +57,10 @@ const PostDetails: React.FC = () => {
   };
 
   const handleCommentSubmit = async () => {
+    if (!user) {
+      alert("Please login to comment");
+      return;
+    }
     if (!commentText.trim() || !postId) return;
     try {
       // replyTo.parentId ব্যাকঅ্যান্ডে parent_id হিসেবে যাবে (গ্রুপিংয়ের জন্য)
@@ -66,6 +70,12 @@ const PostDetails: React.FC = () => {
       setReplyTo(null);
       loadPostData();
     } catch (err) { console.error("Submit Error:", err); }
+  };
+
+  const handleShare = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    alert("Link copied to clipboard!");
   };
 
   if (!post) return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white font-black animate-pulse uppercase tracking-[0.3em]">Loading...</div>;
@@ -108,6 +118,9 @@ const PostDetails: React.FC = () => {
                 <Trash2 size={18} />
              </button>
           )}
+          <button onClick={handleShare} className="text-gray-400 hover:text-green-500 transition-colors p-2 ml-2">
+            <Share2 size={18} />
+          </button>
         </div>
         <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-wrap">{post.content}</p>
       </motion.div>
@@ -133,12 +146,14 @@ const PostDetails: React.FC = () => {
                   )}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">{c.comment_text}</p>
-                <button 
-                    onClick={() => setReplyTo({ parentId: c.id, replyId: c.id, mentionName: c.author_name })} 
-                    className="mt-3 text-[10px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors flex items-center gap-1"
-                >
-                  Reply
-                </button>
+                {user && (
+                  <button 
+                      onClick={() => setReplyTo({ parentId: c.id, replyId: c.id, mentionName: c.author_name })} 
+                      className="mt-3 text-[10px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors flex items-center gap-1"
+                  >
+                    Reply
+                  </button>
+                )}
               </div>
             </div>
 
@@ -166,12 +181,14 @@ const PostDetails: React.FC = () => {
                       {reply.comment_text}
                     </p>
                     {/* রিপ্লাইয়ের রিপ্লাই দেওয়ার বাটন - এটিও মূল কমেন্ট (c.id) কেই parent_id হিসেবে ধরবে */}
-                    <button 
-                        onClick={() => setReplyTo({ parentId: c.id, replyId: reply.id, mentionName: reply.author_name })} 
-                        className="mt-2 text-[8px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors"
-                    >
-                      Reply
-                    </button>
+                    {user && (
+                      <button 
+                          onClick={() => setReplyTo({ parentId: c.id, replyId: reply.id, mentionName: reply.author_name })} 
+                          className="mt-2 text-[8px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors"
+                      >
+                        Reply
+                      </button>
+                    )}
                   </div>
                 </motion.div>
               ))}
@@ -185,39 +202,55 @@ const PostDetails: React.FC = () => {
       {/* স্টিকি ইনপুট বার */}
       <div className="fixed bottom-8 left-0 right-0 px-4 z-50">
         <div className="max-w-3xl mx-auto">
-          <AnimatePresence>
-            {replyTo && (
-              <motion.div 
-                initial={{ y: 15, opacity: 0 }} 
-                animate={{ y: 0, opacity: 1 }} 
-                exit={{ y: 15, opacity: 0 }} 
-                className="bg-blue-600 text-white px-6 py-2 rounded-t-[25px] text-[10px] font-black flex justify-between items-center mx-5 shadow-lg"
+          {!user ? (
+            <div className="bg-white dark:bg-gray-800 p-4 shadow-2xl border border-gray-100 dark:border-gray-700 rounded-[35px] text-center">
+              <p className="text-gray-500 dark:text-gray-400 font-bold">
+                Login to join the discussion
+              </p>
+              <button 
+                onClick={() => navigate("/login")}
+                className="mt-2 text-blue-600 font-black uppercase text-[10px] tracking-widest"
               >
-                <span className="flex items-center gap-2 uppercase tracking-widest">
-                    <CornerDownRight size={14}/> Replying to @{replyTo.mentionName}
-                </span>
-                <X size={16} className="cursor-pointer hover:rotate-90 transition-transform" onClick={() => setReplyTo(null)} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          
-          <div className={`bg-white dark:bg-gray-800 p-3 shadow-2xl border border-gray-100 dark:border-gray-700 flex gap-3 transition-all ${replyTo ? 'rounded-b-[35px] rounded-t-none' : 'rounded-[35px]'}`}>
-            <input 
-              type="text" 
-              value={commentText} 
-              onChange={(e) => setCommentText(e.target.value)} 
-              placeholder={replyTo ? `Write a reply to @${replyTo.mentionName}...` : "Add a comment..."} 
-              className="flex-1 bg-transparent px-6 py-2 outline-none dark:text-white font-medium" 
-              onKeyPress={(e) => e.key === 'Enter' && handleCommentSubmit()} 
-            />
-            <motion.button 
-                whileTap={{ scale: 0.9 }} 
-                onClick={handleCommentSubmit} 
-                className="bg-blue-600 text-white p-4 rounded-[22px] hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30"
-            >
-              <Send size={20} />
-            </motion.button>
-          </div>
+                Login Now
+              </button>
+            </div>
+          ) : (
+            <>
+              <AnimatePresence>
+                {replyTo && (
+                  <motion.div 
+                    initial={{ y: 15, opacity: 0 }} 
+                    animate={{ y: 0, opacity: 1 }} 
+                    exit={{ y: 15, opacity: 0 }} 
+                    className="bg-blue-600 text-white px-6 py-2 rounded-t-[25px] text-[10px] font-black flex justify-between items-center mx-5 shadow-lg"
+                  >
+                    <span className="flex items-center gap-2 uppercase tracking-widest">
+                        <CornerDownRight size={14}/> Replying to @{replyTo.mentionName}
+                    </span>
+                    <X size={16} className="cursor-pointer hover:rotate-90 transition-transform" onClick={() => setReplyTo(null)} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              
+              <div className={`bg-white dark:bg-gray-800 p-3 shadow-2xl border border-gray-100 dark:border-gray-700 flex gap-3 transition-all ${replyTo ? 'rounded-b-[35px] rounded-t-none' : 'rounded-[35px]'}`}>
+                <input 
+                  type="text" 
+                  value={commentText} 
+                  onChange={(e) => setCommentText(e.target.value)} 
+                  placeholder={replyTo ? `Write a reply to @${replyTo.mentionName}...` : "Add a comment..."} 
+                  className="flex-1 bg-transparent px-6 py-2 outline-none dark:text-white font-medium" 
+                  onKeyPress={(e) => e.key === 'Enter' && handleCommentSubmit()} 
+                />
+                <motion.button 
+                    whileTap={{ scale: 0.9 }} 
+                    onClick={handleCommentSubmit} 
+                    className="bg-blue-600 text-white p-4 rounded-[22px] hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30"
+                >
+                  <Send size={20} />
+                </motion.button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

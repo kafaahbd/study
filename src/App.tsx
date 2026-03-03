@@ -80,9 +80,11 @@ function App() {
 
 									<Route path="/forgot-password" element={<ForgotPassword />} />
 									<Route path="/reset-password" element={<ResetPassword />} />
+									
+									<Route path="/forum" element={<Forum />} />
+									<Route path="/post/:postId" element={<PostDetails />} />
+
 									<Route element={<ProtectedRoute />}>
-										<Route path="/forum" element={<Forum />} />
-										<Route path="/post/:postId" element={<PostDetails />} />
 										<Route path="/profile" element={<Profile />} />
 										<Route path="/dashboard" element={<Dashboard />} />
 										<Route path="/mistakes" element={<Mistakes />} />

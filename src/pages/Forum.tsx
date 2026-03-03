@@ -5,7 +5,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { forumService } from "../services/forumService";
 import {
     MessageSquare, Heart, Inbox, Trash2, Send,
-    Layers, GraduationCap, ChevronDown, Check, Filter, X
+    Layers, GraduationCap, ChevronDown, Check, Filter, X, Share2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfirmModal from "../components/ConfirmModal";
@@ -68,6 +68,10 @@ const Forum: React.FC = () => {
 
     const handlePostSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!user) {
+            setToast({ msg: lang === "bn" ? "পোস্ট করতে লগইন করুন" : "Login to post", type: "error" });
+            return;
+        }
         if (!newPost.trim()) return;
         try {
             await forumService.createPost(newPost, category, batch);
@@ -80,6 +84,10 @@ const Forum: React.FC = () => {
     };
 
     const handleToggleReact = async (postId: string) => {
+        if (!user) {
+            setToast({ msg: lang === "bn" ? "রিঅ্যাক্ট দিতে লগইন করুন" : "Login to react", type: "error" });
+            return;
+        }
         // Optimistic Update
         setPosts(prev => prev.map(p => {
             if (p.id === postId) {
@@ -99,6 +107,12 @@ const Forum: React.FC = () => {
             // Rollback on error
             fetchPosts();
         }
+    };
+
+    const handleShare = (postId: string) => {
+        const url = `${window.location.origin}/post/${postId}`;
+        navigator.clipboard.writeText(url);
+        setToast({ msg: lang === "bn" ? "লিঙ্ক কপি হয়েছে!" : "Link copied!", type: "success" });
     };
 
     const confirmDelete = async () => {
@@ -135,82 +149,98 @@ const Forum: React.FC = () => {
             {/* Post Creation Box */}
             <motion.div className="bg-white dark:bg-gray-800 rounded-[45px] shadow-2xl shadow-blue-500/5 border border-white dark:border-gray-700/50 p-3 mb-8">
                 <div className="bg-gray-50/50 dark:bg-gray-900/40 rounded-[40px] p-6">
-                    <div className="flex gap-4 items-start">
-                        <div className="h-14 w-14 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-blue-500/30 shrink-0">
-                            {user?.name?.[0].toUpperCase()}
+                    {!user ? (
+                        <div className="text-center py-4">
+                            <p className="text-gray-500 dark:text-gray-400 font-bold mb-4">
+                                {lang === "bn" ? "আপনার মতামত জানাতে লগইন করুন" : "Login to share your thoughts"}
+                            </p>
+                            <button 
+                                onClick={() => navigate("/login")}
+                                className="bg-blue-600 text-white px-8 py-2.5 rounded-2xl text-[13px] font-black shadow-lg shadow-blue-500/30"
+                            >
+                                {lang === "bn" ? "লগইন করুন" : "Login"}
+                            </button>
                         </div>
-                        <div className="flex-1">
-                            <textarea
-                                className="w-full bg-transparent border-none p-2 text-[16px] outline-none resize-none dark:text-white placeholder:text-gray-400 font-medium mt-2"
-                                placeholder={lang === "bn" ? "আপনার মনে কি আছে?" : "What's on your mind?"}
-                                rows={3}
-                                value={newPost}
-                                onChange={(e) => setNewPost(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-between mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/50 gap-4">
-                        <div className="flex gap-3">
-                            {/* Post Category Selector */}
-                            <div className="relative">
-                                <button onClick={() => { setIsCatOpen(!isCatOpen); setIsBatchOpen(false); }}
-                                    className="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2.5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-[11px] font-black dark:text-gray-200"
-                                >
-                                    <Layers size={14} className="text-blue-500" />
-                                    {category}
-                                    <motion.div animate={{ rotate: isCatOpen ? 180 : 0 }}><ChevronDown size={14} /></motion.div>
-                                </button>
-                                <AnimatePresence>
-                                    {isCatOpen && (
-                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 5 }} exit={{ opacity: 0, y: 10 }}
-                                            className="absolute left-0 top-full z-[120] w-40 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden p-1"
-                                        >
-                                            {categories.map((cat) => (
-                                                <button key={cat} onClick={() => { setCategory(cat); setIsCatOpen(false); }}
-                                                    className={`flex items-center justify-between w-full px-4 py-2.5 text-[11px] font-bold rounded-xl ${category === cat ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
-                                                >
-                                                    {cat} {category === cat && <Check size={12} />}
-                                                </button>
-                                            ))}
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                    ) : (
+                        <>
+                            <div className="flex gap-4 items-start">
+                                <div className="h-14 w-14 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-blue-500/30 shrink-0">
+                                    {user?.name?.[0].toUpperCase()}
+                                </div>
+                                <div className="flex-1">
+                                    <textarea
+                                        className="w-full bg-transparent border-none p-2 text-[16px] outline-none resize-none dark:text-white placeholder:text-gray-400 font-medium mt-2"
+                                        placeholder={lang === "bn" ? "আপনার মনে কি আছে?" : "What's on your mind?"}
+                                        rows={3}
+                                        value={newPost}
+                                        onChange={(e) => setNewPost(e.target.value)}
+                                    />
+                                </div>
                             </div>
 
-                            {/* Post Batch Selector */}
-                            <div className="relative">
-                                <button onClick={() => { setIsBatchOpen(!isBatchOpen); setIsCatOpen(false); }}
-                                    className="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2.5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-[11px] font-black dark:text-gray-200"
-                                >
-                                    <GraduationCap size={14} className="text-indigo-500" />
-                                    {batch}
-                                    <motion.div animate={{ rotate: isBatchOpen ? 180 : 0 }}><ChevronDown size={14} /></motion.div>
-                                </button>
-                                <AnimatePresence>
-                                    {isBatchOpen && (
-                                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 5 }} exit={{ opacity: 0, y: 10 }}
-                                            className="absolute left-0 top-full z-[120] w-40 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden p-1"
+                            <div className="flex flex-wrap items-center justify-between mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/50 gap-4">
+                                <div className="flex gap-3">
+                                    {/* Post Category Selector */}
+                                    <div className="relative">
+                                        <button onClick={() => { setIsCatOpen(!isCatOpen); setIsBatchOpen(false); }}
+                                            className="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2.5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-[11px] font-black dark:text-gray-200"
                                         >
-                                            {postBatches.map((b) => (
-                                                <button key={b} onClick={() => { setBatch(b); setIsBatchOpen(false); }}
-                                                    className={`flex items-center justify-between w-full px-4 py-2.5 text-[11px] font-bold rounded-xl ${batch === b ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                                            <Layers size={14} className="text-blue-500" />
+                                            {category}
+                                            <motion.div animate={{ rotate: isCatOpen ? 180 : 0 }}><ChevronDown size={14} /></motion.div>
+                                        </button>
+                                        <AnimatePresence>
+                                            {isCatOpen && (
+                                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 5 }} exit={{ opacity: 0, y: 10 }}
+                                                    className="absolute left-0 top-full z-[120] w-40 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden p-1"
                                                 >
-                                                    {b} {batch === b && <Check size={12} />}
-                                                </button>
-                                            ))}
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-                        </div>
+                                                    {categories.map((cat) => (
+                                                        <button key={cat} onClick={() => { setCategory(cat); setIsCatOpen(false); }}
+                                                            className={`flex items-center justify-between w-full px-4 py-2.5 text-[11px] font-bold rounded-xl ${category === cat ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                                                        >
+                                                            {cat} {category === cat && <Check size={12} />}
+                                                        </button>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
 
-                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handlePostSubmit}
-                            className="bg-blue-600 text-white px-8 py-3 rounded-2xl text-[13px] font-black shadow-lg shadow-blue-500/30 flex items-center gap-2"
-                        >
-                            <Send size={16} /> {lang === "bn" ? "পোস্ট করুন" : "Post"}
-                        </motion.button>
-                    </div>
+                                    {/* Post Batch Selector */}
+                                    <div className="relative">
+                                        <button onClick={() => { setIsBatchOpen(!isBatchOpen); setIsCatOpen(false); }}
+                                            className="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2.5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 text-[11px] font-black dark:text-gray-200"
+                                        >
+                                            <GraduationCap size={14} className="text-indigo-500" />
+                                            {batch}
+                                            <motion.div animate={{ rotate: isBatchOpen ? 180 : 0 }}><ChevronDown size={14} /></motion.div>
+                                        </button>
+                                        <AnimatePresence>
+                                            {isBatchOpen && (
+                                                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 5 }} exit={{ opacity: 0, y: 10 }}
+                                                    className="absolute left-0 top-full z-[120] w-40 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden p-1"
+                                                >
+                                                    {postBatches.map((b) => (
+                                                        <button key={b} onClick={() => { setBatch(b); setIsBatchOpen(false); }}
+                                                            className={`flex items-center justify-between w-full px-4 py-2.5 text-[11px] font-bold rounded-xl ${batch === b ? "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600" : "text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+                                                        >
+                                                            {b} {batch === b && <Check size={12} />}
+                                                        </button>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                </div>
+
+                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handlePostSubmit}
+                                    className="bg-blue-600 text-white px-8 py-3 rounded-2xl text-[13px] font-black shadow-lg shadow-blue-500/30 flex items-center gap-2"
+                                >
+                                    <Send size={16} /> {lang === "bn" ? "পোস্ট করুন" : "Post"}
+                                </motion.button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </motion.div>
 
@@ -308,6 +338,11 @@ const Forum: React.FC = () => {
                                             className="flex items-center gap-2 text-sm font-black text-gray-400 hover:text-blue-600 transition-colors"
                                         >
                                             <MessageSquare size={22} /> {post.comment_count || 0}
+                                        </button>
+                                        <button onClick={() => handleShare(post.id)}
+                                            className="flex items-center gap-2 text-sm font-black text-gray-400 hover:text-green-600 transition-colors ml-auto"
+                                        >
+                                            <Share2 size={20} />
                                         </button>
                                     </div>
                                 </motion.div>
