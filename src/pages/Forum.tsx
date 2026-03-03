@@ -239,8 +239,20 @@ const Forum: React.FC = () => {
             {/* Feed List */}
             <div className="space-y-8">
                 {loading ? (
-                    <div className="text-center py-10 text-gray-400 font-bold uppercase tracking-widest animate-pulse">
-                        {lang === "bn" ? "পোস্ট লোড হচ্ছে..." : "Loading posts..."}
+                    <div className="flex flex-col items-center justify-center py-20">
+                        <div className="relative">
+                            <motion.div 
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                className="h-16 w-16 rounded-full border-4 border-gray-100 dark:border-gray-800 border-t-blue-600 dark:border-t-blue-500"
+                            />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                <div className="h-3 w-3 bg-blue-600 dark:bg-blue-500 rounded-full animate-pulse" />
+                            </div>
+                        </div>
+                        <p className="mt-6 text-gray-400 dark:text-gray-500 font-black text-[10px] uppercase tracking-[0.3em] animate-pulse">
+                            {lang === "bn" ? "পোস্ট লোড হচ্ছে..." : "Loading posts..."}
+                        </p>
                     </div>
                 ) : (
                     <AnimatePresence mode="popLayout">
