@@ -93,10 +93,11 @@ const Dashboard = () => {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50 dark:bg-gray-700/50 text-gray-400 text-[10px] font-black uppercase tracking-widest">
-                  <th className="px-8 py-5">Subject</th>
-                  <th className="px-8 py-5">Score</th>
-                  <th className="px-8 py-5">Accuracy</th>
-                  <th className="px-8 py-5">Date</th>
+                  <th className="px-8 py-5">{lang === 'bn' ? 'বিষয়' : 'Subject'}</th>
+                  <th className="px-8 py-5">{lang === 'bn' ? 'প্রাপ্ত নম্বর' : 'Score'}</th>
+                  <th className="px-8 py-5">{lang === 'bn' ? 'সঠিকতা' : 'Accuracy'}</th>
+                  <th className="px-8 py-5">{lang === 'bn' ? 'সময়' : 'Time'}</th>
+                  <th className="px-8 py-5">{lang === 'bn' ? 'তারিখ' : 'Date'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50 dark:divide-gray-700">
@@ -122,6 +123,11 @@ const Dashboard = () => {
                             </div>
                             <span className="text-xs font-bold text-gray-400">{accuracy}%</span>
                          </div>
+                      </td>
+                      <td className="px-8 py-5 text-sm font-bold text-gray-600 dark:text-gray-400">
+                        {item.time_taken ? (
+                          `${Math.floor(item.time_taken / 60)}m ${item.time_taken % 60}s`
+                        ) : '--'}
                       </td>
                       <td className="px-8 py-5 text-sm text-gray-500 font-medium">
                           {new Date(item.created_at).toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-US')}
