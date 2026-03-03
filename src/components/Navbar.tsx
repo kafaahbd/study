@@ -4,14 +4,13 @@ import { useAuth } from '../contexts/AuthContext';
 import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
 import { motion } from 'framer-motion';
-import { BookOpen, MessageSquare, Zap } from 'lucide-react'; // আইকন যুক্ত করা হয়েছে
+import { BookOpen, MessageSquare, Zap } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const { t, lang } = useLanguage();
   const location = useLocation();
   const { user, confirmLogout } = useAuth();
 
-  // একটি হেল্পার ফাংশন চেক করার জন্য যে কোন লিঙ্কটি বর্তমানে অ্যাক্টিভ আছে
   const isActive = (path: string) => location.pathname === path;
 
   const navItemClass = (path: string) => `
@@ -23,11 +22,12 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-[100] backdrop-blur-lg bg-white/70 dark:bg-gray-800/70 border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
+      {/* Main Header: Sticky on PC, Relative on Mobile */}
+      <nav className="md:fixed relative top-0 w-full z-[100] backdrop-blur-lg bg-white/70 dark:bg-gray-800/70 border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
             
-            {/* Left Side: Logo & Navigation */}
+            {/* Left Side: Logo & Desktop Navigation */}
             <div className="flex items-center space-x-4 md:space-x-8">
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
@@ -62,20 +62,6 @@ const Navbar: React.FC = () => {
             
             {/* Right Side Actions */}
             <div className="flex items-center space-x-3 md:space-x-6">
-              
-              {/* Mobile Icons (শুধুমাত্র মোবাইলে স্টাডি ও ফোরাম আইকন) */}
-              <div className="flex md:hidden items-center space-x-1 pr-2 border-r border-gray-200 dark:border-gray-700">
-                 <Link to="/" className={`p-2 rounded-lg ${isActive('/') ? 'text-green-600' : 'text-gray-500'}`}>
-                    <BookOpen size={20} />
-                 </Link>
-                 <Link to="/forum" className={`p-2 rounded-lg ${isActive('/forum') ? 'text-green-600' : 'text-gray-500'}`}>
-                    <MessageSquare size={20} />
-                 </Link>
-                 <Link to="/mistakes" className={`p-2 rounded-lg ${isActive('/mistakes') ? 'text-green-600' : 'text-gray-500'}`}>
-                    <Zap size={20} />
-                 </Link>
-              </div>
-
               {/* Toggle Buttons Container */}
               <div className="flex items-center bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
                 <LanguageToggle />
@@ -124,8 +110,27 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </nav>
-      {/* Space to prevent content overlap */}
-      <div className="h-16 md:h-20"></div>
+
+      {/* Mobile Bottom Navigation: Sticky/Fixed at bottom */}
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-sm">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-[2rem] shadow-2xl p-2 flex justify-around items-center">
+          <Link to="/" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/') ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-gray-500'}`}>
+            <BookOpen size={24} />
+            <span className="text-[10px] font-black uppercase tracking-widest">Study</span>
+          </Link>
+          <Link to="/forum" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/forum') ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-500'}`}>
+            <MessageSquare size={24} />
+            <span className="text-[10px] font-black uppercase tracking-widest">Forum</span>
+          </Link>
+          <Link to="/mistakes" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/mistakes') ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/20' : 'text-gray-500'}`}>
+            <Zap size={24} />
+            <span className="text-[10px] font-black uppercase tracking-widest">{lang === 'bn' ? 'ভুল' : 'Mistakes'}</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* Desktop Space to prevent content overlap */}
+      <div className="hidden md:block h-16 md:h-20"></div>
     </>
   );
 };

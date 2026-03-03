@@ -80,10 +80,25 @@ const Forum: React.FC = () => {
     };
 
     const handleToggleReact = async (postId: string) => {
+        // Optimistic Update
+        setPosts(prev => prev.map(p => {
+            if (p.id === postId) {
+                const is_reacted = !p.is_reacted;
+                const react_count = is_reacted ? (Number(p.react_count) + 1) : (Number(p.react_count) - 1);
+                return { ...p, is_reacted, react_count };
+            }
+            return p;
+        }));
+
         try {
             await forumService.toggleReact(postId);
+            // No need to fetchPosts() here as we updated state optimistically
+            // and the backend call is already handled.
+        } catch (err) { 
+            console.error(err);
+            // Rollback on error
             fetchPosts();
-        } catch (err) { console.error(err); }
+        }
     };
 
     const confirmDelete = async () => {
@@ -200,7 +215,7 @@ const Forum: React.FC = () => {
             </motion.div>
 
             {/* --- Filter Bar --- */}
-            <div className="sticky top-4 z-[100] mb-8">
+            <div className="mb-8">
                 <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700 p-2 overflow-x-auto no-scrollbar">
                     <div className="flex items-center gap-2 min-w-max">
                         <div className="p-2 ml-2 text-blue-600 dark:text-blue-400"><Filter size={18} /></div>
