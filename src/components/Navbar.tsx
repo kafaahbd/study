@@ -1,11 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, MessageSquare, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 const Navbar: React.FC = () => {
   const { t, lang } = useLanguage();
@@ -126,24 +126,32 @@ const Navbar: React.FC = () => {
       </nav>
 
       {/* Mobile Bottom Navigation: Sticky/Fixed at bottom */}
-      {!hideBottomNav && (
-        <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-sm">
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-[2rem] shadow-2xl p-2 flex justify-around items-center">
-            <Link to="/" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/') ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-gray-500'}`}>
-              <BookOpen size={24} />
-              <span className="text-[10px] font-black uppercase tracking-widest">Study</span>
-            </Link>
-            <Link to="/forum" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/forum') ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-500'}`}>
-              <MessageSquare size={24} />
-              <span className="text-[10px] font-black uppercase tracking-widest">Forum</span>
-            </Link>
-            <Link to="/mistakes" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/mistakes') ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/20' : 'text-gray-500'}`}>
-              <Zap size={24} />
-              <span className="text-[10px] font-black uppercase tracking-widest">{lang === 'bn' ? 'ভুল' : 'Mistakes'}</span>
-            </Link>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {!hideBottomNav && (
+          <motion.div 
+            initial={{ y: 100, x: '-50%', opacity: 0 }}
+            animate={{ y: 0, x: '-50%', opacity: 1 }}
+            exit={{ y: 100, x: '-50%', opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="md:hidden fixed bottom-6 left-1/2 z-[100] w-[90%] max-w-sm"
+          >
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-[2rem] shadow-2xl p-2 flex justify-around items-center">
+              <Link to="/" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/') ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-gray-500'}`}>
+                <BookOpen size={24} />
+                <span className="text-[10px] font-black uppercase tracking-widest">Study</span>
+              </Link>
+              <Link to="/forum" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/forum') ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-500'}`}>
+                <MessageSquare size={24} />
+                <span className="text-[10px] font-black uppercase tracking-widest">Forum</span>
+              </Link>
+              <Link to="/mistakes" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/mistakes') ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/20' : 'text-gray-500'}`}>
+                <Zap size={24} />
+                <span className="text-[10px] font-black uppercase tracking-widest">{lang === 'bn' ? 'ভুল' : 'Mistakes'}</span>
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Space to prevent content overlap */}
       <div className="h-16 md:h-20"></div>
