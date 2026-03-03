@@ -102,6 +102,10 @@ export const subjectChapters: SubjectChapters = {
 		],
 		ict: [
 			{
+				name: "ICT অধ্যায় ১",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Ict_1_hsc.json",
+			},
+			{
 				name: "ICT অধ্যায় ৫",
 				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/ict_hsc_5.json",
 			},

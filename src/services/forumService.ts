@@ -24,9 +24,10 @@ export const forumService = {
    * @param batch - যেমন: 'SSC', 'HSC' (ঐচ্ছিক)
    */
   getPosts: async (category?: string, batch?: string) => {
-    const params: any = {};
-    if (category && category !== "All") params.category = category;
-    if (batch && batch !== "All") params.batch = batch;
+    const params = {
+      category: category || "All",
+      batch: batch || "All",
+    };
 
     const response = await axios.get(`${API_URL}/posts`, {
       ...getAuthHeader(),

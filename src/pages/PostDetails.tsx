@@ -22,12 +22,15 @@ const PostDetails: React.FC = () => {
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
 
   const loadPostData = async () => {
+    if (!postId) return;
     try {
-      const posts = await forumService.getPosts();
-      const currentPost = posts.find((p: any) => p.id === postId);
+      const currentPost = await forumService.getPostById(postId);
       if (!currentPost) navigate('/forum');
       setPost(currentPost);
-    } catch (err) { console.error("Error loading post:", err); }
+    } catch (err) { 
+      console.error("Error loading post:", err);
+      navigate('/forum');
+    }
   };
 
   useEffect(() => { loadPostData(); }, [postId]);
