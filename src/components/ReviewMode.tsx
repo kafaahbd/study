@@ -107,15 +107,16 @@ const ReviewMode: React.FC<Props> = ({ state }) => {
           <AnimatePresence>
             {hasChecked && practiceMessage && (
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-8 p-6 bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-500 rounded-2xl"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                className="mt-8 p-6 bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-500 rounded-2xl shadow-inner"
               >
-                <div className="flex items-center mb-2 text-amber-700 dark:text-amber-500 font-black uppercase text-xs tracking-tighter">
+                <div className="flex items-center mb-3 text-amber-700 dark:text-amber-500 font-black uppercase text-xs tracking-[0.2em]">
                   <i className="fas fa-lightbulb mr-2"></i>
                   {lang === "bn" ? "সঠিক ব্যাখ্যা" : "Correct Explanation"}
                 </div>
-                <div className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium whitespace-pre-wrap">
                   <Latex>{practiceMessage}</Latex>
                 </div>
               </motion.div>

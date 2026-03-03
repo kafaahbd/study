@@ -35,6 +35,11 @@ const PostDetails: React.FC = () => {
 
   useEffect(() => { loadPostData(); }, [postId]);
 
+  useEffect(() => {
+    document.body.classList.add("hide-mobile-nav");
+    return () => document.body.classList.remove("hide-mobile-nav");
+  }, []);
+
   const handlePostDeleteConfirm = async () => {
     try {
       await forumService.deletePost(postId!);

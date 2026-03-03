@@ -95,15 +95,16 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 					<AnimatePresence>
 						{hasChecked && practiceMessage && (
 							<motion.div
-								initial={{ opacity: 0, height: 0 }}
-								animate={{ opacity: 1, height: "auto" }}
-								className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-xl overflow-hidden"
+								initial={{ opacity: 0, y: 20, scale: 0.95 }}
+								animate={{ opacity: 1, y: 0, scale: 1 }}
+								transition={{ type: "spring", damping: 20, stiffness: 100 }}
+								className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-2xl overflow-hidden shadow-inner"
 							>
-								<div className="flex items-center mb-2 text-blue-700 dark:text-blue-400 font-bold uppercase text-xs tracking-widest">
+								<div className="flex items-center mb-3 text-blue-700 dark:text-blue-400 font-black uppercase text-xs tracking-[0.2em]">
 									<i className="fas fa-info-circle mr-2"></i>
 									{lang === "bn" ? "ব্যাখ্যা" : "Explanation"}
 								</div>
-								<div className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
+								<div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium whitespace-pre-wrap">
 									<Latex>{practiceMessage}</Latex>
 								</div>
 							</motion.div>
