@@ -197,10 +197,26 @@ export const useExamState = () => {
 					wrong_answers: wrongAnswers,
 					time_taken: timeTaken,
 				});
+
+				// ভুল প্রশ্নগুলো আলাদা করে সেভ করা
+				const wrongQuestions = results
+					.filter((r) => !r.isCorrect)
+					.map((r) => {
+						const { userAnswer, isCorrect, correctAnswer, ...rest } = r;
+						return rest;
+					});
+
+				if (wrongQuestions.length > 0) {
+					await examService.saveMistakes({
+						subject_name: subjectName || "General",
+						mistakes: wrongQuestions,
+					});
+				}
+
 				setIsSaved(true);
-				console.log("Result saved successfully!");
+				console.log("Result and mistakes saved successfully!");
 			} catch (error) {
-				console.error("Failed to save result:", error);
+				console.error("Failed to save result or mistakes:", error);
 			}
 		}
 	};

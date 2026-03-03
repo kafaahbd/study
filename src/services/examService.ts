@@ -57,3 +57,63 @@ export const getExamDetails = async (examId: string) => {
     throw error;
   }
 };
+
+/**
+ * ৪. ভুল প্রশ্নগুলো সেভ করা
+ */
+export const saveMistakes = async (mistakeData: any) => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.post(`${API_URL}/exam/mistakes/save`, mistakeData, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * ৫. ভুল থাকা সাবজেক্ট লিস্ট
+ */
+export const getMistakeSubjects = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.get(`${API_URL}/exam/mistakes/subjects`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * ৬. সাবজেক্ট অনুযায়ী ভুল প্রশ্ন
+ */
+export const getMistakesBySubject = async (subjectName: string) => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.get(`${API_URL}/exam/mistakes/subject/${subjectName}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * ৭. ভুল প্রশ্ন ডিলিট করা
+ */
+export const deleteMistake = async (mistakeId: string) => {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.delete(`${API_URL}/exam/mistakes/${mistakeId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -4,10 +4,10 @@ import { useAuth } from '../contexts/AuthContext';
 import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
 import { motion } from 'framer-motion';
-import { BookOpen, MessageSquare } from 'lucide-react'; // আইকন যুক্ত করা হয়েছে
+import { BookOpen, MessageSquare, Zap } from 'lucide-react'; // আইকন যুক্ত করা হয়েছে
 
 const Navbar: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const location = useLocation();
   const { user, confirmLogout } = useAuth();
 
@@ -53,6 +53,10 @@ const Navbar: React.FC = () => {
                   <MessageSquare size={18} />
                   <span>Forum</span>
                 </Link>
+                <Link to="/mistakes" className={navItemClass('/mistakes')}>
+                  <Zap size={18} />
+                  <span>{lang === 'bn' ? 'ভুল সংশোধন' : 'Mistakes'}</span>
+                </Link>
               </div>
             </div>
             
@@ -66,6 +70,9 @@ const Navbar: React.FC = () => {
                  </Link>
                  <Link to="/forum" className={`p-2 rounded-lg ${isActive('/forum') ? 'text-green-600' : 'text-gray-500'}`}>
                     <MessageSquare size={20} />
+                 </Link>
+                 <Link to="/mistakes" className={`p-2 rounded-lg ${isActive('/mistakes') ? 'text-green-600' : 'text-gray-500'}`}>
+                    <Zap size={20} />
                  </Link>
               </div>
 

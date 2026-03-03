@@ -25,6 +25,7 @@ const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Forum = lazy(() => import("./pages/Forum"));
 const PostDetails = lazy(() => import("./pages/PostDetails"));
+const Mistakes = lazy(() => import("./pages/Mistakes"));
 
 // প্রিমিয়াম পেজ লোডার
 const PageLoader = () => {
@@ -84,6 +85,7 @@ function App() {
 										<Route path="/post/:postId" element={<PostDetails />} />
 										<Route path="/profile" element={<Profile />} />
 										<Route path="/dashboard" element={<Dashboard />} />
+										<Route path="/mistakes" element={<Mistakes />} />
 									</Route>
 								</Routes>
 							</motion.div>
