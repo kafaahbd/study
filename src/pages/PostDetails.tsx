@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { forumService } from '../services/forumService';
 import { useAuth } from '../contexts/AuthContext';
-import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2 } from 'lucide-react';
+import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
 
@@ -12,6 +12,7 @@ const PostDetails: React.FC = () => {
   const { user } = useAuth();
   const [post, setPost] = useState<any>(null);
   const [commentText, setCommentText] = useState('');
+  const [showNav, setShowNav] = useState(false);
   
   // parentId হবে মূল কমেন্টের আইডি (গ্রুপিংয়ের জন্য)
   // replyId হবে নির্দিষ্ট কমেন্টের আইডি (মেনশনের জন্য)
@@ -36,9 +37,13 @@ const PostDetails: React.FC = () => {
   useEffect(() => { loadPostData(); }, [postId]);
 
   useEffect(() => {
-    document.body.classList.add("hide-mobile-nav");
+    if (!showNav) {
+      document.body.classList.add("hide-mobile-nav");
+    } else {
+      document.body.classList.remove("hide-mobile-nav");
+    }
     return () => document.body.classList.remove("hide-mobile-nav");
-  }, []);
+  }, [showNav]);
 
   const handlePostDeleteConfirm = async () => {
     try {
@@ -74,8 +79,33 @@ const PostDetails: React.FC = () => {
 
   const handleShare = () => {
     const url = window.location.href;
-    navigator.clipboard.writeText(url);
-    alert("Link copied to clipboard!");
+    
+    const copyToClipboard = (text: string) => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        return new Promise((resolve, reject) => {
+          if (document.execCommand('copy')) {
+            resolve(true);
+          } else {
+            reject(new Error('Copy failed'));
+          }
+          document.body.removeChild(textArea);
+        });
+      }
+    };
+
+    copyToClipboard(url)
+      .then(() => alert("Link copied to clipboard!"))
+      .catch(() => alert("Failed to copy link"));
   };
 
   if (!post) return <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white font-black animate-pulse uppercase tracking-[0.3em]">Loading...</div>;
@@ -201,7 +231,18 @@ const PostDetails: React.FC = () => {
 
       {/* স্টিকি ইনপুট বার */}
       <div className="fixed bottom-8 left-0 right-0 px-4 z-50">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto flex flex-col gap-3">
+          {/* Nav Toggle Button */}
+          <div className="flex justify-end pr-4">
+            <button 
+              onClick={() => setShowNav(!showNav)}
+              className="bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg border border-gray-100 dark:border-gray-700 text-gray-400 hover:text-blue-500 transition-all"
+              title={showNav ? "Hide Navigation" : "Show Navigation"}
+            >
+              {showNav ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+
           {!user ? (
             <div className="bg-white dark:bg-gray-800 p-4 shadow-2xl border border-gray-100 dark:border-gray-700 rounded-[35px] text-center">
               <p className="text-gray-500 dark:text-gray-400 font-bold">

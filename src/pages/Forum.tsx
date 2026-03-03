@@ -110,9 +110,39 @@ const Forum: React.FC = () => {
     };
 
     const handleShare = (postId: string) => {
-        const url = `${window.location.origin}/post/${postId}`;
-        navigator.clipboard.writeText(url);
-        setToast({ msg: lang === "bn" ? "লিঙ্ক কপি হয়েছে!" : "Link copied!", type: "success" });
+        const baseUrl = window.location.href.split('/forum')[0];
+        const url = `${baseUrl}/post/${postId}`;
+        
+        const copyToClipboard = (text: string) => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                return navigator.clipboard.writeText(text);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                return new Promise((resolve, reject) => {
+                    if (document.execCommand('copy')) {
+                        resolve(true);
+                    } else {
+                        reject(new Error('Copy failed'));
+                    }
+                    document.body.removeChild(textArea);
+                });
+            }
+        };
+
+        copyToClipboard(url)
+            .then(() => {
+                setToast({ msg: lang === "bn" ? "লিঙ্ক কপি হয়েছে!" : "Link copied!", type: "success" });
+            })
+            .catch(() => {
+                setToast({ msg: lang === "bn" ? "কপি করা সম্ভব হয়নি" : "Failed to copy", type: "error" });
+            });
     };
 
     const confirmDelete = async () => {
