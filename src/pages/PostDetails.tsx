@@ -13,9 +13,10 @@ const PostDetails: React.FC = () => {
   const [post, setPost] = useState<any>(null);
   const [commentText, setCommentText] = useState('');
   
-  // replyTo.id হবে parent_id (মূল কমেন্টের আইডি)
-  // replyTo.mentionName হবে যাকে আমরা মেনশন করছি (রিপ্লাইয়ের ওপর রিপ্লাই দেওয়ার সময়)
-  const [replyTo, setReplyTo] = useState<{ id: string; mentionName: string } | null>(null);
+  // parentId হবে মূল কমেন্টের আইডি (গ্রুপিংয়ের জন্য)
+  // replyId হবে নির্দিষ্ট কমেন্টের আইডি (মেনশনের জন্য)
+  // mentionName হবে যাকে আমরা মেনশন করছি
+  const [replyTo, setReplyTo] = useState<{ parentId: string; replyId: string; mentionName: string } | null>(null);
 
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
@@ -50,9 +51,9 @@ const PostDetails: React.FC = () => {
   const handleCommentSubmit = async () => {
     if (!commentText.trim() || !postId) return;
     try {
-      // replyTo.id ব্যাকঅ্যান্ডে parent_id হিসেবে যাবে
-      // এটি সবসময় মূল কমেন্টের আইডি থাকবে যাতে নেস্টিং ১ লেভেলের বেশি না হয়
-      await forumService.addComment(postId, commentText, replyTo?.id);
+      // replyTo.parentId ব্যাকঅ্যান্ডে parent_id হিসেবে যাবে (গ্রুপিংয়ের জন্য)
+      // replyTo.replyId ব্যাকঅ্যান্ডে reply_to_id হিসেবে যাবে (মেনশনের জন্য)
+      await forumService.addComment(postId, commentText, replyTo?.parentId, replyTo?.replyId);
       setCommentText('');
       setReplyTo(null);
       loadPostData();
@@ -63,11 +64,11 @@ const PostDetails: React.FC = () => {
 
   // --- Threading Logic (Flat Style) ---
   // ১. মূল কমেন্টগুলো (parent_id null)
-  const mainComments = post.comments?.filter((c: any) => !c.reply_to_id) || [];
+  const mainComments = post.comments?.filter((c: any) => !c.parent_id) || [];
   
   // ২. নির্দিষ্ট কমেন্টের আন্ডারে থাকা সব রিপ্লাই (এগুলো সিরিয়ালি নিচে নিচে থাকবে)
   const getReplies = (parentCommentId: string) => {
-    return post.comments?.filter((c: any) => c.reply_to_id === parentCommentId) || [];
+    return post.comments?.filter((c: any) => c.parent_id === parentCommentId) || [];
   };
 
   return (
@@ -125,7 +126,7 @@ const PostDetails: React.FC = () => {
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">{c.comment_text}</p>
                 <button 
-                    onClick={() => setReplyTo({ id: c.id, mentionName: c.author_name })} 
+                    onClick={() => setReplyTo({ parentId: c.id, replyId: c.id, mentionName: c.author_name })} 
                     className="mt-3 text-[10px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors flex items-center gap-1"
                 >
                   Reply
@@ -158,7 +159,7 @@ const PostDetails: React.FC = () => {
                     </p>
                     {/* রিপ্লাইয়ের রিপ্লাই দেওয়ার বাটন - এটিও মূল কমেন্ট (c.id) কেই parent_id হিসেবে ধরবে */}
                     <button 
-                        onClick={() => setReplyTo({ id: c.id, mentionName: reply.author_name })} 
+                        onClick={() => setReplyTo({ parentId: c.id, replyId: reply.id, mentionName: reply.author_name })} 
                         className="mt-2 text-[8px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors"
                     >
                       Reply

@@ -72,14 +72,16 @@ export const forumService = {
   /**
    * ৫. কমেন্ট অথবা রিপ্লাই যোগ করা
    * @param parentId - যদি এটি একটি রিপ্লাই হয়, তবে মেইন কমেন্টের ID দিন
+   * @param replyToId - যদি এটি কোনো নির্দিষ্ট রিপ্লাইয়ের ওপর রিপ্লাই হয়, তবে সেই রিপ্লাইয়ের ID দিন
    */
-  addComment: async (postId: string, commentText: string, parentId: string | null = null) => {
+  addComment: async (postId: string, commentText: string, parentId: string | null = null, replyToId: string | null = null) => {
     const response = await axios.post(
       `${API_URL}/comments`,
       { 
         post_id: postId, 
         comment_text: commentText,
-        parent_id: parentId 
+        parent_id: parentId,
+        reply_to_id: replyToId
       },
       getAuthHeader()
     );
