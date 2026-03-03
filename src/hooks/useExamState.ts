@@ -439,6 +439,16 @@ export const useExamState = () => {
 		setSubject(s);
 	};
 
+	// --- Hide mobile nav during exam ---
+	useEffect(() => {
+		if (examState === "running_exam" || examState === "running_practice") {
+			document.body.classList.add("hide-mobile-nav");
+		} else {
+			document.body.classList.remove("hide-mobile-nav");
+		}
+		return () => document.body.classList.remove("hide-mobile-nav");
+	}, [examState]);
+
 	return {
 		lang,
 		group,

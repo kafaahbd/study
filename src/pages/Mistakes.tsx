@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
-import { useAuth } from "../contexts/AuthContext";
+
 import * as examService from "../services/examService";
 import { BookOpen, Play, Trash2, CheckCircle, AlertCircle, ArrowLeft, RefreshCw } from "lucide-react";
-import {type Question } from "../typescriptfile/types";
+
 
 const Mistakes: React.FC = () => {
     const { lang } = useLanguage();
-    const { user } = useAuth();
+    
     const [subjects, setSubjects] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
@@ -56,6 +56,31 @@ const Mistakes: React.FC = () => {
         setSelectedOption(null);
     };
 
+    const handleRestart = async () => {
+        if (!selectedSubject) return;
+        setLoading(true);
+        try {
+            const data = await examService.getMistakesBySubject(selectedSubject);
+            setMistakes(data);
+            if (data.length > 0) {
+                setPracticeFinished(false);
+                setPracticeMode(true);
+                setCurrentIndex(0);
+                setIsAnswered(false);
+                setSelectedOption(null);
+            } else {
+                setPracticeFinished(false);
+                setPracticeMode(false);
+                setSelectedSubject(null);
+                fetchSubjects();
+            }
+        } catch (error) {
+            console.error("Error restarting practice:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleAnswer = (option: string) => {
         if (isAnswered) return;
         const currentQuestion = mistakes[currentIndex].question_data;
@@ -90,6 +115,15 @@ const Mistakes: React.FC = () => {
         setMistakes([]);
         fetchSubjects();
     };
+
+    useEffect(() => {
+        if (practiceMode && !practiceFinished) {
+            document.body.classList.add("hide-mobile-nav");
+        } else {
+            document.body.classList.remove("hide-mobile-nav");
+        }
+        return () => document.body.classList.remove("hide-mobile-nav");
+    }, [practiceMode, practiceFinished]);
 
     if (loading) {
         return (
@@ -302,7 +336,7 @@ const Mistakes: React.FC = () => {
                                         onClick={nextQuestion}
                                         className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-5 rounded-3xl font-black uppercase text-xs tracking-[0.3em] shadow-xl hover:scale-[1.02] transition-all active:scale-95"
                                     >
-                                        {currentIndex < mistakes.length - 1 ? (lang === "bn" ? "পরবর্তী প্রশ্ন" : "Next Question") : (lang === "bn" ? "ফলাফল দেখুন" : "View Results")}
+                                        {currentIndex < mistakes.length - 1 ? (lang === "bn" ? "পরবর্তী প্রশ্ন" : "Next Question") : (lang === "bn" ? "সব শেষ" : "All Done")}
                                     </button>
                                 </motion.div>
                             )}
@@ -333,11 +367,7 @@ const Mistakes: React.FC = () => {
                                     <ArrowLeft size={18} /> {lang === "bn" ? "ফিরে যান" : "Go Back"}
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        setPracticeFinished(false);
-                                        handleSubjectClick(selectedSubject!);
-                                        startPractice();
-                                    }}
+                                    onClick={handleRestart}
                                     className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white px-12 py-5 rounded-3xl font-black uppercase text-xs tracking-[0.2em] hover:bg-gray-200 dark:hover:bg-gray-600 transition-all active:scale-95 flex items-center justify-center gap-3"
                                 >
                                     <RefreshCw size={18} /> {lang === "bn" ? "আবার শুরু করুন" : "Restart"}
