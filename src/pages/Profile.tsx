@@ -244,7 +244,11 @@ const Profile = () => {
 													{exam.subject_name}
 												</p>
 												<p className="text-[10px] text-gray-400 font-bold uppercase">
-													{formatDate(exam.created_at)}
+													{formatDate(exam.created_at)} • {exam.time_taken ? (
+														lang === 'bn' 
+															? `${Math.floor(exam.time_taken / 60)}মি. ${exam.time_taken % 60}সে.`
+															: `${Math.floor(exam.time_taken / 60)}m ${exam.time_taken % 60}s`
+													) : '--'}
 												</p>
 											</div>
 											<div className="text-right">

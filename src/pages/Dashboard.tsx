@@ -126,7 +126,9 @@ const Dashboard = () => {
                       </td>
                       <td className="px-8 py-5 text-sm font-bold text-gray-600 dark:text-gray-400">
                         {item.time_taken ? (
-                          `${Math.floor(item.time_taken / 60)}m ${item.time_taken % 60}s`
+                          lang === 'bn' 
+                            ? `${Math.floor(item.time_taken / 60)}মি. ${item.time_taken % 60}সে.`
+                            : `${Math.floor(item.time_taken / 60)}m ${item.time_taken % 60}s`
                         ) : '--'}
                       </td>
                       <td className="px-8 py-5 text-sm text-gray-500 font-medium">
