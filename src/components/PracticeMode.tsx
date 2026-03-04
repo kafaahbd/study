@@ -73,77 +73,104 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 			</div>
 
 			{/* Main Question Card Container */}
-			<main className="max-w-full flex justify-center mx-auto">
-				<div className="w-[95%] lg:w-[70%] bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-6 md:p-10 rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-none transition-all duration-300">
-					{/* Question Title */}
-					<div className="mb-8">
-						<h2 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-100 leading-relaxed">
-							<Latex>{currentQuestion?.question}</Latex>
-						</h2>
+			<main className="max-w-7xl mx-auto">
+				<div className={`grid grid-cols-1 ${hasChecked && practiceMessage ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} gap-8 transition-all duration-500`}>
+					
+					{/* Left Side: Question & Options */}
+					<div className={`bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-6 md:p-10 rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-none transition-all duration-300 ${!hasChecked || !practiceMessage ? 'max-w-3xl mx-auto w-full' : ''}`}>
+						{/* Question Title */}
+						<div className="mb-8">
+							<h2 className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-100 leading-relaxed">
+								<Latex>{currentQuestion?.question}</Latex>
+							</h2>
+						</div>
+
+						{/* Options */}
+						<QuestionCard
+							question={currentQuestion}
+							userAnswer={userAnswers[currentQuestion?.id]}
+							onAnswerSelect={handleAnswerSelect}
+							disabled={hasChecked}
+							colorMap={selectedOptionColor}
+						/>
+
+						{/* Mobile Explanation (Visible only on mobile) */}
+						<div className="lg:hidden">
+							<AnimatePresence>
+								{hasChecked && practiceMessage && (
+									<motion.div
+										initial={{ opacity: 0, y: 20, scale: 0.95 }}
+										animate={{ opacity: 1, y: 0, scale: 1 }}
+										transition={{ type: "spring", damping: 20, stiffness: 100 }}
+										className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-2xl overflow-hidden shadow-inner"
+									>
+										<div className="flex items-center mb-3 text-blue-700 dark:text-blue-400 font-black uppercase text-xs tracking-[0.2em]">
+											<i className="fas fa-info-circle mr-2"></i>
+											{lang === "bn" ? "ব্যাখ্যা" : "Explanation"}
+										</div>
+										<div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium whitespace-pre-wrap">
+											<Latex>{practiceMessage}</Latex>
+										</div>
+									</motion.div>
+								)}
+							</AnimatePresence>
+						</div>
+
+						{/* Action Buttons */}
+						<div className="flex flex-col sm:flex-row gap-4 mt-10">
+							{!hasChecked ? (
+								<button
+									onClick={() =>
+										handleCheckAnswer(
+											currentQuestion.id,
+											userAnswers[currentQuestion.id],
+										)
+									}
+									disabled={!userAnswers[currentQuestion?.id]}
+									className="w-full py-4 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 disabled:opacity-30 transition-all font-bold text-lg shadow-lg active:scale-95"
+								>
+									{lang === "bn" ? "উত্তর চেক করুন" : "Check Answer"}
+								</button>
+							) : (
+								<button
+									onClick={handleNextOrResult}
+									className="w-full py-4 bg-green-600 text-white rounded-2xl hover:bg-green-700 transition-all font-bold text-lg shadow-lg active:scale-95 flex items-center justify-center gap-2"
+								>
+									{isLast
+										? lang === "bn"
+											? "ভুল সংশোধন করুন"
+											: "Fix Mistakes"
+										: lang === "bn"
+											? "পরবর্তী প্রশ্ন"
+											: "Next Question"}
+									<i
+										className={`fas ${isLast ? "fa-flag-checkered" : "fa-arrow-right"}`}
+									></i>
+								</button>
+							)}
+						</div>
 					</div>
 
-					{/* Options */}
-					<QuestionCard
-						question={currentQuestion}
-						userAnswer={userAnswers[currentQuestion?.id]}
-						onAnswerSelect={handleAnswerSelect}
-						disabled={hasChecked}
-						colorMap={selectedOptionColor}
-					/>
-
-					{/* Explanation Section */}
+					{/* Right Side: Explanation (Visible only on PC) */}
 					<AnimatePresence>
 						{hasChecked && practiceMessage && (
 							<motion.div
-								initial={{ opacity: 0, y: 20, scale: 0.95 }}
-								animate={{ opacity: 1, y: 0, scale: 1 }}
-								transition={{ type: "spring", damping: 20, stiffness: 100 }}
-								className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-2xl overflow-hidden shadow-inner"
+								initial={{ opacity: 0, x: 50 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: 50 }}
+								className="hidden lg:block bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-10 rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-none"
 							>
-								<div className="flex items-center mb-3 text-blue-700 dark:text-blue-400 font-black uppercase text-xs tracking-[0.2em]">
-									<i className="fas fa-info-circle mr-2"></i>
-									{lang === "bn" ? "ব্যাখ্যা" : "Explanation"}
+								<div className="flex items-center mb-6 text-blue-700 dark:text-blue-400 font-black uppercase text-sm tracking-[0.3em]">
+									<i className="fas fa-info-circle mr-3 text-xl"></i>
+									{lang === "bn" ? "বিস্তারিত ব্যাখ্যা" : "Detailed Explanation"}
 								</div>
-								<div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium whitespace-pre-wrap">
+								<div className="h-[2px] w-20 bg-blue-500 mb-8"></div>
+								<div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium text-lg whitespace-pre-wrap">
 									<Latex>{practiceMessage}</Latex>
 								</div>
 							</motion.div>
 						)}
 					</AnimatePresence>
-
-					{/* Action Buttons */}
-					<div className="flex flex-col sm:flex-row gap-4 mt-10">
-						{!hasChecked ? (
-							<button
-								onClick={() =>
-									handleCheckAnswer(
-										currentQuestion.id,
-										userAnswers[currentQuestion.id],
-									)
-								}
-								disabled={!userAnswers[currentQuestion?.id]}
-								className="w-full py-4 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 disabled:opacity-30 transition-all font-bold text-lg shadow-lg active:scale-95"
-							>
-								{lang === "bn" ? "উত্তর চেক করুন" : "Check Answer"}
-							</button>
-						) : (
-							<button
-								onClick={handleNextOrResult}
-								className="w-full py-4 bg-green-600 text-white rounded-2xl hover:bg-green-700 transition-all font-bold text-lg shadow-lg active:scale-95 flex items-center justify-center gap-2"
-							>
-								{isLast
-									? lang === "bn"
-										? "ভুল সংশোধন করুন"
-										: "Fix Mistakes"
-									: lang === "bn"
-										? "পরবর্তী প্রশ্ন"
-										: "Next Question"}
-								<i
-									className={`fas ${isLast ? "fa-flag-checkered" : "fa-arrow-right"}`}
-								></i>
-							</button>
-						)}
-					</div>
 				</div>
 			</main>
 		</div>

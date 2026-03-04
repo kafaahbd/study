@@ -37,7 +37,12 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Main Header: Sticky on both PC and Mobile */}
-      <nav className="fixed top-0 w-full z-[100] backdrop-blur-lg bg-white/70 dark:bg-gray-800/70 border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm">
+      <motion.nav 
+        initial={false}
+        animate={{ y: hideBottomNav ? -100 : 0 }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        className={`fixed top-0 w-full z-[100] backdrop-blur-lg bg-white/70 dark:bg-gray-800/70 border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm transition-transform md:!transform-none`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
             
@@ -123,7 +128,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile Bottom Navigation: Sticky/Fixed at bottom */}
       <AnimatePresence>
@@ -154,7 +159,7 @@ const Navbar: React.FC = () => {
       </AnimatePresence>
 
       {/* Space to prevent content overlap */}
-      <div className="h-16 md:h-20"></div>
+      <div className={`h-16 md:h-20 transition-all ${hideBottomNav ? 'h-0 md:h-20' : ''}`}></div>
     </>
   );
 };

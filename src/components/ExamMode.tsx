@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Latex from "react-latex-next";
 import QuestionCard from "./QuestionCard";
@@ -18,11 +18,16 @@ const ExamMode: React.FC<Props> = ({ state }) => {
   // উত্তর দেওয়া হয়েছে এমন প্রশ্নের সংখ্যা
   const answeredCount = Object.keys(userAnswers).length;
 
+  useEffect(() => {
+    document.body.classList.add("hide-mobile-nav");
+    return () => document.body.classList.remove("hide-mobile-nav");
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-6 px-4 transition-colors">
       
       {/* Sticky Top Header with Timer and Progress */}
-      <div className="sticky top-0 z-50 w-full mb-8 pt-2">
+      <div className="sticky top-0 md:top-20 z-50 w-full mb-8 pt-2">
         <div className="w-[95%] lg:w-[70%] mx-auto bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 flex items-center justify-between">
           <button onClick={handleBack} className="text-gray-500 hover:text-red-500 font-bold flex items-center gap-1">
             <i className="fas fa-times-circle"></i>
