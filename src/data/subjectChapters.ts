@@ -129,6 +129,10 @@ export const subjectChapters: SubjectChapters = {
 				name: "পদার্থ ১ম পত্র অধ্যায় ৪ ",
 				url: "https://raw.githubusercontent.com/kafaahbd/nothing/refs/heads/main/hsc_physcis_chapter_4_1st_paper.json",
 			},
+			{
+				name: "পদার্থ ১ম পত্র অধ্যায়  ৬",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Physics_6_hsc_1st",
+			},
 			// অন্যান্য অধ্যায়
 		],
 		chemistry: [
@@ -164,6 +168,7 @@ export const subjectChapters: SubjectChapters = {
 		],
 		// Arts
 		history: [{ name: "ইতিহাস অধ্যায় ১", url: "#" }],
+		logic: [{ name: "যুক্তিবিদ্যা ১ম পত্র অধ্যায় ২", url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Logic_1_2chp" }],
 		islamic: [{ name: "ইসলামের ইতিহাস অধ্যায় ১", url: "#" }],
 		civics: [
 			{

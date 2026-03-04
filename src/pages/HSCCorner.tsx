@@ -59,6 +59,7 @@ const HSCCorner: React.FC = () => {
       bgIcon: "group-hover/sub:bg-orange-600",
       subjects: [
         { name: t("study.hsc.subjects.history"), path: "/exam?group=hsc&subject=history" },
+        { name: t("study.hsc.subjects.logic"), path: "/exam?group=hsc&subject=logic" },
         { name: t("study.hsc.subjects.islamic"), path: "/exam?group=hsc&subject=islamic" },
         { name: t("study.hsc.subjects.civics"), path: "/exam?group=hsc&subject=civics" },
         { name: t("study.hsc.subjects.economics"), path: "/exam?group=hsc&subject=economics" },
