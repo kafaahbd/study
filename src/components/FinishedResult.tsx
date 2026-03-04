@@ -1,25 +1,28 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Latex from "react-latex-next";
-import { saveResult } from "../services/examService";
-import { useAuth } from "../contexts/AuthContext";
+
+
 
 interface Props {
 	state: any;
 }
 
 const FinishedResult: React.FC<Props> = ({ state }) => {
-	const { user } = useAuth();
+	
 	const { lang, result, subjectName, resetToSetup, isSaved } = state;
 	const navigate = useNavigate();
 	const reportTemplateRef = useRef<HTMLDivElement>(null);
 	const [isDownloading, setIsDownloading] = useState(false);
 
+	useEffect(() => {
+		document.body.classList.add("hide-mobile-nav");
+		return () => document.body.classList.remove("hide-mobile-nav");
+	}, []);
+
 	if (!result) return null;
 
 	const handleBack = () => navigate(-1);
-
-	if (!result) return null;
 
 const handleDownloadPdf = () => {
     // ১. প্রিন্ট হওয়ার সময় ফাইলের নাম যা হবে (টাইটেল হিসেবে সেট করা)

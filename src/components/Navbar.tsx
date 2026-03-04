@@ -8,13 +8,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, MessageSquare, Zap } from 'lucide-react';
 
 const Navbar: React.FC = () => {
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   const location = useLocation();
   const { user, confirmLogout } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
   const [hideBottomNav, setHideBottomNav] = useState(false);
+
+  const toggleNav = () => {
+    if (document.body.classList.contains('hide-mobile-nav')) {
+      document.body.classList.remove('hide-mobile-nav');
+    } else {
+      document.body.classList.add('hide-mobile-nav');
+    }
+  };
 
   useEffect(() => {
     const checkNav = () => {
@@ -23,7 +31,7 @@ const Navbar: React.FC = () => {
     };
     
     // Check periodically or on specific events
-    const interval = setInterval(checkNav, 100);
+    const interval = setInterval(checkNav, 50);
     return () => clearInterval(interval);
   }, []);
 
@@ -36,6 +44,22 @@ const Navbar: React.FC = () => {
 
   return (
     <>
+      {/* Mobile Nav Toggle Button (Floating) */}
+      <motion.button
+        initial={false}
+        animate={{ 
+          left: hideBottomNav ? 16 : 'auto',
+          right: hideBottomNav ? 'auto' : '2%',
+          bottom: hideBottomNav ? 32 : 24,
+          rotate: hideBottomNav ? 0 : 180
+        }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        onClick={toggleNav}
+        className="md:hidden fixed z-[110] w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-full shadow-2xl flex items-center justify-center text-gray-600 dark:text-gray-300 active:scale-90"
+      >
+        <i className="fas fa-chevron-right text-sm"></i>
+      </motion.button>
+
       {/* Main Header: Sticky on both PC and Mobile */}
       <motion.nav 
         initial={false}
@@ -66,15 +90,15 @@ const Navbar: React.FC = () => {
               <div className="hidden md:flex items-center space-x-2">
                 <Link to="/" className={navItemClass('/')}>
                   <BookOpen size={18} />
-                  <span>Study</span>
+                  <span>{t('nav.study')}</span>
                 </Link>
                 <Link to="/forum" className={navItemClass('/forum')}>
                   <MessageSquare size={18} />
-                  <span>Forum</span>
+                  <span>{t('nav.forum')}</span>
                 </Link>
                 <Link to="/mistakes" className={navItemClass('/mistakes')}>
                   <Zap size={18} />
-                  <span>{lang === 'bn' ? 'ভুল সংশোধন' : 'Mistakes'}</span>
+                  <span>{t('nav.mistakes')}</span>
                 </Link>
               </div>
             </div>
@@ -143,15 +167,15 @@ const Navbar: React.FC = () => {
             <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-[2rem] shadow-2xl p-2 flex justify-around items-center">
               <Link to="/" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/') ? 'text-green-600 bg-green-50 dark:bg-green-900/20' : 'text-gray-500'}`}>
                 <BookOpen size={24} />
-                <span className="text-[10px] font-black uppercase tracking-widest">Study</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">{t('nav.study')}</span>
               </Link>
               <Link to="/forum" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/forum') ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'text-gray-500'}`}>
                 <MessageSquare size={24} />
-                <span className="text-[10px] font-black uppercase tracking-widest">Forum</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">{t('nav.forum')}</span>
               </Link>
               <Link to="/mistakes" className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${isActive('/mistakes') ? 'text-purple-600 bg-purple-50 dark:bg-purple-900/20' : 'text-gray-500'}`}>
                 <Zap size={24} />
-                <span className="text-[10px] font-black uppercase tracking-widest">{lang === 'bn' ? 'ভুল' : 'Mistakes'}</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">{t('nav.mistakes')}</span>
               </Link>
             </div>
           </motion.div>
@@ -159,7 +183,7 @@ const Navbar: React.FC = () => {
       </AnimatePresence>
 
       {/* Space to prevent content overlap */}
-      <div className={`h-16 md:h-20 transition-all ${hideBottomNav ? 'h-0 md:h-20' : ''}`}></div>
+      <div className={`transition-all duration-300 ${hideBottomNav ? 'h-0 overflow-hidden' : 'h-16 md:h-20'}`}></div>
     </>
   );
 };

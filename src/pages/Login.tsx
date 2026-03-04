@@ -67,189 +67,195 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex items-center justify-center px-4 py-6 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start md:justify-center px-4 pt-4 md:pt-0 transition-colors">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full"
+        className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
       >
-        {/* Logo Section */}
-        <div className="text-center mb-6">
+        {/* Left Side: Logo Section (PC) / Top Section (Mobile) */}
+        <div className="text-center md:text-left space-y-4 md:space-y-6">
           <Link to="/" className="inline-block">
             <img
-              src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png"
+              src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaahlogo5.png"
               alt="Kafa'ah"
-              className="h-16 mx-auto mb-4"
+              className="h-24 md:h-40 mx-auto md:mx-0 transition-transform duration-500 hover:scale-105"
             />
           </Link>
-          <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">
-            {t("modal.login")}
-          </h2>
-          <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium italic">
-            {lang === "bn"
-              ? "স্বাগতম! আপনার জ্ঞানযাত্রা শুরু হোক।"
-              : "Welcome back! Let your journey continue."}
-          </p>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-8 md:p-10 relative overflow-hidden">
-          {/* Decorative Top Bar */}
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-
-          <AnimatePresence mode="wait">
-            {needsVerification ? (
-              /* ভেরিফিকেশন কার্ড যখন ইউজার আনভেরিফাইড */
-              <motion.div 
-                key="verification"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="space-y-6"
-              >
-                <div className="text-center p-6 bg-amber-50 dark:bg-amber-900/20 rounded-3xl border border-amber-100 dark:border-amber-800">
-                  <div className="w-16 h-16 bg-amber-100 dark:bg-amber-800/40 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i className="fas fa-envelope-open-text text-amber-500 text-2xl"></i>
-                  </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 font-bold leading-relaxed">
-                    {lang === 'bn' 
-                      ? `আমরা আপনার ইমেইলে একটি কোড পাঠিয়েছি। অ্যাকাউন্ট সক্রিয় করতে কোডটি দিন।`
-                      : `We've sent a code to your email. Please verify to continue.`}
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-3">
-                  <button
-                    onClick={() => navigate("/verify-code", { state: { email: unverifiedEmail } })}
-                    className="w-full h-14 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-500/20 active:scale-95"
-                  >
-                    {lang === 'bn' ? "কোড লিখুন" : "Enter Code"}
-                  </button>
-                  <button
-                    onClick={handleResendVerification}
-                    disabled={resendLoading}
-                    className="w-full h-14 bg-transparent border-2 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 rounded-2xl font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition disabled:opacity-50"
-                  >
-                    {resendLoading ? <i className="fas fa-spinner fa-spin"></i> : (lang === 'bn' ? "কোড পুনরায় পাঠান" : "Resend Code")}
-                  </button>
-                </div>
-              </motion.div>
-            ) : (
-              /* সাধারণ লগইন ফর্ম */
-              <motion.form 
-                key="login-form"
-                onSubmit={handleSubmit} 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-5"
-              >
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-2 ml-1">
-                    {t("modal.emailOrUsername")}
-                  </label>
-                  <div className="relative group">
-                    <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-blue-500 transition-colors">
-                      <i className="fas fa-user"></i>
-                    </span>
-                    <input
-                      type="text"
-                      value={identifier}
-                      onChange={(e) => setIdentifier(e.target.value)}
-                      required
-                      className="w-full pl-11 pr-4 py-4 bg-slate-50 dark:bg-gray-800/50 border-2 border-transparent focus:border-blue-500/20 rounded-2xl dark:text-white transition-all outline-none font-medium"
-                      placeholder={t("modal.emailOrUsernamePlaceholder")}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-2 ml-1">
-                    {t("modal.password")}
-                  </label>
-                  <div className="relative group">
-                    <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-blue-500 transition-colors">
-                      <i className="fas fa-lock"></i>
-                    </span>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="w-full pl-11 pr-12 py-4 bg-slate-50 dark:bg-gray-800/50 border-2 border-transparent focus:border-blue-500/20 rounded-2xl dark:text-white transition-all outline-none font-medium"
-                      placeholder="••••••••"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-500 transition-colors"
-                    >
-                      <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <Link
-                    to="/forgot-password"
-                    className="text-[10px] font-black uppercase text-gray-400 hover:text-orange-500 tracking-widest transition-colors"
-                  >
-                    {lang === 'bn' ? "পাসওয়ার্ড ভুলে গেছেন?" : "Forgot Password?"}
-                  </Link>
-                </div>
-
-                {/* Error/Success Messages */}
-                <AnimatePresence>
-                  {(error || resendSuccess) && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className={`p-4 border-l-4 rounded-r-xl flex items-center gap-3 overflow-hidden ${
-                        error ? 'bg-red-50 dark:bg-red-900/20 border-red-500 text-red-700 dark:text-red-400' : 
-                        'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400'
-                      } text-xs font-bold`}
-                    >
-                      <i className={`fas ${error ? 'fa-circle-exclamation' : 'fa-check-circle'} text-base`}></i>
-                      {error || resendSuccess}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
-                >
-                  {isLoading ? (
-                    <i className="fas fa-spinner fa-spin text-xl"></i>
-                  ) : (
-                    t("modal.login")
-                  )}
-                </button>
-              </motion.form>
-            )}
-          </AnimatePresence>
-
-          <div className="mt-10 pt-8 border-t border-gray-50 dark:border-gray-800 text-center">
-            <p className="text-gray-500 dark:text-gray-400 font-medium text-sm">
-              {t("modal.noAccount")}{" "}
-              <Link
-                to="/signup"
-                className="text-blue-600 dark:text-blue-400 font-black hover:underline underline-offset-4"
-              >
-                {t("modal.createAccount")}
-              </Link>
+          <div className="space-y-2">
+            
+            <p className="text-gray-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] text-xs md:text-sm">
+              Exception is an example
+            </p>
+            <p className="text-gray-400 dark:text-gray-500 font-medium italic text-sm md:text-base">
+              {lang === "bn"
+                ? "স্বাগতম! আপনার জ্ঞানযাত্রা শুরু হোক।"
+                : "Welcome back! Let your journey continue."}
             </p>
           </div>
         </div>
 
-        {/* Back to Home Link */}
-        <div className="mt-8 text-center">
-          <Link
-            to="/"
-            className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-blue-500 transition-colors flex items-center justify-center gap-2"
-          >
-            <i className="fas fa-arrow-left"></i> {lang === 'bn' ? "হোমে ফিরে যান" : "Back to Home"}
-          </Link>
+        {/* Right Side: Form Section */}
+        <div className="w-full max-w-md mx-auto md:ml-auto">
+          <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-8 md:p-10 relative overflow-hidden">
+            {/* Decorative Top Bar */}
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+
+            <AnimatePresence mode="wait">
+              {needsVerification ? (
+                /* ভেরিফিকেশন কার্ড যখন ইউজার আনভেরিফাইড */
+                <motion.div 
+                  key="verification"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="space-y-6"
+                >
+                  <div className="text-center p-6 bg-amber-50 dark:bg-amber-900/20 rounded-3xl border border-amber-100 dark:border-amber-800">
+                    <div className="w-16 h-16 bg-amber-100 dark:bg-amber-800/40 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <i className="fas fa-envelope-open-text text-amber-500 text-2xl"></i>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 font-bold leading-relaxed">
+                      {lang === 'bn' 
+                        ? `আমরা আপনার ইমেইলে একটি কোড পাঠিয়েছি। অ্যাকাউন্ট সক্রিয় করতে কোডটি দিন।`
+                        : `We've sent a code to your email. Please verify to continue.`}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <button
+                      onClick={() => navigate("/verify-code", { state: { email: unverifiedEmail } })}
+                      className="w-full h-14 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-500/20 active:scale-95"
+                    >
+                      {lang === 'bn' ? "কোড লিখুন" : "Enter Code"}
+                    </button>
+                    <button
+                      onClick={handleResendVerification}
+                      disabled={resendLoading}
+                      className="w-full h-14 bg-transparent border-2 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 rounded-2xl font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition disabled:opacity-50"
+                    >
+                      {resendLoading ? <i className="fas fa-spinner fa-spin"></i> : (lang === 'bn' ? "কোড পুনরায় পাঠান" : "Resend Code")}
+                    </button>
+                  </div>
+                </motion.div>
+              ) : (
+                /* সাধারণ লগইন ফর্ম */
+                <motion.form 
+                  key="login-form"
+                  onSubmit={handleSubmit} 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-5"
+                >
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-2 ml-1">
+                      {t("modal.emailOrUsername")}
+                    </label>
+                    <div className="relative group">
+                      <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                        <i className="fas fa-user"></i>
+                      </span>
+                      <input
+                        type="text"
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
+                        required
+                        className="w-full pl-11 pr-4 py-4 bg-slate-50 dark:bg-gray-800/50 border-2 border-transparent focus:border-blue-500/20 rounded-2xl dark:text-white transition-all outline-none font-medium"
+                        placeholder={t("modal.emailOrUsernamePlaceholder")}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-2 ml-1">
+                      {t("modal.password")}
+                    </label>
+                    <div className="relative group">
+                      <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                        <i className="fas fa-lock"></i>
+                      </span>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="w-full pl-11 pr-12 py-4 bg-slate-50 dark:bg-gray-800/50 border-2 border-transparent focus:border-blue-500/20 rounded-2xl dark:text-white transition-all outline-none font-medium"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-500 transition-colors"
+                      >
+                        <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Link
+                      to="/forgot-password"
+                      className="text-[10px] font-black uppercase text-gray-400 hover:text-orange-500 tracking-widest transition-colors"
+                    >
+                      {lang === 'bn' ? "পাসওয়ার্ড ভুলে গেছেন?" : "Forgot Password?"}
+                    </Link>
+                  </div>
+
+                  {/* Error/Success Messages */}
+                  <AnimatePresence>
+                    {(error || resendSuccess) && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className={`p-4 border-l-4 rounded-r-xl flex items-center gap-3 overflow-hidden ${
+                          error ? 'bg-red-50 dark:bg-red-900/20 border-red-500 text-red-700 dark:text-red-400' : 
+                          'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400'
+                        } text-xs font-bold`}
+                      >
+                        <i className={`fas ${error ? 'fa-circle-exclamation' : 'fa-check-circle'} text-base`}></i>
+                        {error || resendSuccess}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                  >
+                    {isLoading ? (
+                      <i className="fas fa-spinner fa-spin text-xl"></i>
+                    ) : (
+                      t("modal.login")
+                    )}
+                  </button>
+                </motion.form>
+              )}
+            </AnimatePresence>
+
+            <div className="mt-10 pt-8 border-t border-gray-50 dark:border-gray-800 text-center">
+              <p className="text-gray-500 dark:text-gray-400 font-medium text-sm">
+                {t("modal.noAccount")}{" "}
+                <Link
+                  to="/signup"
+                  className="text-blue-600 dark:text-blue-400 font-black hover:underline underline-offset-4"
+                >
+                  {t("modal.createAccount")}
+                </Link>
+              </p>
+            </div>
+          </div>
+
+          {/* Back to Home Link */}
+          <div className="mt-8 text-center">
+            <Link
+              to="/"
+              className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-blue-500 transition-colors flex items-center justify-center gap-2"
+            >
+              <i className="fas fa-arrow-left"></i> {lang === 'bn' ? "হোমে ফিরে যান" : "Back to Home"}
+            </Link>
+          </div>
         </div>
       </motion.div>
     </div>

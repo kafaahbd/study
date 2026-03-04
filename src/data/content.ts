@@ -6,6 +6,8 @@ export const content: Record<string, Record<string, string>> = {
 		"nav.projects": "Projects",
 		"nav.join": "Join Us",
 		"nav.study": "Study",
+		"nav.forum": "Forum",
+		"nav.mistakes": "Mistakes",
 		"nav.about": "About",
 		"nav.login": "Login",
 		"nav.logout": "Logout",
@@ -166,7 +168,7 @@ export const content: Record<string, Record<string, string>> = {
 		"modal.signingUp": "Signing up...",
 		"modal.passwordsDoNotMatch": "Passwords do not match",
 		"modal.passwordTooShort": "Password must be at least 6 characters",
-		"modal.alreadyHaveAccount": "Already have an account? ",
+		"modal.alreadyHaveAccount": "Already have an account? Login",
 
 		//profile
 		"profile.title": "My Profile",
@@ -241,6 +243,8 @@ export const content: Record<string, Record<string, string>> = {
 		"nav.projects": "প্রকল্প",
 		"nav.join": "যোগ দিন",
 		"nav.study": "স্টাডি",
+		"nav.forum": "ফোরাম",
+		"nav.mistakes": "ভুল সংশোধন",
 		"nav.about": "সম্পর্কে",
 		"nav.login": "লগইন",
 		"nav.logout": "লগআউট",
@@ -375,7 +379,7 @@ export const content: Record<string, Record<string, string>> = {
 		"study.admission.bangla": "বাংলা",
 
 		//modal
-		"modal.login": "লগইন করুন",
+		"modal.login": "লগইন",
 		"modal.signUp": "নিবন্ধন",
 		"modal.emailOrUsername": "ইমেইল বা ইউজারনেম",
 		"modal.emailOrUsernamePlaceholder": "আপনার ইমেইল বা ইউজারনেম",
@@ -398,7 +402,7 @@ export const content: Record<string, Record<string, string>> = {
 		"modal.signingUp": "নিবন্ধন হচ্ছে...",
 		"modal.passwordsDoNotMatch": "পাসওয়ার্ড মিলছে না",
 		"modal.passwordTooShort": "পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে",
-		"modal.alreadyHaveAccount": "ইতিমধ্যে একাউন্ট আছে? ",
+		"modal.alreadyHaveAccount": "ইতিমধ্যে একাউন্ট আছে? লগইন করুন",
 
 		//profile
 		"profile.title": "আমার প্রোফাইল",

@@ -10,6 +10,12 @@ interface Props {
 
 const PracticeMode: React.FC<Props> = ({ state }) => {
 	const navigate = useNavigate();
+
+	React.useEffect(() => {
+		document.body.classList.add("hide-mobile-nav");
+		return () => document.body.classList.remove("hide-mobile-nav");
+	}, []);
+
 	const {
 		lang,
 		questions,
