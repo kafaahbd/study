@@ -67,27 +67,27 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start md:justify-center px-4 pt-4 md:pt-0 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start lg:justify-center px-4 pt-4 lg:pt-0 transition-colors">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
+        className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center"
       >
         {/* Left Side: Logo Section (PC) / Top Section (Mobile) */}
-        <div className="text-center md:text-left space-y-4 md:space-y-6">
+        <div className="text-center lg:text-left space-y-4 lg:space-y-6">
           <Link to="/" className="inline-block">
             <img
               src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaahlogo5.png"
               alt="Kafa'ah"
-              className="h-24 md:h-40 mx-auto md:mx-0 transition-transform duration-500 hover:scale-105"
+              className="h-24 lg:h-40 mx-auto lg:mx-0 transition-transform duration-500 hover:scale-105"
             />
           </Link>
           <div className="space-y-2">
             
-            <p className="text-gray-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] text-xs md:text-sm">
+            <p className="text-gray-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] text-xs lg:text-sm">
               Exception is an example
             </p>
-            <p className="text-gray-400 dark:text-gray-500 font-medium italic text-sm md:text-base">
+            <p className="text-gray-400 dark:text-gray-500 font-medium italic text-sm lg:text-base">
               {lang === "bn"
                 ? "স্বাগতম! আপনার জ্ঞানযাত্রা শুরু হোক।"
                 : "Welcome back! Let your journey continue."}
@@ -96,8 +96,8 @@ const Login = () => {
         </div>
 
         {/* Right Side: Form Section */}
-        <div className="w-full max-w-md mx-auto md:ml-auto">
-          <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-8 md:p-10 relative overflow-hidden">
+        <div className="w-full max-w-md mx-auto lg:ml-auto">
+          <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-8 lg:p-10 relative overflow-hidden">
             {/* Decorative Top Bar */}
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
 

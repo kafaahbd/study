@@ -6,6 +6,9 @@
   body {
     @apply antialiased;
   }
+  ::selection {
+    @apply bg-green-500/30 text-green-900 dark:text-green-100;
+  }
 }
 
 /* Smooth scroll behavior */

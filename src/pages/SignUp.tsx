@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -23,6 +23,79 @@ const SignUp = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState({
+    score: 0,
+    label: "",
+    color: "bg-gray-200",
+    suggestions: [] as string[],
+  });
+
+  const validatePassword = useCallback((pass: string) => {
+    let score = 0;
+    const suggestions = [];
+
+    if (pass.length >= 8) score++;
+    else suggestions.push(lang === 'bn' ? "কমপক্ষে ৮টি অক্ষর" : "At least 8 characters");
+
+    if (/[A-Z]/.test(pass) && /[a-z]/.test(pass)) score++;
+    else suggestions.push(lang === 'bn' ? "বড় ও ছোট হাতের অক্ষর" : "Upper & lower case letters");
+
+    if (/[0-9]/.test(pass)) score++;
+    else suggestions.push(lang === 'bn' ? "অন্তত একটি সংখ্যা" : "At least one number");
+
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(pass)) score++;
+    else suggestions.push(lang === 'bn' ? "একটি বিশেষ চিহ্ন (!@#$)" : "One special character (!@#$)");
+
+    let label = "";
+    let color = "";
+    switch (score) {
+      case 0:
+      case 1:
+        label = lang === 'bn' ? "খুব দুর্বল" : "Very Weak";
+        color = "bg-red-500";
+        break;
+      case 2:
+        label = lang === 'bn' ? "দুর্বল" : "Weak";
+        color = "bg-orange-500";
+        break;
+      case 3:
+        label = lang === 'bn' ? "মাঝারি" : "Medium";
+        color = "bg-yellow-500";
+        break;
+      case 4:
+        label = lang === 'bn' ? "শক্তিশালী" : "Strong";
+        color = "bg-green-500";
+        break;
+    }
+
+    setPasswordStrength({ score, label, color, suggestions });
+  }, [lang]);
+
+  const generateStrongPassword = () => {
+    const length = 12;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+    let retVal = "";
+    
+    // Ensure at least one of each required type
+    retVal += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random() * 26)];
+    retVal += "abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random() * 26)];
+    retVal += "0123456789"[Math.floor(Math.random() * 10)];
+    retVal += "!@#$%^&*()_+"[Math.floor(Math.random() * 12)];
+    
+    for (let i = 4; i < length; ++i) {
+      retVal += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    
+    // Shuffle the password
+    retVal = retVal.split('').sort(() => 0.5 - Math.random()).join('');
+    
+    setFormData({ ...formData, password: retVal, confirmPassword: retVal });
+    setShowPassword(true);
+  };
+
+  useEffect(() => {
+    validatePassword(formData.password);
+  }, [formData.password, validatePassword]);
 
   useEffect(() => {
     if (user) {
@@ -53,8 +126,10 @@ const SignUp = () => {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError(t("modal.passwordTooShort"));
+    if (passwordStrength.score < 4) {
+      setError(lang === 'bn' 
+        ? "পাসওয়ার্ড অবশ্যই ৮ অক্ষরের হতে হবে এবং এতে অক্ষর, সংখ্যা ও বিশেষ চিহ্ন থাকতে হবে।" 
+        : "Password must be at least 8 characters and include letters, numbers, and special characters.");
       return;
     }
 
@@ -62,36 +137,32 @@ const SignUp = () => {
       const { ...registerData } = formData;
       await register(registerData);
       navigate("/verify-code", { state: { email: formData.email } });
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError(String(err));
-      }
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start md:justify-center px-4 pt-4 md:pt-12 transition-colors font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start lg:justify-center px-4 pt-4 lg:pt-12 transition-colors font-sans">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
+        className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center"
       >
         {/* Left Side: Logo Section (PC) / Top Section (Mobile) */}
-        <div className="text-center md:text-left space-y-4 md:space-y-6">
+        <div className="text-center lg:text-left space-y-4 lg:space-y-6">
           <Link to="/" className="inline-block">
             <img 
               src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaahlogo5.png" 
               alt="Kafa'ah" 
-              className="h-24 md:h-44 mx-auto md:mx-0 transition-transform duration-500 hover:scale-105"
+              className="h-24 lg:h-44 mx-auto lg:mx-0 transition-transform duration-500 hover:scale-105"
             />
           </Link>
           <div className="space-y-2">
-            <p className="text-gray-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] text-xs md:text-sm">
+            <p className="text-gray-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] text-xs lg:text-sm">
               Exception is an example
             </p>
-            <p className="text-gray-400 dark:text-gray-500 font-medium italic text-sm md:text-base">
+            <p className="text-gray-400 dark:text-gray-500 font-medium italic text-sm lg:text-base">
               {lang === 'bn' ? 'কাফআহ পরিবারের সদস্য হয়ে আপনার যাত্রা শুরু করুন' : 'Join the Kafa\'ah family and start your journey'}
             </p>
           </div>
@@ -99,12 +170,12 @@ const SignUp = () => {
 
         {/* Right Side: Form Section */}
         <div className="w-full">
-          <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-6 md:p-10 relative overflow-hidden">
+          <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-6 lg:p-10 relative overflow-hidden">
             {/* Decorative Top Bar */}
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 to-emerald-500"></div>
 
             <div className="mb-8">
-              <h2 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+              <h2 className="text-2xl lg:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
                 {t("modal.signUp")}
               </h2>
             </div>
@@ -119,7 +190,7 @@ const SignUp = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 
                 {/* Personal Info Section */}
                 <div className="space-y-4">
@@ -220,15 +291,53 @@ const SignUp = () => {
                   {/* Password Section */}
                   <div className="grid grid-cols-1 gap-4">
                     <div className="relative">
-                      <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 mb-1 block">
-                        {t("modal.password")}
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-xs font-bold text-gray-500 dark:text-gray-400 ml-1 block">
+                          {t("modal.password")}
+                        </label>
+                        <button 
+                          type="button"
+                          onClick={generateStrongPassword}
+                          className="text-[9px] font-black uppercase tracking-widest text-green-600 dark:text-blue-400 hover:underline"
+                        >
+                          {lang === 'bn' ? "শক্তিশালী পাসওয়ার্ড দিন" : "Suggest Strong Password"}
+                        </button>
+                      </div>
                       <input
                         type={showPassword ? "text" : "password"}
-                        name="password" value={formData.password} onChange={handleChange} required minLength={6}
+                        name="password" value={formData.password} onChange={handleChange} required
                         className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800/50 border-2 border-transparent focus:border-green-500/20 rounded-xl dark:text-white transition-all outline-none font-medium text-sm"
                         placeholder="••••••••"
                       />
+                      
+                      {/* Password Strength Indicator */}
+                      {formData.password && (
+                        <div className="mt-2 space-y-2">
+                          <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider">
+                            <span className="text-gray-400">{lang === 'bn' ? "পাসওয়ার্ডের শক্তি" : "Password Strength"}:</span>
+                            <span className={passwordStrength.color.replace('bg-', 'text-')}>{passwordStrength.label}</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden flex gap-1">
+                            {[1, 2, 3, 4].map((step) => (
+                              <div 
+                                key={step}
+                                className={`h-full flex-1 transition-all duration-500 ${
+                                  step <= passwordStrength.score ? passwordStrength.color : 'bg-transparent'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          {passwordStrength.suggestions.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                              {passwordStrength.suggestions.map((s, i) => (
+                                <span key={i} className="text-[9px] bg-gray-100 dark:bg-gray-800 text-gray-500 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-700">
+                                  + {s}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
