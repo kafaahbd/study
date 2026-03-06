@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import SEO from "../components/SEO";
 
 const SignUp = () => {
   const { t, lang } = useLanguage();
@@ -23,14 +24,9 @@ const SignUp = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const [passwordStrength, setPasswordStrength] = useState({
-    score: 0,
-    label: "",
-    color: "bg-gray-200",
-    suggestions: [] as string[],
-  });
 
-  const validatePassword = useCallback((pass: string) => {
+  const passwordStrength = useMemo(() => {
+    const pass = formData.password;
     let score = 0;
     const suggestions = [];
 
@@ -68,8 +64,8 @@ const SignUp = () => {
         break;
     }
 
-    setPasswordStrength({ score, label, color, suggestions });
-  }, [lang]);
+    return { score, label, color, suggestions };
+  }, [formData.password, lang]);
 
   const generateStrongPassword = () => {
     const length = 12;
@@ -92,10 +88,6 @@ const SignUp = () => {
     setFormData({ ...formData, password: retVal, confirmPassword: retVal });
     setShowPassword(true);
   };
-
-  useEffect(() => {
-    validatePassword(formData.password);
-  }, [formData.password, validatePassword]);
 
   useEffect(() => {
     if (user) {
@@ -144,6 +136,11 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start lg:justify-center px-4 pt-4 lg:pt-12 transition-colors font-sans">
+      <SEO 
+        title={lang === "bn" ? "সাইন আপ - কাফআহ" : "Sign Up - Kafa'ah"} 
+        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+        url="/signup"
+      />
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
+import SEO from "../components/SEO";
 
 import * as examService from "../services/examService";
 import { BookOpen, Play, Trash2, CheckCircle, AlertCircle, ArrowLeft, RefreshCw } from "lucide-react";
@@ -135,6 +136,12 @@ const Mistakes: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
+            <SEO 
+                title={lang === "bn" ? "ভুল সংশোধন কেন্দ্র - কাফআহ" : "Mistake Lab - Kafa'ah"} 
+                description={lang === "bn" ? "আপনার ভুল করা প্রশ্নগুলো প্র্যাকটিস করে নিজেকে আরও দক্ষ করে তুলুন।" : "Practice the questions you got wrong and improve your skills."}
+                image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/exam.jpg"
+                url="/mistakes"
+            />
             <div className="max-w-4xl mx-auto">
                 <AnimatePresence mode="wait">
                     {!selectedSubject && !practiceMode && (

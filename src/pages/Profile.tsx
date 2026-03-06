@@ -4,6 +4,7 @@ import { Navigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { getUserExamHistory } from "../services/examService";
+import SEO from "../components/SEO";
 
 const Profile = () => {
 	const { user, isLoading, confirmLogout, updateUser } = useAuth();
@@ -108,6 +109,12 @@ const Profile = () => {
 
 	return (
 		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-12 px-4 transition-colors font-sans">
+			<SEO 
+				title={lang === "bn" ? "প্রোফাইল - কাফআহ" : "Profile - Kafa'ah"} 
+				description={lang === "bn" ? "আপনার প্রোফাইল তথ্য এবং পরীক্ষার ইতিহাস দেখুন।" : "View your profile information and exam history."}
+				image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+				url="/profile"
+			/>
 			<div className="w-[95%] lg:w-[75%] mx-auto">
 				{/* Header */}
 				<div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">

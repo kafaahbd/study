@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import SEO from "../components/SEO";
 
 const Login = () => {
   const { t, lang } = useLanguage();
@@ -68,6 +69,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start lg:justify-center px-4 pt-4 lg:pt-0 transition-colors">
+      <SEO 
+        title={lang === "bn" ? "লগইন - কাফআহ" : "Login - Kafa'ah"} 
+        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+        url="/login"
+      />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

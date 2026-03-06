@@ -3,6 +3,7 @@ import { getUserExamHistory } from '../services/examService';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 
 const Dashboard = () => {
   const [history, setHistory] = useState<any[]>([]);
@@ -49,6 +50,12 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4 transition-colors">
+      <SEO 
+        title={lang === "bn" ? "ড্যাশবোর্ড - কাফআহ" : "Dashboard - Kafa'ah"} 
+        description={lang === "bn" ? "আপনার পরীক্ষার পরিসংখ্যান এবং অগ্রগতি দেখুন।" : "View your exam statistics and progress."}
+        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+        url="/dashboard"
+      />
       <div className="max-w-6xl mx-auto">
         
         {/* Header Section */}

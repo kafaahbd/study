@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import SEO from "../components/SEO";
 import { useExamState } from "../hooks/useExamState";
 import { getGroupName, getSubjectName } from "../typescriptfile/utils";
 import SetupScreen from "../components/SetupScreen";
@@ -35,15 +35,15 @@ const ExamCenter: React.FC = () => {
     lang === "bn"
       ? `${subjectName} অধ্যায়ভিত্তিক মডেল টেস্ট দিন। সম্পূর্ণ ফ্রি ইনশাআল্লাহ।`
       : `Take chapter-wise model tests for ${subjectName}. Completely free InshaAllah.`;
-  const pageUrl = `https://kafaahbd.github.io/study-corner/exam?group=${groupParam}&subject=${subjectParam}`;
 
   // If no chapters for subject, show error
   if (chaptersForSubject.length === 0 && groupParam && subjectParam) {
     return (
       <div className="min-h-screen bg-geometric-light dark:bg-geometric-dark py-8 px-4">
-        <Helmet>
-          <title>{lang === "bn" ? "সাবজেক্ট পাওয়া যায়নি" : "Subject Not Found"} | Kafa'ah</title>
-        </Helmet>
+        <SEO 
+          title={lang === "bn" ? "সাবজেক্ট পাওয়া যায়নি" : "Subject Not Found"} 
+          image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/exam.jpg"
+        />
         <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-4">
             {lang === "bn" ? "সাবজেক্ট পাওয়া যায়নি" : "Subject Not Found"}
@@ -71,17 +71,12 @@ const ExamCenter: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:url" content={pageUrl} />
-        <meta
-          property="og:image"
-          content="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaahlogo5.png"
-        />
-      </Helmet>
+      <SEO 
+        title={pageTitle}
+        description={pageDescription}
+        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/exam.jpg"
+        url={`/exam?group=${groupParam}&subject=${subjectParam}`}
+      />
 
       {examState === "setup" && <SetupScreen state={state} />}
       {examState === "running_exam" && <ExamMode state={state} />}

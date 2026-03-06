@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { forumService } from "../services/forumService";
+import SEO from "../components/SEO";
 import {
     MessageSquare, Heart, Inbox, Trash2, Send,
     Layers, GraduationCap, ChevronDown, Check, Filter, X, Share2
@@ -157,6 +158,11 @@ const Forum: React.FC = () => {
 
     return (
         <div className="max-w-3xl mx-auto py-10 px-4 min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
+            <SEO 
+                title={lang === "bn" ? "ফোরাম - কাফআহ" : "Forum - Kafa'ah"} 
+                image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/forum.jpg"
+                url="/forum"
+            />
             <ConfirmModal
                 isOpen={deleteModal.isOpen}
                 onClose={() => setDeleteModal({ isOpen: false, postId: null })}

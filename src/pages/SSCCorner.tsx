@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import ScrollAnimation from "../components/ScrollAnimation";
-import { Helmet } from "react-helmet-async";
+import SEO from "../components/SEO";
 import { motion } from "framer-motion";
 
 interface Subject {
@@ -97,9 +97,11 @@ const SSCCorner: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-12 px-4 transition-colors">
-      <Helmet>
-        <title>{lang === "bn" ? "এসএসসি কর্নার - কাফআহ" : "SSC Corner - Kafa'ah"}</title>
-      </Helmet>
+      <SEO 
+        title={lang === "bn" ? "এসএসসি কর্নার - কাফআহ" : "SSC Corner - Kafa'ah"} 
+        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/ssc.jpg"
+        url="/ssc"
+      />
 
       <div className="w-[95%] lg:w-[95%] mx-auto">
         {/* Header Section */}

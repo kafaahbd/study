@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { forumService } from '../services/forumService';
 import { useAuth } from '../contexts/AuthContext';
@@ -22,7 +22,7 @@ const PostDetails: React.FC = () => {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
 
-  const loadPostData = async () => {
+  const loadPostData = useCallback(async () => {
     if (!postId) return;
     try {
       const currentPost = await forumService.getPostById(postId);
@@ -32,9 +32,14 @@ const PostDetails: React.FC = () => {
       console.error("Error loading post:", err);
       navigate('/forum');
     }
-  };
+  }, [postId, navigate]);
 
-  useEffect(() => { loadPostData(); }, [postId]);
+  useEffect(() => { 
+    const timer = setTimeout(() => {
+      loadPostData(); 
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [loadPostData]);
 
   useEffect(() => {
     if (!showNav) {

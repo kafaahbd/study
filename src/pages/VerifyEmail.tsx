@@ -11,14 +11,14 @@ const VerifyEmail = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const token = searchParams.get('token');
-    if (!token) {
-      setStatus('error');
-      setMessage(t('verification.invalidToken') || (lang === 'bn' ? 'ভেরিফিকেশন লিঙ্কটি সঠিক নয়' : 'Invalid verification link'));
-      return;
-    }
-
     const verifyEmail = async () => {
+      const token = searchParams.get('token');
+      if (!token) {
+        setStatus('error');
+        setMessage(t('verification.invalidToken') || (lang === 'bn' ? 'ভেরিফিকেশন লিঙ্কটি সঠিক নয়' : 'Invalid verification link'));
+        return;
+      }
+
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/auth/verify-email?token=${token}`);
         setStatus('success');

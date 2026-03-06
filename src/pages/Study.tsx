@@ -3,6 +3,7 @@ import ScrollAnimation from "../components/ScrollAnimation";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import SEO from "../components/SEO";
 
 interface Course {
   key: string;
@@ -34,8 +35,11 @@ const Study: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-16 px-4 transition-colors">
       
-      {/* SEO & Meta (Note: Consider using react-helmet) */}
-      <title>{lang === "bn" ? "কাফআহ স্টাডি কর্নার | SSC, HSC ও এডমিশন" : "Kafa'ah Study Corner | SSC, HSC & Admission"}</title>
+      <SEO 
+        title={lang === "bn" ? "হোম - কাফআহ স্টাডি কর্নার" : "Home - Kafa'ah Study Corner"} 
+        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+        url="/"
+      />
 
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
