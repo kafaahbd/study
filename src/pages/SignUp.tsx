@@ -144,28 +144,9 @@ const SignUp = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center"
+        className="max-w-4xl w-full"
       >
-        {/* Left Side: Logo Section (PC) / Top Section (Mobile) */}
-        <div className="text-center lg:text-left space-y-4 lg:space-y-6">
-          <Link to="/" className="inline-block">
-            <img 
-              src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaahlogo5.png" 
-              alt="Kafa'ah" 
-              className="h-24 lg:h-44 mx-auto lg:mx-0 transition-transform duration-500 hover:scale-105"
-            />
-          </Link>
-          <div className="space-y-2">
-            <p className="text-gray-500 dark:text-gray-400 font-black uppercase tracking-[0.3em] text-xs lg:text-sm">
-              Exception is an example
-            </p>
-            <p className="text-gray-400 dark:text-gray-500 font-medium italic text-sm lg:text-base">
-              {lang === 'bn' ? 'কাফআহ পরিবারের সদস্য হয়ে আপনার যাত্রা শুরু করুন' : 'Join the Kafa\'ah family and start your journey'}
-            </p>
-          </div>
-        </div>
-
-        {/* Right Side: Form Section */}
+        {/* Form Section */}
         <div className="w-full">
           <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-6 lg:p-10 relative overflow-hidden">
             {/* Decorative Top Bar */}
