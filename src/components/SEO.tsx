@@ -24,7 +24,14 @@ const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description || defaultDesc} />
       <meta property="og:image" content={image || defaultImage} />
+      <meta property="og:image:secure_url" content={image || defaultImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:image:alt" content="Kafa'ah Study Corner Preview" />
+      <meta property="og:locale" content="bn_BD" />
       <meta property="og:url" content={url ? `${siteUrl}${url}` : siteUrl} />
+      <meta property="og:type" content="website" />
       
       {/* Twitter */}
       <meta name="twitter:title" content={fullTitle} />

@@ -80,7 +80,7 @@ const Login = () => {
         className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center"
       >
         {/* Left Side: Logo Section (PC) / Top Section (Mobile) */}
-        <div className="text-center lg:text-left space-y-4 lg:space-y-6">
+        <div className="text-center lg:text-left space-y-4 lg:space-y-6 hidden lg:block">
           <Link to="/" className="inline-block">
             <img
               src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaahlogo5.png"

@@ -35,6 +35,10 @@ export const subjectChapters: SubjectChapters = {
 				name: "English 2nd Paper : Word Meaning",
 				url: "https://raw.githubusercontent.com/kafaahbd/nothing/refs/heads/main/hsc_english_2nd_paper_wordmeaning.json",
 			},
+			{
+				name: "English 2nd Paper Chapter : Completing Sentence",
+				url: "https://raw.githubusercontent.com/kafaahbd/nothing/refs/heads/main/Completing.json",
+			},
 		],
 		ict: [{ name: "ICT অধ্যায় ১", url: "#" }],
 		math: [
@@ -107,6 +111,22 @@ export const subjectChapters: SubjectChapters = {
 				name: "English 2nd Paper : Word Meaning",
 				url: "https://raw.githubusercontent.com/kafaahbd/nothing/refs/heads/main/hsc_english_2nd_paper_wordmeaning.json",
 			},
+			{
+				name: "English 2nd Paper : Modifier",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Eng_modifuer.json",
+			},
+			{
+				name: "English 2nd Paper : Words and Phrases",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Phrases.json",
+			},
+			{
+				name: "English 2nd Paper : Preposition",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Prepositions.json",
+			},
+			{
+				name: "English 2nd Paper Chapter : Completing Sentence",
+				url: "https://raw.githubusercontent.com/kafaahbd/nothing/refs/heads/main/Completing.json",
+			},
 			{ name: "English 2nd Paper Chapter 1", url: "#" },
 		],
 		ict: [
@@ -168,7 +188,12 @@ export const subjectChapters: SubjectChapters = {
 		],
 		// Arts
 		history: [{ name: "ইতিহাস অধ্যায় ১", url: "#" }],
-		logic: [{ name: "যুক্তিবিদ্যা ১ম পত্র অধ্যায় ২", url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Logic_1_2chp" }],
+		logic: [
+			{
+				name: "যুক্তিবিদ্যা ১ম পত্র অধ্যায় ২",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/Logic_1_2chp",
+			},
+		],
 		islamic: [{ name: "ইসলামের ইতিহাস অধ্যায় ১", url: "#" }],
 		civics: [
 			{
@@ -211,6 +236,11 @@ export const subjectChapters: SubjectChapters = {
 		"university-english": [
 			{ name: "ইংরেজি (বিশ্ববিদ্যালয়) অধ্যায় ১", url: "#" },
 		],
-		"university-gk": [{ name: "সাধারণ জ্ঞান বাংলাদেশ বিষয়ক", url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/University_gk_bd.json" }],
+		"university-gk": [
+			{
+				name: "সাধারণ জ্ঞান বাংলাদেশ বিষয়ক",
+				url: "https://raw.githubusercontent.com/kafaahbd/Question/refs/heads/main/University_gk_bd.json",
+			},
+		],
 	},
 };
