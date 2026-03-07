@@ -183,7 +183,7 @@ const Navbar: React.FC = () => {
       </AnimatePresence>
 
       {/* Space to prevent content overlap */}
-      <div className={`transition-all duration-300 ${hideBottomNav ? 'h-0 overflow-hidden' : 'h-16 md:h-20'}`}></div>
+      <div className={`transition-all duration-300 ${hideBottomNav ? 'h-0 overflow-hidden' : 'h-12 md:h-20'}`}></div>
     </>
   );
 };

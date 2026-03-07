@@ -135,7 +135,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start lg:justify-center px-4 pt-4 lg:pt-12 transition-colors font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start lg:justify-center px-3 lg:px-4 pt-4 lg:pt-10 pb-10 transition-colors font-sans">
       <SEO 
         title={lang === "bn" ? "সাইন আপ - কাফআহ" : "Sign Up - Kafa'ah"} 
         image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
@@ -144,11 +144,11 @@ const SignUp = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl w-full"
+        className="max-w-5xl w-full"
       >
         {/* Form Section */}
         <div className="w-full">
-          <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-6 lg:p-10 relative overflow-hidden">
+          <div className="bg-white dark:bg-gray-800/50 backdrop-blur-xl rounded-3xl lg:rounded-[2.5rem] shadow-2xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 p-5 lg:p-12 relative overflow-hidden">
             {/* Decorative Top Bar */}
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-500 to-emerald-500"></div>
 

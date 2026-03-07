@@ -96,30 +96,30 @@ const SSCCorner: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-12 px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 lg:py-12 px-3 lg:px-4 transition-colors">
       <SEO 
         title={lang === "bn" ? "এসএসসি কর্নার - কাফআহ" : "SSC Corner - Kafa'ah"} 
         image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/ssc.jpg"
         url="/ssc"
       />
 
-      <div className="w-[95%] lg:w-[95%] mx-auto">
+      <div className="w-full lg:w-[95%] mx-auto">
         {/* Header Section */}
-        <header className="mb-12">
+        <header className="mb-8 lg:mb-12">
           <Link
             to="/"
-            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-6"
+            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-4 lg:mb-6"
           >
             <i className="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
             {t("study.back")}
           </Link>
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-6 lg:pb-8">
             <div>
-              <h1 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">
+              <h1 className="text-3xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 lg:mb-3 tracking-tight">
                 {t("study.ssc.title")}
               </h1>
-              <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">
+              <p className="text-base lg:text-lg text-gray-600 dark:text-gray-400 font-medium">
                 {t("study.ssc.subtitle")}
               </p>
             </div>
@@ -150,17 +150,17 @@ const SSCCorner: React.FC = () => {
                 </div>
 
                 {/* Subjects List */}
-                <div className="p-4 md:p-6 space-y-2">
+                <div className="p-3 lg:p-6 space-y-2">
                   {group.subjects.map((subject, subIdx) => (
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      className={`flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub`}
+                      className={`flex items-center justify-between p-3 lg:p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub`}
                     >
-                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors`}>
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors text-sm lg:text-base`}>
                         {subject.name}
                       </span>
-                      <div className={`w-8 h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm ${group.bgIcon} group-hover/sub:text-white transition-all`}>
+                      <div className={`w-7 h-7 lg:w-8 lg:h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm ${group.bgIcon} group-hover/sub:text-white transition-all`}>
                         <i className="fas fa-chevron-right text-[10px]"></i>
                       </div>
                     </Link>
@@ -175,16 +175,16 @@ const SSCCorner: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="mt-16 bg-white dark:bg-gray-900 rounded-[2rem] p-8 border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row items-center gap-6 shadow-lg shadow-gray-100 dark:shadow-none"
+          className="mt-10 lg:mt-16 bg-white dark:bg-gray-900 rounded-3xl lg:rounded-[2rem] p-6 lg:p-8 border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row items-center gap-4 lg:gap-6 shadow-lg shadow-gray-100 dark:shadow-none"
         >
-          <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0">
+          <div className="w-12 h-12 lg:w-16 lg:h-16 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center text-xl lg:text-2xl flex-shrink-0">
             <i className="fas fa-info-circle"></i>
           </div>
           <div className="text-center md:text-left">
-            <h3 className="text-lg font-black text-gray-800 dark:text-white mb-1 uppercase tracking-tight">
+            <h3 className="text-base lg:text-lg font-black text-gray-800 dark:text-white mb-1 uppercase tracking-tight">
               {lang === "bn" ? "আপডেট তথ্য" : "Update Information"}
             </h3>
-            <p className="text-gray-500 dark:text-gray-400 font-medium">
+            <p className="text-sm lg:text-base text-gray-500 dark:text-gray-400 font-medium">
               {lang === "bn"
                 ? "খুব শীঘ্রই প্রতিটি বিষয়ের কন্টেন্ট বা প্রশ্নব্যাংক যুক্ত করা হবে। বর্তমানে কিছু লিঙ্ক খালি থাকতে পারে।"
                 : "Question banks for each subject will be added soon. Some links might be empty currently."}

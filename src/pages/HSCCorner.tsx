@@ -84,30 +84,30 @@ const HSCCorner: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-12 px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 lg:py-12 px-3 lg:px-4 transition-colors">
       <SEO 
         title={lang === "bn" ? "এইচএসসি কর্নার - কাফআহ" : "HSC Corner - Kafa'ah"} 
         image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/hsc.jpg"
         url="/hsc"
       />
 
-      <div className="w-[95%] lg:w-[95%] mx-auto">
+      <div className="w-full lg:w-[95%] mx-auto">
         {/* Header Section */}
-        <header className="mb-12">
+        <header className="mb-8 lg:mb-12">
           <Link
             to="/"
-            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-6"
+            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-4 lg:mb-6"
           >
             <i className="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
             {t("study.back")}
           </Link>
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-6 lg:pb-8">
             <div>
-              <h1 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">
+              <h1 className="text-3xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 lg:mb-3 tracking-tight">
                 {t("study.hsc.title")}
               </h1>
-              <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">
+              <p className="text-base lg:text-lg text-gray-600 dark:text-gray-400 font-medium">
                 {t("study.hsc.subtitle")}
               </p>
             </div>
@@ -138,17 +138,17 @@ const HSCCorner: React.FC = () => {
                 </div>
 
                 {/* Subjects List */}
-                <div className="p-6 space-y-3 flex-grow">
+                <div className="p-3 lg:p-6 space-y-2 lg:space-y-3 flex-grow">
                   {group.subjects.map((subject, subIdx) => (
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      className={`flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub`}
+                      className={`flex items-center justify-between p-3 lg:p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub`}
                     >
-                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors`}>
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors text-sm lg:text-base`}>
                         {subject.name}
                       </span>
-                      <div className={`w-8 h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm ${group.bgIcon} group-hover/sub:text-white transition-all`}>
+                      <div className={`w-7 h-7 lg:w-8 lg:h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm ${group.bgIcon} group-hover/sub:text-white transition-all`}>
                         <i className="fas fa-chevron-right text-[10px]"></i>
                       </div>
                     </Link>
@@ -164,28 +164,28 @@ const HSCCorner: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-16 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-900 dark:to-black rounded-[2.5rem] p-8 md:p-12 text-center relative overflow-hidden shadow-2xl"
+          className="mt-10 lg:mt-16 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-900 dark:to-black rounded-3xl lg:rounded-[2.5rem] p-6 lg:p-12 text-center relative overflow-hidden shadow-2xl"
         >
           {/* Decorative background circle */}
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
           
           <div className="relative z-10">
-            <div className="w-20 h-20 bg-blue-500/20 text-blue-400 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-6 border border-blue-500/30">
+            <div className="w-16 h-16 lg:w-20 lg:h-20 bg-blue-500/20 text-blue-400 rounded-2xl lg:rounded-3xl flex items-center justify-center text-2xl lg:text-3xl mx-auto mb-4 lg:mb-6 border border-blue-500/30">
               <i className="fas fa-rocket"></i>
             </div>
-            <h3 className="text-2xl md:text-3xl font-black text-white mb-4 uppercase tracking-tight">
+            <h3 className="text-xl lg:text-3xl font-black text-white mb-3 lg:mb-4 uppercase tracking-tight">
               {lang === "bn" ? "নতুন কন্টেন্ট আসছে!" : "New Content Coming Soon!"}
             </h3>
-            <p className="text-gray-400 font-medium max-w-2xl mx-auto mb-8">
+            <p className="text-sm lg:text-base text-gray-400 font-medium max-w-2xl mx-auto mb-6 lg:mb-8">
               {lang === "bn"
                 ? "ইনশাআল্লাহ্, এইচএসসি-র প্রতিটি বিষয়ের প্রশ্নব্যাংক এবং মডেল টেস্ট দ্রুত আপডেট করা হচ্ছে। আমাদের সাথেই থাকুন।"
                 : "InshaAllah, question banks and model tests for every HSC subject are being updated rapidly. Stay tuned with us."}
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-xs font-bold tracking-widest uppercase">
+            <div className="flex flex-wrap justify-center gap-3 lg:gap-4">
+              <div className="px-5 lg:px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-[10px] lg:text-xs font-bold tracking-widest uppercase">
                 Free Access
               </div>
-              <div className="px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-xs font-bold tracking-widest uppercase">
+              <div className="px-5 lg:px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-[10px] lg:text-xs font-bold tracking-widest uppercase">
                 Interactive Tests
               </div>
             </div>

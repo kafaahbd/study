@@ -9,9 +9,9 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
-  const siteTitle = "Study Corner - Kafa'ah";
+  const siteTitle = "Kafa'ah Study Corner";
   const fullTitle = `${title} | ${siteTitle}`;
-  const defaultDesc = "Study Corner by Kafa'ah – অধ্যায়ভিত্তিক মডেল টেস্ট ও পরীক্ষার প্রস্তুতি। SSC, HSC ও এডমিশন পরীক্ষার্থীদের জন্য সম্পূর্ণ ফ্রি অনলাইন পরীক্ষা ইনশাআল্লাহ।";
+  const defaultDesc = "Kafa'ah Study Corner – বাংলাদেশের সেরা অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। SSC, HSC ও এডমিশন প্রস্তুতির জন্য অধ্যায়ভিত্তিক পরীক্ষা, তাৎক্ষণিক ফলাফল ও ব্যাখ্যা। Kafa'ah Bangladesh এর একটি উদ্যোগ ইনশাআল্লাহ।";
   const defaultImage = "https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/stufy.jpg";
   const siteUrl = "https://study.kafaahbd.com";
 
