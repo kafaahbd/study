@@ -145,7 +145,7 @@ const Navbar: React.FC = () => {
             </div>
             {/* Dark mode pill */}
             <div
-              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px] hidden dark:flex"
+              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px] dark:flex"
               style={{
                 background: 'rgba(10,10,20,0.88)',
                 backdropFilter: 'blur(24px) saturate(160%)',

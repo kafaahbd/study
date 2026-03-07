@@ -35,8 +35,8 @@ const Forum: React.FC = () => {
     // কনস্ট্যান্ট ভ্যালুগুলো
     const categories = ["Common", "Science", "Arts", "Commerce"];
     const filterCategories = ["All", ...categories];
-    
-    const filterBatches = ["All", "SSC", "HSC"];
+    const batches = ["All", "SSC", "HSC"]
+    const filterBatches = ["All", ...batches];
 
     // পোস্ট ফেচ করার ফাংশন
     const fetchPosts = async () => {
