@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Latex from "react-latex-next";
 
 
+import type { ExamHookState } from "../typescriptfile/types";
+
 interface Props {
-  state: any;
+  state: ExamHookState;
 }
 
 const PracticeCompleted: React.FC<Props> = ({ state }) => {
@@ -83,7 +85,7 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
 
         {/* Detailed Results */}
         <div className="space-y-8">
-          {result.results.map((item: any, idx: number) => {
+          {result.results.map((item, idx: number) => {
             const userOptionText = item.userAnswer && item.options[item.userAnswer] ? item.options[item.userAnswer] : "";
             const correctOptionText = item.options[item.correctAnswer] || "";
             

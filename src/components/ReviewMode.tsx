@@ -5,8 +5,10 @@ import QuestionCard from "./QuestionCard";
 import { type Question } from "../typescriptfile/types";
 import { motion, AnimatePresence } from "framer-motion";
 
+import type { ExamHookState } from "../typescriptfile/types";
+
 interface Props {
-  state: any;
+  state: ExamHookState;
 }
 
 const ReviewMode: React.FC<Props> = ({ state }) => {

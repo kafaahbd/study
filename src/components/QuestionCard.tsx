@@ -1,8 +1,10 @@
 import React from "react";
 import Latex from "react-latex-next";
 
+import type { Question } from "../typescriptfile/types";
+
 interface Props {
-  question: any;
+  question: Question;
   userAnswer?: string;
   onAnswerSelect: (questionId: number, answer: string) => void;
   disabled?: boolean;

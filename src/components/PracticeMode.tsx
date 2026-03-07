@@ -4,8 +4,10 @@ import Latex from "react-latex-next";
 import QuestionCard from "./QuestionCard";
 import { motion, AnimatePresence } from "framer-motion"; // অ্যানিমেশনের জন্য (ঐচ্ছিক কিন্তু দারুণ)
 
+import type { ExamHookState } from "../typescriptfile/types";
+
 interface Props {
-	state: any;
+	state: ExamHookState;
 }
 
 const PracticeMode: React.FC<Props> = ({ state }) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { subjectChapters } from "../data/subjectChapters";
@@ -133,32 +133,8 @@ export const useExamState = () => {
 		}
 	};
 
-	// --- Timer for exam mode ---
-	useEffect(() => {
-		if (examState === "running_exam" && timeLeft > 0) {
-			const timer = setInterval(() => {
-				setTimeLeft((prev) => {
-					if (prev <= 1) {
-						clearInterval(timer);
-						handleSubmitExam();
-						return 0;
-					}
-					return prev - 1;
-				});
-			}, 1000);
-			return () => clearInterval(timer);
-		}
-	}, [examState, timeLeft]);
-
-	// --- Answer selection ---
-	const handleAnswerSelect = (questionId: number, answer: string) => {
-		if (hasChecked) return;
-		setUserAnswers((prev) => ({ ...prev, [questionId]: answer }));
-		setSelectedOptionColor((prev) => ({ ...prev, [questionId]: "" }));
-	};
-
 	// --- Exam mode submit ---
-	const handleSubmitExam = async () => {
+	const handleSubmitExam = useCallback(async () => {
 		if (isSubmitting.current) return;
 		isSubmitting.current = true;
 
@@ -203,6 +179,10 @@ export const useExamState = () => {
 					.filter((r) => !r.isCorrect)
 					.map((r) => {
 						const { userAnswer, isCorrect, correctAnswer, ...rest } = r;
+						// Mark as used for linter
+						void userAnswer;
+						void isCorrect;
+						void correctAnswer;
 						return rest;
 					});
 
@@ -219,7 +199,31 @@ export const useExamState = () => {
 				console.error("Failed to save result or mistakes:", error);
 			}
 		}
+	}, [questions, userAnswers, duration, timeLeft, user, subjectName]);
+
+	// --- Answer selection ---
+	const handleAnswerSelect = (questionId: number, answer: string) => {
+		if (hasChecked) return;
+		setUserAnswers((prev) => ({ ...prev, [questionId]: answer }));
+		setSelectedOptionColor((prev) => ({ ...prev, [questionId]: "" }));
 	};
+
+	// --- Timer for exam mode ---
+	useEffect(() => {
+		if (examState === "running_exam" && timeLeft > 0) {
+			const timer = setInterval(() => {
+				setTimeLeft((prev) => {
+					if (prev <= 1) {
+						clearInterval(timer);
+						handleSubmitExam();
+						return 0;
+					}
+					return prev - 1;
+				});
+			}, 1000);
+			return () => clearInterval(timer);
+		}
+	}, [examState, timeLeft, handleSubmitExam]);
 	// --- Practice mode: check answer ---
 	const handleCheckAnswer = (
 		questionId: number,

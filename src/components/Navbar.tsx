@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, MessageSquare, Zap } from 'lucide-react';
+import { BookOpen, MessageSquare, Zap, ChevronRight } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const { t } = useLanguage();
@@ -44,21 +44,21 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* Mobile Nav Toggle Button (Floating) */}
-      <motion.button
-        initial={false}
-        animate={{ 
-          left: hideBottomNav ? 16 : 'auto',
-          right: hideBottomNav ? 'auto' : '2%',
-          bottom: hideBottomNav ? 32 : 24,
-          rotate: hideBottomNav ? 0 : 180
-        }}
-        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        onClick={toggleNav}
-        className="md:hidden fixed z-[110] w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-full shadow-2xl flex items-center justify-center text-gray-600 dark:text-gray-300 active:scale-90"
-      >
-        <i className="fas fa-chevron-right text-sm"></i>
-      </motion.button>
+      {/* Mobile Nav Toggle Button (Floating - only shown when nav is hidden) */}
+      <AnimatePresence>
+        {hideBottomNav && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5, x: -20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.5, x: -20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            onClick={toggleNav}
+            className="md:hidden fixed bottom-8 left-4 z-[110] w-10 h-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-full shadow-2xl flex items-center justify-center text-gray-600 dark:text-gray-300 active:scale-90"
+          >
+            <i className="fas fa-chevron-right text-sm"></i>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Main Header: Sticky on both PC and Mobile */}
       <motion.nav 
@@ -177,6 +177,17 @@ const Navbar: React.FC = () => {
                 <Zap size={24} />
                 <span className="text-[10px] font-black uppercase tracking-widest">{t('nav.mistakes')}</span>
               </Link>
+              
+              {/* Toggle Button integrated into nav */}
+              <button 
+                onClick={toggleNav}
+                className="flex flex-col items-center gap-1 p-3 rounded-2xl text-gray-400 hover:text-red-500 transition-colors"
+              >
+                <ChevronRight size={24} className="rotate-180" />
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  {t('nav.hide')}
+                </span>
+              </button>
             </div>
           </motion.div>
         )}

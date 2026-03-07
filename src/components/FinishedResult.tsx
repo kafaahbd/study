@@ -1,11 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Latex from "react-latex-next";
 
 
 
+import type { ExamHookState } from "../typescriptfile/types";
+
 interface Props {
-	state: any;
+	state: ExamHookState;
 }
 
 const FinishedResult: React.FC<Props> = ({ state }) => {
@@ -13,12 +15,21 @@ const FinishedResult: React.FC<Props> = ({ state }) => {
 	const { lang, result, subjectName, resetToSetup, isSaved } = state;
 	const navigate = useNavigate();
 	const reportTemplateRef = useRef<HTMLDivElement>(null);
-	const [isDownloading, setIsDownloading] = useState(false);
 
 	useEffect(() => {
 		document.body.classList.add("hide-mobile-nav");
 		return () => document.body.classList.remove("hide-mobile-nav");
 	}, []);
+
+	useEffect(() => {
+		if (isSaved) {
+			const timer = setTimeout(() => {
+				// আপনি চাইলে আরেকটি স্টেট নিয়ে এটি হাইড করতে পারেন
+				// তবে আপাতত এভাবে রাখলেও কোনো সমস্যা নেই।
+			}, 5000);
+			return () => clearTimeout(timer);
+		}
+	}, [isSaved]);
 
 	if (!result) return null;
 
@@ -37,20 +48,10 @@ const handleDownloadPdf = () => {
     document.title = originalTitle;
 };
 
-	useEffect(() => {
-		if (isSaved) {
-			const timer = setTimeout(() => {
-				// আপনি চাইলে আরেকটি স্টেট নিয়ে এটি হাইড করতে পারেন
-				// তবে আপাতত এভাবে রাখলেও কোনো সমস্যা নেই।
-			}, 5000);
-			return () => clearTimeout(timer);
-		}
-	}, [isSaved]);
-
 	return (
-		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 transition-colors">
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 lg:py-8 px-3 lg:px-4 transition-colors">
 			{/* Navigation Layer */}
-			<div className="max-w-4xl mx-auto flex items-center justify-between mb-8 print:hidden">
+			<div className="max-w-4xl mx-auto flex items-center justify-between mb-6 lg:mb-8 print:hidden">
 				<button
 					onClick={handleBack}
 					className="flex items-center text-green-600 font-bold hover:underline"
@@ -64,13 +65,7 @@ const handleDownloadPdf = () => {
 						onClick={handleDownloadPdf}
 						className="flex items-center gap-2 px-6 py-2 bg-red-600 text-white rounded-full font-bold shadow-lg hover:bg-red-700 transition-all"
 					>
-						<i
-							className={
-								isDownloading
-									? "fas fa-spinner animate-spin"
-									: "fas fa-file-download"
-							}
-						></i>
+						<i className="fas fa-file-download"></i>
 						{lang === "bn" ? "PDF রিপোর্ট" : "PDF Report"}
 					</button>
 				</div>
@@ -79,7 +74,7 @@ const handleDownloadPdf = () => {
 			{/* PDF Content Area */}
 			<div
 				ref={reportTemplateRef}
-				className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl transition-colors text-gray-900 dark:text-gray-100"
+				className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-5 lg:p-8 rounded-3xl shadow-xl transition-colors text-gray-900 dark:text-gray-100"
 			>
 				{/* PDF Header */}
 				<div className="text-center border-b-2 border-green-500 pb-6 mb-8">
@@ -113,11 +108,9 @@ const handleDownloadPdf = () => {
 					</div>
 				</div>
 
-				{/* Questions Detail */}
-				<div className="space-y-12">
-					{result.results.map((item: any, idx: number) => {
+            {result.results.map((item, idx: number) => {
 						const userOptionText =
-							item.options[item.userAnswer] || "Not Answered";
+							(item.userAnswer && item.options[item.userAnswer]) || "Not Answered";
 						const correctOptionText = item.options[item.correctAnswer] || "";
 
 						return (
