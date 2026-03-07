@@ -25,6 +25,7 @@ const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Forum = lazy(() => import("./pages/Forum"));
 const PostDetails = lazy(() => import("./pages/PostDetails"));
+const CreatePost = lazy(() => import("./pages/CreatePost"));
 const Mistakes = lazy(() => import("./pages/Mistakes"));
 
 // প্রিমিয়াম পেজ লোডার
@@ -54,7 +55,7 @@ function App() {
 			<div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-white selection:bg-green-100 dark:selection:bg-blue-900/30">
 				<Navbar />
 
-				<main className="flex-grow relative">
+				<main className="flex-grow relative pb-20 md:pb-0">
 					{/* Suspense handles Lazy Loading */}
 					<Suspense fallback={<PageLoader />}>
 						<AnimatePresence mode="wait">
@@ -83,9 +84,12 @@ function App() {
 									
 									<Route path="/forum" element={<Forum />} />
 									<Route path="/post/:postId" element={<PostDetails />} />
+									<Route path="/create-post" element={<CreatePost />} />
+									<Route path="/edit-post/:postId" element={<CreatePost />} />
 
 									<Route element={<ProtectedRoute />}>
 										<Route path="/profile" element={<Profile />} />
+										<Route path="/profile/:userId" element={<Profile />} />
 										<Route path="/dashboard" element={<Dashboard />} />
 										<Route path="/mistakes" element={<Mistakes />} />
 									</Route>

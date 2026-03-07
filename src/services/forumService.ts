@@ -110,5 +110,51 @@ export const forumService = {
       getAuthHeader()
     );
     return response.data;
+  },
+
+  /**
+   * ৮. পোস্ট আপডেট করা
+   */
+  updatePost: async (postId: string, content: string, category: string, batch: string) => {
+    const response = await axios.put(
+      `${API_URL}/posts/${postId}`,
+      { content, category, batch },
+      getAuthHeader()
+    );
+    return response.data;
+  },
+
+  /**
+   * ৯. ইউজার ব্লক করা
+   */
+  blockUser: async (userId: string) => {
+    const response = await axios.post(
+      `${API_URL}/block`,
+      { blocked_user_id: userId },
+      getAuthHeader()
+    );
+    return response.data;
+  },
+
+  /**
+   * ১০. নির্দিষ্ট ইউজারের পোস্ট ফেচ করা
+   */
+  getUserPosts: async (userId: string) => {
+    const response = await axios.get(
+      `${API_URL}/user/${userId}/posts`,
+      getAuthHeader()
+    );
+    return response.data;
+  },
+
+  /**
+   * ১১. ইউজারের প্রোফাইল তথ্য ফেচ করা (অন্য ইউজারের জন্য)
+   */
+  getUserProfile: async (userId: string) => {
+    const response = await axios.get(
+      `${API_URL}/user/${userId}/profile`,
+      getAuthHeader()
+    );
+    return response.data;
   }
 };

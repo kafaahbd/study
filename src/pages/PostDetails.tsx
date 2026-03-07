@@ -125,7 +125,7 @@ const PostDetails: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4 min-h-screen bg-gray-50 dark:bg-gray-900 pb-40">
+    <div className="max-w-3xl mx-auto pt-0 pb-40 md:pt-4 md:pb-40 px-4 min-h-screen bg-gray-50 dark:bg-gray-900">
       
       <ConfirmModal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} onConfirm={handlePostDeleteConfirm} title="Delete Post?" />
       <ConfirmModal isOpen={!!commentToDelete} onClose={() => setCommentToDelete(null)} onConfirm={handleCommentDeleteConfirm} title="Delete Comment?" />
@@ -138,11 +138,19 @@ const PostDetails: React.FC = () => {
       {/* Post Card */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-gray-800 rounded-[40px] p-8 shadow-sm border border-gray-100 dark:border-gray-700 mb-12">
         <div className="flex gap-4 mb-6">
-          <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/20">
+          <div 
+            onClick={() => navigate(`/profile/${post.user_id}`)}
+            className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/20 cursor-pointer"
+          >
             {post.author_name?.[0]}
           </div>
           <div>
-            <h2 className="font-black text-xl dark:text-white leading-tight">{post.author_name}</h2>
+            <h2 
+              onClick={() => navigate(`/profile/${post.user_id}`)}
+              className="font-black text-xl dark:text-white leading-tight cursor-pointer hover:text-blue-600 transition-colors"
+            >
+              {post.author_name}
+            </h2>
             <div className="flex items-center gap-3 mt-1">
               <span className="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 px-2 py-0.5 rounded-md font-black uppercase tracking-tighter">{post.category}</span>
               <span className="text-[10px] text-gray-400 font-bold flex items-center gap-1"><Clock size={12}/> {new Date(post.created_at).toLocaleDateString()}</span>
