@@ -12,7 +12,7 @@ const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
   const siteTitle = "Study Corner - Kafa'ah";
   const fullTitle = `${title} | ${siteTitle}`;
   const defaultDesc = "Study Corner by Kafa'ah – অধ্যায়ভিত্তিক মডেল টেস্ট ও পরীক্ষার প্রস্তুতি। SSC, HSC ও এডমিশন পরীক্ষার্থীদের জন্য সম্পূর্ণ ফ্রি অনলাইন পরীক্ষা ইনশাআল্লাহ।";
-  const defaultImage = "https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg";
+  const defaultImage = "https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/stufy.jpg";
   const siteUrl = "https://study.kafaahbd.com";
 
   return (
