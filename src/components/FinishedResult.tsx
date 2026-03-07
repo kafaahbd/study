@@ -108,70 +108,64 @@ const handleDownloadPdf = () => {
 					</div>
 				</div>
 
-            {result.results.map((item, idx: number) => {
-						const userOptionText =
-							(item.userAnswer && item.options[item.userAnswer]) || "Not Answered";
-						const correctOptionText = item.options[item.correctAnswer] || "";
-
-						return (
-							<div key={idx} className="group">
-								<div className="flex gap-4 mb-4">
-									<span className="flex-none w-8 h-8 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg flex items-center justify-center font-bold">
-										{idx + 1}
-									</span>
-									<div className="text-xl font-semibold leading-snug pt-0.5">
-										<Latex>{item.question}</Latex>
-									</div>
-								</div>
-
-								<div className="ml-12 space-y-3">
-									{/* Result Indicator */}
-									<div
-										className={`p-4 rounded-xl flex items-center gap-3 ${
-											item.isCorrect
-												? "bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300"
-												: "bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300"
-										}`}
-									>
-										<i
-											className={`fas ${item.isCorrect ? "fa-check-circle" : "fa-times-circle"}`}
-										></i>
-										<p className="font-medium">
-											<span className="font-bold">
-												{lang === "bn" ? "আপনার উত্তর: " : "Your Answer: "}
-											</span>
-											<Latex>{`${item.userAnswer || ""}. ${userOptionText}`}</Latex>
-										</p>
-									</div>
-
-									{!item.isCorrect && (
-										<div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 border border-dashed border-gray-300 dark:border-gray-600">
-											<p className="font-medium">
-												<span className="font-bold text-green-600">
-													{lang === "bn" ? "সঠিক উত্তর: " : "Correct: "}
-												</span>
-												<Latex>{`${item.correctAnswer}. ${correctOptionText}`}</Latex>
-											</p>
-										</div>
-									)}
-
-									{/* Explanation Section */}
-									{item.explanation && (
-										<div className="mt-4 p-5 bg-yellow-50 dark:bg-yellow-900/10 rounded-2xl border-l-4 border-yellow-400">
-											<p className="text-xs font-black text-yellow-700 dark:text-yellow-500 uppercase mb-1 tracking-widest">
-												{lang === "bn"
-													? "ব্যাখ্যা / Explanation"
-													: "Explanation"}
-											</p>
-											<div className="text-gray-700 dark:text-gray-300 text-lg italic leading-relaxed">
-												<Latex>{item.explanation}</Latex>
-											</div>
-										</div>
-									)}
+				{/* Questions Detail */}
+				<div className="space-y-8 lg:space-y-12">
+					{result.results.map((item, idx: number) => (
+						<div key={idx} className="group">
+							<div className="flex gap-4 mb-4">
+								<span className="flex-none w-8 h-8 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg flex items-center justify-center font-bold">
+									{idx + 1}
+								</span>
+								<div className="text-xl font-semibold leading-snug pt-0.5">
+									<Latex>{item.question}</Latex>
 								</div>
 							</div>
-						);
-					})}
+
+							<div className="ml-12 space-y-3">
+								{/* Result Indicator */}
+								<div
+									className={`p-4 rounded-xl flex items-center gap-3 ${
+										item.isCorrect
+											? "bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300"
+											: "bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300"
+									}`}
+								>
+									<i className={`fas ${item.isCorrect ? "fa-check-circle" : "fa-times-circle"}`}></i>
+									<p className="font-medium">
+										<span className="font-bold">
+											{lang === "bn" ? "আপনার উত্তর: " : "Your Answer: "}
+										</span>
+										<Latex>{`${item.userAnswer || ""}. ${
+											(item.userAnswer && item.options[item.userAnswer]) || "Not Answered"
+										}`}</Latex>
+									</p>
+								</div>
+
+								{!item.isCorrect && (
+									<div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 border border-dashed border-gray-300 dark:border-gray-600">
+										<p className="font-medium">
+											<span className="font-bold text-green-600">
+												{lang === "bn" ? "সঠিক উত্তর: " : "Correct: "}
+											</span>
+											<Latex>{`${item.correctAnswer}. ${item.options[item.correctAnswer] || ""}`}</Latex>
+										</p>
+									</div>
+								)}
+
+								{/* Explanation Section */}
+								{item.explanation && (
+									<div className="mt-4 p-5 bg-yellow-50 dark:bg-yellow-900/10 rounded-2xl border-l-4 border-yellow-400">
+										<p className="text-xs font-black text-yellow-700 dark:text-yellow-500 uppercase mb-1 tracking-widest">
+											{lang === "bn" ? "ব্যাখ্যা / Explanation" : "Explanation"}
+										</p>
+										<div className="text-gray-700 dark:text-gray-300 text-lg italic leading-relaxed">
+											<Latex>{item.explanation}</Latex>
+										</div>
+									</div>
+								)}
+							</div>
+						</div>
+					))}
 				</div>
 			</div>
 

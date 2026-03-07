@@ -85,57 +85,50 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
 
         {/* Detailed Results */}
         <div className="space-y-8">
-          {result.results.map((item, idx: number) => {
-            const userOptionText = item.userAnswer && item.options[item.userAnswer] ? item.options[item.userAnswer] : "";
-            const correctOptionText = item.options[item.correctAnswer] || "";
-            
-            // Border logic based on status
-            let accentColor = "border-gray-200 dark:border-gray-700";
-            if (item.everWrong && item.isCorrect) accentColor = "border-yellow-400";
-            else if (!item.isCorrect) accentColor = "border-red-500";
-            else if (item.isCorrect) accentColor = "border-green-500";
+          {result.results.map((item, idx: number) => (
+            <div key={idx} className={`border-l-4 ${
+              item.everWrong && item.isCorrect ? "border-yellow-400" :
+              !item.isCorrect ? "border-red-500" :
+              "border-green-500"
+            } pl-6 py-2 transition-all`}>
+              <div className="flex justify-between items-start mb-4">
+                <p className="text-xl font-bold text-gray-800 dark:text-gray-100">
+                  {idx + 1}. <Latex>{item.question}</Latex>
+                </p>
+                {item.everWrong && item.isCorrect && (
+                  <span className="flex-none ml-2 px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-[10px] font-black rounded-full uppercase italic">
+                    {lang === "bn" ? "সংশোধিত" : "Corrected"}
+                  </span>
+                )}
+              </div>
 
-            return (
-              <div key={idx} className={`border-l-4 ${accentColor} pl-6 py-2 transition-all`}>
-                <div className="flex justify-between items-start mb-4">
-                  <p className="text-xl font-bold text-gray-800 dark:text-gray-100">
-                    {idx + 1}. <Latex>{item.question}</Latex>
+              <div className="space-y-3">
+                <div className={`flex items-center gap-2 text-lg ${item.isCorrect ? "text-green-600 font-medium" : "text-red-600 font-bold"}`}>
+                  <i className={`fas ${item.isCorrect ? 'fa-check-circle' : 'fa-times-circle'}`}></i>
+                  <p>
+                    {lang === "bn" ? "আপনার উত্তর:" : "Your answer:"}{" "}
+                    <Latex>{`${item.userAnswer ?? ""}. ${item.userAnswer && item.options[item.userAnswer] ? item.options[item.userAnswer] : ""}`}</Latex>
                   </p>
-                  {item.everWrong && item.isCorrect && (
-                    <span className="flex-none ml-2 px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-[10px] font-black rounded-full uppercase italic">
-                      {lang === "bn" ? "সংশোধিত" : "Corrected"}
-                    </span>
-                  )}
                 </div>
 
-                <div className="space-y-3">
-                  <div className={`flex items-center gap-2 text-lg ${item.isCorrect ? "text-green-600 font-medium" : "text-red-600 font-bold"}`}>
-                    <i className={`fas ${item.isCorrect ? 'fa-check-circle' : 'fa-times-circle'}`}></i>
+                {!item.isCorrect && (
+                  <div className="flex items-center gap-2 text-lg text-green-600 font-medium bg-green-50 dark:bg-green-900/10 p-2 rounded-lg border border-dashed border-green-200">
+                    <i className="fas fa-check-double"></i>
                     <p>
-                      {lang === "bn" ? "আপনার উত্তর:" : "Your answer:"}{" "}
-                      <Latex>{`${item.userAnswer ?? ""}. ${userOptionText}`}</Latex>
+                      {lang === "bn" ? "সঠিক উত্তর:" : "Correct answer:"}{" "}
+                      <Latex>{`${item.correctAnswer}. ${item.options[item.correctAnswer] || ""}`}</Latex>
                     </p>
                   </div>
-
-                  {!item.isCorrect && (
-                    <div className="flex items-center gap-2 text-lg text-green-600 font-medium bg-green-50 dark:bg-green-900/10 p-2 rounded-lg border border-dashed border-green-200">
-                      <i className="fas fa-check-double"></i>
-                      <p>
-                        {lang === "bn" ? "সঠিক উত্তর:" : "Correct answer:"}{" "}
-                        <Latex>{`${item.correctAnswer}. ${correctOptionText}`}</Latex>
-                      </p>
-                    </div>
-                  )}
-                  
-                  {item.explanation && (
-                    <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl text-sm italic text-gray-600 dark:text-gray-400 border-l-2 border-indigo-400">
-                       <Latex>{item.explanation}</Latex>
-                    </div>
-                  )}
-                </div>
+                )}
+                
+                {item.explanation && (
+                  <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl text-sm italic text-gray-600 dark:text-gray-400 border-l-2 border-indigo-400">
+                     <Latex>{item.explanation}</Latex>
+                  </div>
+                )}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
         {/* PDF Footer Info */}

@@ -11,6 +11,7 @@ export const content: Record<string, Record<string, string>> = {
 		"nav.about": "About",
 		"nav.login": "Login",
 		"nav.logout": "Logout",
+		"nav.hide": "Hide",
 		// Footer
 		"footer.about": "About",
 		"footer.contact": "Contact",
@@ -249,6 +250,7 @@ export const content: Record<string, Record<string, string>> = {
 		"nav.about": "সম্পর্কে",
 		"nav.login": "লগইন",
 		"nav.logout": "লগআউট",
+		"nav.hide" : "লুকান",
 		// Footer
 		"footer.about": "সম্পর্কে",
 		"footer.contact": "যোগাযোগ",
