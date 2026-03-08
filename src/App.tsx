@@ -55,7 +55,7 @@ function App() {
 			<div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-white selection:bg-green-100 dark:selection:bg-blue-900/30">
 				<Navbar />
 
-				<main className="flex-grow relative pb-20 md:pb-0">
+				<main className="flex-grow relative">
 					{/* Suspense handles Lazy Loading */}
 					<Suspense fallback={<PageLoader />}>
 						<AnimatePresence mode="wait">

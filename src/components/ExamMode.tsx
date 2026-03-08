@@ -78,12 +78,12 @@ const ExamMode: React.FC<Props> = ({ state }) => {
                 className="group relative"
               >
                 {/* Question Number Badge */}
-                <div className="flex items-start gap-3 lg:gap-4">
+                <div className="flex flex-col md:flex-row items-start gap-2 md:gap-3 lg:gap-4">
                   <span className="flex-none w-8 h-8 lg:w-10 lg:h-10 bg-slate-100 dark:bg-gray-800 text-slate-500 dark:text-gray-400 rounded-xl flex items-center justify-center font-black text-base lg:text-lg group-hover:bg-green-600 group-hover:text-white transition-colors">
                     {idx + 1}
                   </span>
-                  <div className="flex-1">
-                    <p className="text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 lg:mb-6 leading-relaxed pt-0.5 lg:pt-1">
+                  <div className="flex-1 w-full">
+                    <p className="text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-200 mb-3 lg:mb-6 leading-relaxed pt-0.5 lg:pt-1">
                       <Latex>{q.question}</Latex>
                     </p>
                     <QuestionCard

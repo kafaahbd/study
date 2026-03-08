@@ -123,7 +123,7 @@ const Profile = () => {
 			await updateUser(formData);
 			setIsEditing(false);
             setToast({ msg: lang === "bn" ? "প্রোফাইল আপডেট হয়েছে" : "Profile updated", type: "success" });
-		} catch (err) {
+		} catch {
 			setToast({ msg: "Update failed!", type: "error" });
 		} finally {
 			setIsUpdating(false);
@@ -136,7 +136,7 @@ const Profile = () => {
             await forumService.blockUser(userId);
             setToast({ msg: lang === "bn" ? "ইউজার ব্লক করা হয়েছে" : "User blocked", type: "success" });
             setTimeout(() => navigate("/forum"), 1500);
-        } catch (err) {
+        } catch {
             setToast({ msg: "Failed to block", type: "error" });
         }
     };
@@ -153,7 +153,7 @@ const Profile = () => {
         }));
         try {
             await forumService.toggleReact(postId);
-        } catch (err) {
+        } catch {
             // Rollback
             const targetId = userId || currentUser?.id;
             if (targetId) {

@@ -28,7 +28,7 @@ const ResetPassword = () => {
       });
       alert(lang === 'bn' ? "পাসওয়ার্ড সফলভাবে রিসেট হয়েছে" : "Password reset successful");
       navigate("/login");
-    } catch (err) {
+    } catch {
       alert("Failed to reset password");
     } finally {
       setIsLoading(false);

@@ -5,11 +5,14 @@ import { useAuth } from '../contexts/AuthContext';
 import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getProfileColor, getTimeAgo } from '../typescriptfile/utils';
 
 const PostDetails: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { lang } = useLanguage();
   const [post, setPost] = useState<any>(null);
   const [commentText, setCommentText] = useState('');
   const [showNav, setShowNav] = useState(false);
@@ -140,7 +143,7 @@ const PostDetails: React.FC = () => {
         <div className="flex gap-4 mb-6">
           <div 
             onClick={() => navigate(`/profile/${post.user_id}`)}
-            className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/20 cursor-pointer"
+            className={`h-12 w-12 rounded-2xl bg-gradient-to-tr ${getProfileColor(post.author_name)} text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/20 cursor-pointer border-2 border-white dark:border-gray-700`}
           >
             {post.author_name?.[0]}
           </div>
@@ -153,7 +156,7 @@ const PostDetails: React.FC = () => {
             </h2>
             <div className="flex items-center gap-3 mt-1">
               <span className="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 px-2 py-0.5 rounded-md font-black uppercase tracking-tighter">{post.category}</span>
-              <span className="text-[10px] text-gray-400 font-bold flex items-center gap-1"><Clock size={12}/> {new Date(post.created_at).toLocaleDateString()}</span>
+              <span className="text-[10px] text-gray-400 font-bold flex items-center gap-1"><Clock size={12}/> {getTimeAgo(post.created_at, lang)}</span>
             </div>
           </div>
           {post.user_id === user?.id && (
@@ -176,7 +179,7 @@ const PostDetails: React.FC = () => {
           <div key={c.id} className="space-y-4">
             {/* মেইন কমেন্ট বক্স */}
             <div className="flex gap-4 group">
-              <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-black shrink-0 text-gray-500">
+              <div className={`h-10 w-10 rounded-full bg-gradient-to-tr ${getProfileColor(c.author_name)} text-white flex items-center justify-center text-xs font-black shrink-0 border-2 border-white dark:border-gray-700 shadow-sm`}>
                 {c.author_name?.[0]}
               </div>
               <div className="flex-1 bg-white dark:bg-gray-800/60 p-5 rounded-[28px] border border-gray-100 dark:border-gray-700 shadow-sm relative group">
@@ -204,7 +207,7 @@ const PostDetails: React.FC = () => {
             <div className="ml-14 space-y-4 border-l-2 border-gray-100 dark:border-gray-800/50 pl-6">
               {getReplies(c.id).map((reply: any) => (
                 <motion.div initial={{ opacity: 0, x: 5 }} animate={{ opacity: 1, x: 0 }} key={reply.id} className="flex gap-3 group">
-                  <div className="h-8 w-8 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 flex items-center justify-center text-[10px] font-black shrink-0">
+                  <div className={`h-8 w-8 rounded-full bg-gradient-to-tr ${getProfileColor(reply.author_name)} text-white flex items-center justify-center text-[10px] font-black shrink-0 border-2 border-white dark:border-gray-700 shadow-sm`}>
                     {reply.author_name?.[0]}
                   </div>
                   <div className="flex-1 bg-gray-50/50 dark:bg-gray-800/30 p-4 rounded-[22px] border border-gray-100 dark:border-gray-700">

@@ -33,7 +33,7 @@ const Study: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 lg:py-16 px-3 lg:px-4 transition-colors">
+    <div className="bg-slate-50 dark:bg-gray-900 py-4 lg:py-16 px-3 lg:px-4 transition-colors">
       
       <SEO 
         title={lang === "bn" ? "হোম - কাফআহ স্টাডি কর্নার" : "Home - Kafa'ah Study Corner"} 
@@ -66,7 +66,7 @@ const Study: React.FC = () => {
               <Link
                 to={course.path}
                 onClick={(e) => handleClick(course.path, e)}
-                className="group relative block bg-white dark:bg-gray-900 p-6 lg:p-8 rounded-3xl lg:rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2"
+                className="group relative flex flex-col items-center justify-center text-center h-full bg-white dark:bg-gray-900 p-6 lg:p-8 rounded-3xl lg:rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 transition-all hover:-translate-y-2"
               >
                 {/* Background Glow on Hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${course.color} opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-[0.07] rounded-3xl lg:rounded-[2.5rem] transition-opacity`}></div>
@@ -77,7 +77,7 @@ const Study: React.FC = () => {
                 </div>
 
                 {/* Content */}
-                <h2 className="text-xl lg:text-2xl font-black text-gray-800 dark:text-gray-100 mb-2">
+                <h2 className="text-xl lg:text-2xl font-black text-gray-800 dark:text-gray-100 mb-2 text-center">
                   {t(`study.${course.key}`)}
                 </h2>
                 

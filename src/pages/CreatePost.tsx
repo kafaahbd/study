@@ -39,7 +39,7 @@ const CreatePost: React.FC = () => {
                     setContent(post.content);
                     setCategory(post.category);
                     setBatch(post.batch);
-                } catch (err) {
+                } catch {
                     setToast({ msg: lang === "bn" ? "পোস্ট লোড করা সম্ভব হয়নি" : "Failed to load post", type: "error" });
                 } finally {
                     setFetching(false);
@@ -71,7 +71,7 @@ const CreatePost: React.FC = () => {
                 setToast({ msg: lang === "bn" ? "পোস্ট শেয়ার হয়েছে!" : "Post shared!", type: "success" });
             }
             setTimeout(() => navigate("/forum"), 1500);
-        } catch (err) {
+        } catch {
             setToast({ msg: lang === "bn" ? "ব্যর্থ হয়েছে" : "Failed", type: "error" });
         } finally {
             setLoading(false);
@@ -116,7 +116,7 @@ const CreatePost: React.FC = () => {
             <div className="max-w-2xl mx-auto p-4">
                 {/* User Info */}
                 <div className="flex items-center gap-4 mb-6">
-                    <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/30 border-2 border-white dark:border-gray-700`}>
+                    <div className={`h-12 w-12 rounded-2xl bg-gradient-to-tr ${getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/30 border-2 border-white dark:border-gray-700`}>
                         {user?.name?.[0].toUpperCase()}
                     </div>
                     <div>

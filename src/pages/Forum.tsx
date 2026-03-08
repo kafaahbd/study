@@ -132,7 +132,7 @@ const Forum: React.FC = () => {
             setToast({ msg: lang === "bn" ? "পোস্ট ডিলিট হয়েছে" : "Post removed", type: "success" });
             setDeleteModal({ isOpen: false, postId: null });
             fetchPosts();
-        } catch (err) { setToast({ msg: "Error", type: "error" }); }
+        } catch { setToast({ msg: "Error", type: "error" }); }
     };
 
     const handleBlock = async (userId: string) => {
@@ -140,7 +140,7 @@ const Forum: React.FC = () => {
             await forumService.blockUser(userId);
             setToast({ msg: lang === "bn" ? "ইউজার ব্লক করা হয়েছে" : "User blocked", type: "success" });
             fetchPosts();
-        } catch (err) {
+        } catch {
             setToast({ msg: lang === "bn" ? "ব্লক করা সম্ভব হয়নি" : "Failed to block", type: "error" });
         }
     };
@@ -177,7 +177,7 @@ const Forum: React.FC = () => {
                 className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-[35px] shadow-sm border border-gray-200 dark:border-gray-700 p-3 md:p-4 mb-5 md:mb-8 cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 transition-all"
             >
                 <div className="flex gap-3 md:gap-4 items-center">
-                    <div className={`h-9 w-9 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-br ${getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-sm md:text-xl shadow-md shadow-blue-500/20 shrink-0 border-2 border-white dark:border-gray-700`}>
+                    <div className={`h-9 w-9 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-tr ${getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-sm md:text-xl shadow-md shadow-blue-500/20 shrink-0 border-2 border-white dark:border-gray-700`}>
                         {user?.name?.[0].toUpperCase() || "?"}
                     </div>
                     <div className="flex-1 bg-gray-50 dark:bg-gray-900/50 rounded-xl md:rounded-2xl px-4 py-2.5 md:py-3 border border-gray-100 dark:border-gray-800">

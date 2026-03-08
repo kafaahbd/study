@@ -28,7 +28,7 @@ const ScrollAnimation: React.FC<ScrollAnimationProps> = ({ children, className =
   }, [])
 
   return (
-    <div ref={ref} className={`opacity-0 ${className}`}>
+    <div ref={ref} className={`opacity-0 w-full h-full ${className}`}>
       {children}
     </div>
   )

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, MessageSquare, Zap, Menu } from 'lucide-react';
+import { BookOpen, MessageSquare, Zap } from 'lucide-react';
 import { getProfileColor } from '../typescriptfile/utils';
 
 const Navbar: React.FC = () => {
@@ -13,6 +13,12 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const { user, confirmLogout } = useAuth();
   const [navHidden, setNavHidden] = useState(false);
+
+  useEffect(() => {
+    const autoHidePaths = ['/exam', '/post/', '/mistakes', '/practice', '/result'];
+    const shouldHide = autoHidePaths.some(path => location.pathname.includes(path));
+    setNavHidden(shouldHide);
+  }, [location.pathname]);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -35,12 +41,15 @@ const Navbar: React.FC = () => {
       : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'}
   `;
 
+  const isExamPage = location.pathname.includes('/exam');
+
   return (
     <>
       {/* ── TOP HEADER ── */}
-      <nav className="fixed top-0 w-full z-[100] backdrop-blur-xl bg-gray-900/80 border-b border-gray-800/40 shadow-[0_1px_12px_rgba(0,0,0,0.05)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 md:h-20">
+      {!isExamPage && (
+        <nav className="fixed top-0 w-full z-[100] backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200/50 dark:border-gray-800/40 shadow-[0_1px_12px_rgba(0,0,0,0.05)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16 md:h-20">
 
             <div className="flex items-center gap-5 md:gap-8">
               <Link to="/" className="flex-shrink-0 group">
@@ -75,7 +84,7 @@ const Navbar: React.FC = () => {
                         {user.name}
                       </p>
                     </span>
-                    <div className={`relative h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-br ${getProfileColor(user.name)} flex items-center justify-center text-white font-black shadow-lg shadow-green-200 dark:shadow-none transition-all group-hover:scale-110 group-hover:rotate-3 border-2 border-white dark:border-gray-800`}>
+                    <div className={`relative h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-tr ${getProfileColor(user.name)} flex items-center justify-center text-white font-black shadow-lg shadow-green-200 dark:shadow-none transition-all group-hover:scale-110 group-hover:rotate-3 border-2 border-white dark:border-gray-800`}>
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                   </Link>
@@ -101,9 +110,10 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </nav>
+      )}
 
       {/* Exact spacer — no extra white space */}
-      <div className="h-16 md:h-20" />
+      {!isExamPage && <div className="h-16 md:h-20" />}
 
       {/* ── MOBILE BOTTOM NAV ── */}
       <AnimatePresence>
@@ -117,16 +127,9 @@ const Navbar: React.FC = () => {
         >
           <div className="flex-1">
             <div
-              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px]"
-              style={{
-                background: 'rgba(17, 24, 39, 0.88)', // bg-gray-900
-                backdropFilter: 'blur(24px) saturate(160%)',
-                WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: '0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.4)',
-              }}
+              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px] bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-lg dark:shadow-[0_-1px_0_rgba(0,0,0,0.3),0_8px_32px_rgba(0,0,0,0.4)]"
             >
-              <NavItems navLinks={navLinks} isActive={isActive} activeColors={activeColors} user={user} setNavHidden={setNavHidden} navHidden={navHidden} />
+              <NavItems navLinks={navLinks} isActive={isActive} activeColors={activeColors} setNavHidden={setNavHidden} />
             </div>
           </div>
         </motion.div>
@@ -139,24 +142,13 @@ const Navbar: React.FC = () => {
             exit={{ x: -50, opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             onClick={() => setNavHidden(false)}
-            className="md:hidden fixed bottom-4 left-0 z-[110] h-12 w-10 rounded-r-2xl flex items-center justify-center"
-            style={{
-              background: 'rgba(17, 24, 39, 0.88)',
-              backdropFilter: 'blur(24px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderLeft: 'none',
-              boxShadow: '4px 0 16px rgba(0,0,0,0.3)',
-            }}
+            className="md:hidden fixed bottom-4 left-0 z-[110] h-12 w-10 rounded-r-2xl flex items-center justify-center bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-l-0 border-gray-200/50 dark:border-white/10 shadow-lg"
             aria-label="Show navigation"
           >
             <i className="fas fa-chevron-right text-gray-400 text-lg" />
           </motion.button>
         )}
       </AnimatePresence>
-
-      {/* Content clearance for bottom nav */}
-      <div className="md:hidden h-[80px]" />
     </>
   );
 };
@@ -166,16 +158,12 @@ const NavItems = ({
   navLinks,
   isActive,
   activeColors,
-  user,
-  setNavHidden,
-  navHidden
+  setNavHidden
 }: {
   navLinks: { path: string; icon: React.ElementType; label: string; color: string }[];
   isActive: (p: string) => boolean;
   activeColors: Record<string, { bg: string; icon: string; label: string; dot: string }>;
-  user: { name: string } | null;
   setNavHidden: (hidden: boolean) => void;
-  navHidden: boolean;
 }) => (
   <>
     {navLinks.map(({ path, icon: Icon, label, color }) => {
