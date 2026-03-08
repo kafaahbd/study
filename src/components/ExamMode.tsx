@@ -29,7 +29,7 @@ const ExamMode: React.FC<Props> = ({ state }) => {
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-4 lg:py-6 px-3 lg:px-4 transition-colors">
       
       {/* Sticky Top Header with Timer and Progress */}
-      <div className="sticky top-0 md:top-20 z-50 w-full mb-6 lg:mb-8 pt-1 lg:pt-2">
+      <div className="sticky top-0 z-50 w-full mb-6 lg:mb-8 pt-1 lg:pt-2">
         <div className="w-full lg:w-[70%] mx-auto bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-3 lg:p-4 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 flex items-center justify-between">
           <button onClick={handleBack} className="text-gray-500 hover:text-red-500 font-bold flex items-center gap-1 text-sm">
             <i className="fas fa-times-circle"></i>

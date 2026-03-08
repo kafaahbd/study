@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { forumService } from '../services/forumService';
 import { useAuth } from '../contexts/AuthContext';
 import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2, Eye, EyeOff } from 'lucide-react';
@@ -16,6 +16,7 @@ const PostDetails: React.FC = () => {
   const [post, setPost] = useState<any>(null);
   const [commentText, setCommentText] = useState('');
   const [showNav, setShowNav] = useState(false);
+  const [showReplies, setShowReplies] = useState<Record<string, boolean>>({});
   
   // parentId হবে মূল কমেন্টের আইডি (গ্রুপিংয়ের জন্য)
   // replyId হবে নির্দিষ্ট কমেন্টের আইডি (মেনশনের জন্য)
@@ -139,36 +140,36 @@ const PostDetails: React.FC = () => {
       </button>
 
       {/* Post Card */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-gray-800 rounded-[40px] p-8 shadow-sm border border-gray-100 dark:border-gray-700 mb-12">
-        <div className="flex gap-4 mb-6">
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-gray-800 rounded-[2rem] p-6 shadow-sm border border-gray-100 dark:border-gray-700 mb-8">
+        <div className="flex gap-4 mb-4">
           <div 
             onClick={() => navigate(`/profile/${post.user_id}`)}
-            className={`h-12 w-12 rounded-2xl bg-gradient-to-tr ${getProfileColor(post.author_name)} text-white flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/20 cursor-pointer border-2 border-white dark:border-gray-700`}
+            className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${getProfileColor(post.author_name)} text-white flex items-center justify-center font-black text-lg shadow-sm cursor-pointer border-2 border-white dark:border-gray-700`}
           >
             {post.author_name?.[0]}
           </div>
           <div>
             <h2 
               onClick={() => navigate(`/profile/${post.user_id}`)}
-              className="font-black text-xl dark:text-white leading-tight cursor-pointer hover:text-blue-600 transition-colors"
+              className="font-black text-lg dark:text-white leading-tight cursor-pointer hover:text-blue-600 transition-colors"
             >
               {post.author_name}
             </h2>
-            <div className="flex items-center gap-3 mt-1">
-              <span className="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 px-2 py-0.5 rounded-md font-black uppercase tracking-tighter">{post.category}</span>
-              <span className="text-[10px] text-gray-400 font-bold flex items-center gap-1"><Clock size={12}/> {getTimeAgo(post.created_at, lang)}</span>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-[9px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 px-1.5 py-0.5 rounded-md font-black uppercase tracking-tighter">{post.category}</span>
+              <span className="text-[9px] text-gray-400 font-bold flex items-center gap-1"><Clock size={10}/> {getTimeAgo(post.created_at, lang)}</span>
             </div>
           </div>
           {post.user_id === user?.id && (
              <button onClick={() => setIsPostModalOpen(true)} className="ml-auto text-red-400 hover:text-red-500 transition-colors p-2">
-                <Trash2 size={18} />
+                <Trash2 size={16} />
              </button>
           )}
           <button onClick={handleShare} className="text-gray-400 hover:text-green-500 transition-colors p-2 ml-2">
-            <Share2 size={18} />
+            <Share2 size={16} />
           </button>
         </div>
-        <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-wrap">{post.content}</p>
+        <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed whitespace-pre-wrap">{post.content}</p>
       </motion.div>
 
       {/* Discussions Area */}
@@ -179,66 +180,76 @@ const PostDetails: React.FC = () => {
           <div key={c.id} className="space-y-4">
             {/* মেইন কমেন্ট বক্স */}
             <div className="flex gap-4 group">
-              <div className={`h-10 w-10 rounded-full bg-gradient-to-tr ${getProfileColor(c.author_name)} text-white flex items-center justify-center text-xs font-black shrink-0 border-2 border-white dark:border-gray-700 shadow-sm`}>
-                {c.author_name?.[0]}
-              </div>
-              <div className="flex-1 bg-white dark:bg-gray-800/60 p-5 rounded-[28px] border border-gray-100 dark:border-gray-700 shadow-sm relative group">
-                <div className="flex justify-between items-start">
-                  <span className="font-black text-blue-500 text-sm">@{c.author_name}</span>
-                  {c.comment_author_id === user?.id && (
-                    <button onClick={() => setCommentToDelete(c.id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-500 transition-all">
-                        <Trash2 size={14} />
-                    </button>
-                  )}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">{c.comment_text}</p>
-                {user && (
-                  <button 
-                      onClick={() => setReplyTo({ parentId: c.id, replyId: c.id, mentionName: c.author_name })} 
-                      className="mt-3 text-[10px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors flex items-center gap-1"
-                  >
-                    Reply
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* ফ্ল্যাট রিপ্লাই লিস্ট (এই কমেন্টের অধীনে সব রিপ্লাই) */}
-            <div className="ml-14 space-y-4 border-l-2 border-gray-100 dark:border-gray-800/50 pl-6">
-              {getReplies(c.id).map((reply: any) => (
-                <motion.div initial={{ opacity: 0, x: 5 }} animate={{ opacity: 1, x: 0 }} key={reply.id} className="flex gap-3 group">
-                  <div className={`h-8 w-8 rounded-full bg-gradient-to-tr ${getProfileColor(reply.author_name)} text-white flex items-center justify-center text-[10px] font-black shrink-0 border-2 border-white dark:border-gray-700 shadow-sm`}>
-                    {reply.author_name?.[0]}
+              <div className="flex-1 bg-white dark:bg-gray-800/60 p-5 rounded-[20px] border border-gray-100 dark:border-gray-700 shadow-sm relative group">
+                <div className="flex justify-between items-start mb-2">
+                  <Link to={`/profile/${c.comment_author_id}`} className="font-black text-blue-500 text-sm">@{c.author_name}</Link>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-gray-400 font-bold">{getTimeAgo(c.created_at, lang)}</span>
+                    {c.comment_author_id === user?.id && (
+                      <button onClick={() => setCommentToDelete(c.id)} className="text-red-400 hover:text-red-500 transition-all">
+                          <Trash2 size={14} />
+                      </button>
+                    )}
                   </div>
-                  <div className="flex-1 bg-gray-50/50 dark:bg-gray-800/30 p-4 rounded-[22px] border border-gray-100 dark:border-gray-700">
-                    <div className="flex justify-between items-start">
-                      <span className="font-black text-indigo-400 text-xs">@{reply.author_name}</span>
-                      {reply.comment_author_id === user?.id && (
-                        <button onClick={() => setCommentToDelete(reply.id)} className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-500 transition-all">
-                            <Trash2 size={12} />
-                        </button>
-                      )}
-                    </div>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 leading-relaxed">
-                      {/* যদি এটি কোনো রিপ্লাইয়ের ওপর রিপ্লাই হয় তবে @username দেখাবে */}
-                      {reply.reply_to_name && (
-                        <span className="text-blue-500 font-bold mr-1 italic">@{reply.reply_to_name}</span>
-                      )}
-                      {reply.comment_text}
-                    </p>
-                    {/* রিপ্লাইয়ের রিপ্লাই দেওয়ার বাটন - এটিও মূল কমেন্ট (c.id) কেই parent_id হিসেবে ধরবে */}
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed break-words">{c.comment_text}</p>
+                <div className="flex items-center gap-4 mt-3">
                     {user && (
                       <button 
-                          onClick={() => setReplyTo({ parentId: c.id, replyId: reply.id, mentionName: reply.author_name })} 
-                          className="mt-2 text-[8px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors"
+                          onClick={() => setReplyTo({ parentId: c.id, replyId: c.id, mentionName: c.author_name })} 
+                          className="text-[10px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors"
                       >
                         Reply
                       </button>
                     )}
-                  </div>
-                </motion.div>
-              ))}
+                    {getReplies(c.id).length > 0 && (
+                        <button 
+                            onClick={() => setShowReplies(prev => ({ ...prev, [c.id]: !prev[c.id] }))}
+                            className="text-[10px] font-black text-blue-500 uppercase tracking-widest transition-colors"
+                        >
+                            {showReplies[c.id] ? "Hide Replies" : `Show ${getReplies(c.id).length} Replies`}
+                        </button>
+                    )}
+                </div>
+              </div>
             </div>
+
+            {/* ফ্ল্যাট রিপ্লাই লিস্ট */}
+            {showReplies[c.id] && (
+                <div className="ml-14 space-y-4 border-l-2 border-gray-100 dark:border-gray-800/50 pl-6">
+                {getReplies(c.id).map((reply: any) => (
+                    <motion.div initial={{ opacity: 0, x: 5 }} animate={{ opacity: 1, x: 0 }} key={reply.id} className="flex gap-3 group">
+                    <div className="flex-1 bg-gray-50/50 dark:bg-gray-800/30 p-4 rounded-[20px] border border-gray-100 dark:border-gray-700">
+                        <div className="flex justify-between items-start mb-1">
+                        <Link to={`/profile/${reply.comment_author_id}`} className="font-black text-indigo-400 text-xs">@{reply.author_name}</Link>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] text-gray-400 font-bold">{getTimeAgo(reply.created_at, lang)}</span>
+                            {reply.comment_author_id === user?.id && (
+                                <button onClick={() => setCommentToDelete(reply.id)} className="text-red-400 hover:text-red-500 transition-all">
+                                    <Trash2 size={12} />
+                                </button>
+                            )}
+                        </div>
+                        </div>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed break-words">
+                        {reply.reply_to_name && (
+                            <span className="text-blue-500 font-bold mr-1 italic">@{reply.reply_to_name}</span>
+                        )}
+                        {reply.comment_text}
+                        </p>
+                        {user && (
+                        <button 
+                            onClick={() => setReplyTo({ parentId: c.id, replyId: reply.id, mentionName: reply.author_name })} 
+                            className="mt-2 text-[8px] font-black text-gray-400 hover:text-blue-500 uppercase tracking-widest transition-colors"
+                        >
+                            Reply
+                        </button>
+                        )}
+                    </div>
+                    </motion.div>
+                ))}
+                </div>
+            )}
           </div>
         )) : (
           <div className="text-center py-10 text-gray-400 font-medium italic opacity-60">No discussions yet. Start the conversation!</div>

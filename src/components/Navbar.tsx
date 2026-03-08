@@ -15,7 +15,12 @@ const Navbar: React.FC = () => {
   const [navHidden, setNavHidden] = useState(false);
 
   useEffect(() => {
-    const autoHidePaths = ['/exam', '/post/', '/mistakes', '/practice', '/result'];
+    // Only auto-hide on mobile
+    if (window.innerWidth >= 768) {
+        setNavHidden(false);
+        return;
+    }
+    const autoHidePaths = ['/exam', '/post/', '/mistakes', '/practice', '/result', '/create-post'];
     const shouldHide = autoHidePaths.some(path => location.pathname.includes(path));
     setNavHidden(shouldHide);
   }, [location.pathname]);

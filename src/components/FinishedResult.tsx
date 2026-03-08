@@ -112,16 +112,16 @@ const handleDownloadPdf = () => {
 				<div className="space-y-8 lg:space-y-12">
 					{result.results.map((item, idx: number) => (
 						<div key={idx} className="group">
-							<div className="flex gap-4 mb-4">
-								<span className="flex-none w-8 h-8 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg flex items-center justify-center font-bold">
+							<div className="mb-4">
+								<span className=" w-8 h-8 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg flex items-center justify-center font-bold mb-2">
 									{idx + 1}
 								</span>
-								<div className="text-xl font-semibold leading-snug pt-0.5">
+								<div className="text-xl font-semibold leading-snug">
 									<Latex>{item.question}</Latex>
 								</div>
 							</div>
 
-							<div className="ml-12 space-y-3">
+							<div className="ml-0 space-y-3">
 								{/* Result Indicator */}
 								<div
 									className={`p-4 rounded-xl flex items-center gap-3 ${

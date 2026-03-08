@@ -27,6 +27,7 @@ const Forum = lazy(() => import("./pages/Forum"));
 const PostDetails = lazy(() => import("./pages/PostDetails"));
 const CreatePost = lazy(() => import("./pages/CreatePost"));
 const Mistakes = lazy(() => import("./pages/Mistakes"));
+const BlockedUsersPage = lazy(() => import("./pages/BlockedUsersPage"));
 
 // প্রিমিয়াম পেজ লোডার
 const PageLoader = () => {
@@ -92,6 +93,7 @@ function App() {
 										<Route path="/profile/:userId" element={<Profile />} />
 										<Route path="/dashboard" element={<Dashboard />} />
 										<Route path="/mistakes" element={<Mistakes />} />
+										<Route path="/blocked-users" element={<BlockedUsersPage />} />
 									</Route>
 								</Routes>
 							</motion.div>

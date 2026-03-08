@@ -39,7 +39,7 @@ const ExamCenter: React.FC = () => {
   // If no chapters for subject, show error
   if (chaptersForSubject.length === 0 && groupParam && subjectParam) {
     return (
-      <div className="min-h-screen bg-geometric-light dark:bg-geometric-dark py-8 px-4">
+      <div className="min-h-screen bg-geometric-light dark:bg-geometric-dark py-4 px-2">
         <SEO 
           title={lang === "bn" ? "সাবজেক্ট পাওয়া যায়নি" : "Subject Not Found"} 
           image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/exam.jpg"
