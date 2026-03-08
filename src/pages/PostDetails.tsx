@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { forumService } from '../services/forumService';
 import { useAuth } from '../contexts/AuthContext';
-import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2 } from 'lucide-react';
+import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -36,6 +36,9 @@ const PostDetails: React.FC = () => {
   const { lang } = useLanguage();
   const [post, setPost] = useState<any>(null);
   const [commentText, setCommentText] = useState('');
+  const [commentImage, setCommentImage] = useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   const [showReplies, setShowReplies] = useState<Record<string, boolean>>({});
   
   // parentId হবে মূল কমেন্টের আইডি (গ্রুপিংয়ের জন্য)
@@ -81,17 +84,29 @@ const PostDetails: React.FC = () => {
     } catch (err) { console.error(err); }
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setCommentImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+    }
+  };
+
   const handleCommentSubmit = async () => {
     if (!user) {
       alert("Please login to comment");
       return;
     }
-    if (!commentText.trim() || !postId) return;
+    if ((!commentText.trim() && !commentImage) || !postId) return;
     try {
       // replyTo.parentId ব্যাকঅ্যান্ডে parent_id হিসেবে যাবে (গ্রুপিংয়ের জন্য)
       // replyTo.replyId ব্যাকঅ্যান্ডে reply_to_id হিসেবে যাবে (মেনশনের জন্য)
-      await forumService.addComment(postId, commentText, replyTo?.parentId, replyTo?.replyId);
+      await forumService.addComment(postId, commentText, replyTo?.parentId, replyTo?.replyId, commentImage || undefined);
       setCommentText('');
+      setCommentImage(null);
       setReplyTo(null);
       loadPostData();
     } catch (err) { console.error("Submit Error:", err); }
@@ -181,6 +196,11 @@ const PostDetails: React.FC = () => {
           </button>
         </div>
         <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed whitespace-pre-wrap">{post.content}</p>
+        {post.image && (
+            <div className="mt-4">
+                <img src={post.image} alt="Post content" className="w-full max-h-96 object-cover rounded-xl" />
+            </div>
+        )}
       </motion.div>
 
       {/* Discussions Area */}
@@ -204,6 +224,11 @@ const PostDetails: React.FC = () => {
                   </div>
                 </div>
                 <CommentText text={c.comment_text} className="text-gray-600 dark:text-gray-300" />
+                {c.image && (
+                    <div className="mt-2">
+                        <img src={c.image} alt="Comment attachment" className="max-w-xs max-h-48 object-cover rounded-lg" />
+                    </div>
+                )}
                 <div className="flex items-center gap-4 mt-3">
                     {user && (
                       <button 
@@ -243,6 +268,11 @@ const PostDetails: React.FC = () => {
                         </div>
                         </div>
                         <CommentText text={reply.comment_text} replyToName={reply.reply_to_name} className="text-gray-500 dark:text-gray-400 text-sm" />
+                        {reply.image && (
+                            <div className="mt-2">
+                                <img src={reply.image} alt="Reply attachment" className="max-w-xs max-h-40 object-cover rounded-lg" />
+                            </div>
+                        )}
                         {user && (
                         <button 
                             onClick={() => setReplyTo({ parentId: c.id, replyId: reply.id, mentionName: reply.author_name })} 
@@ -299,22 +329,48 @@ const PostDetails: React.FC = () => {
                 )}
               </AnimatePresence>
               
-              <div className={`bg-white dark:bg-gray-800 p-3 shadow-2xl border border-gray-100 dark:border-gray-700 flex gap-3 transition-all ${replyTo ? 'rounded-b-[35px] rounded-t-none' : 'rounded-[35px]'}`}>
-                <input 
-                  type="text" 
-                  value={commentText} 
-                  onChange={(e) => setCommentText(e.target.value)} 
-                  placeholder={replyTo ? `Write a reply to @${replyTo.mentionName}...` : "Add a comment..."} 
-                  className="flex-1 bg-transparent px-6 py-2 outline-none dark:text-white font-medium" 
-                  onKeyPress={(e) => e.key === 'Enter' && handleCommentSubmit()} 
-                />
-                <motion.button 
-                    whileTap={{ scale: 0.9 }} 
-                    onClick={handleCommentSubmit} 
-                    className="bg-blue-600 text-white p-4 rounded-[22px] hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30"
-                >
-                  <Send size={20} />
-                </motion.button>
+              <div className={`bg-white dark:bg-gray-800 p-3 shadow-2xl border border-gray-100 dark:border-gray-700 flex flex-col gap-2 transition-all ${replyTo ? 'rounded-b-[35px] rounded-t-none' : 'rounded-[35px]'}`}>
+                {commentImage && (
+                    <div className="relative mx-4 mt-2">
+                        <img src={commentImage} alt="Preview" className="h-20 w-auto object-cover rounded-lg" />
+                        <button 
+                            onClick={() => setCommentImage(null)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white p-0.5 rounded-full hover:bg-red-600 transition-colors"
+                        >
+                            <X size={14} />
+                        </button>
+                    </div>
+                )}
+                <div className="flex items-center gap-3">
+                    <input 
+                        type="file" 
+                        ref={fileInputRef}
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        accept="image/*"
+                    />
+                    <button 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="p-2 text-gray-400 hover:text-blue-500 transition-colors"
+                    >
+                        <ImageIcon size={24} />
+                    </button>
+                    <input 
+                      type="text" 
+                      value={commentText} 
+                      onChange={(e) => setCommentText(e.target.value)} 
+                      placeholder={replyTo ? `Write a reply to @${replyTo.mentionName}...` : "Add a comment..."} 
+                      className="flex-1 bg-transparent px-2 py-2 outline-none dark:text-white font-medium" 
+                      onKeyPress={(e) => e.key === 'Enter' && handleCommentSubmit()} 
+                    />
+                    <motion.button 
+                        whileTap={{ scale: 0.9 }} 
+                        onClick={handleCommentSubmit} 
+                        className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30"
+                    >
+                      <Send size={20} />
+                    </motion.button>
+                </div>
               </div>
             </>
           )}

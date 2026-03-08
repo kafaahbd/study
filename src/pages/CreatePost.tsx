@@ -5,7 +5,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { forumService } from "../services/forumService";
 import SEO from "../components/SEO";
 import { 
-    Send, Layers, GraduationCap, ChevronDown, Check, ArrowLeft, Loader2
+    Send, Layers, GraduationCap, ChevronDown, Check, ArrowLeft, Loader2, Image as ImageIcon, X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getProfileColor } from "../typescriptfile/utils";
@@ -21,12 +21,15 @@ const CreatePost: React.FC = () => {
     const [content, setContent] = useState("");
     const [category, setCategory] = useState<string>("Common");
     const [batch, setBatch] = useState<string>("SSC");
+    const [image, setImage] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(isEditing);
     
     const [isCatOpen, setIsCatOpen] = useState(false);
     const [isBatchOpen, setIsBatchOpen] = useState(false);
     const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
+
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     const categories = ["Common", "Science", "Arts", "Commerce"];
     const postBatches = ["SSC", "HSC", "All"];
@@ -39,6 +42,7 @@ const CreatePost: React.FC = () => {
                     setContent(post.content);
                     setCategory(post.category);
                     setBatch(post.batch);
+                    if (post.image) setImage(post.image);
                 } catch {
                     setToast({ msg: lang === "bn" ? "পোস্ট লোড করা সম্ভব হয়নি" : "Failed to load post", type: "error" });
                 } finally {
@@ -56,18 +60,29 @@ const CreatePost: React.FC = () => {
         }
     }, [toast]);
 
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) return;
-        if (!content.trim()) return;
+        if (!content.trim() && !image) return;
 
         setLoading(true);
         try {
             if (isEditing && postId) {
-                await forumService.updatePost(postId, content, category, batch);
+                await forumService.updatePost(postId, content, category, batch); // Update API might need image support too, but focusing on create first
                 setToast({ msg: lang === "bn" ? "পোস্ট আপডেট হয়েছে!" : "Post updated!", type: "success" });
             } else {
-                await forumService.createPost(content, category, batch);
+                await forumService.createPost(content, category, batch, image || undefined);
                 setToast({ msg: lang === "bn" ? "পোস্ট শেয়ার হয়েছে!" : "Post shared!", type: "success" });
             }
             setTimeout(() => navigate("/forum"), 1500);
@@ -185,6 +200,37 @@ const CreatePost: React.FC = () => {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                 />
+
+                {/* Image Preview */}
+                {image && (
+                    <div className="relative mb-4">
+                        <img src={image} alt="Preview" className="w-full max-h-96 object-cover rounded-xl" />
+                        <button 
+                            onClick={() => setImage(null)}
+                            className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70 transition-colors"
+                        >
+                            <X size={20} />
+                        </button>
+                    </div>
+                )}
+
+                {/* Image Upload Button */}
+                <div className="flex items-center gap-2 mt-4 border-t border-gray-100 dark:border-gray-800 pt-4">
+                    <input 
+                        type="file" 
+                        ref={fileInputRef}
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        accept="image/*"
+                    />
+                    <button 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex items-center gap-2 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors font-bold text-sm"
+                    >
+                        <ImageIcon size={20} />
+                        {lang === "bn" ? "ছবি যোগ করুন" : "Add Photo"}
+                    </button>
+                </div>
             </div>
 
             {/* Toast UI */}
