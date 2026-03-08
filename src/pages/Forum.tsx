@@ -398,7 +398,7 @@ const Forum: React.FC = () => {
                                         </div>
                                     </div>
                                     
-                                    <TextExpander text={post.content} limit={150} className="text-gray-700 dark:text-gray-300 text-sm md:text-[16px] leading-relaxed mb-5 md:mb-7 font-medium" />
+                                    <TextExpander text={post.content} limit={150} className="text-gray-700 dark:text-gray-300 text-sm md:text-[16px] leading-relaxed mb-5 md:mb-7 font-medium whitespace-pre-wrap" />
                                     
                                     {post.image && (
                                         <div className="mb-5 md:mb-7">

@@ -222,7 +222,7 @@ const PostDetails: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <TextExpander text={c.comment_text} limit={50} className="text-gray-600 dark:text-gray-300" />
+                <TextExpander text={c.comment_text} limit={50} className="text-gray-600 dark:text-gray-300 whitespace-pre-wrap" />
                 {c.image && (
                     <div className="mt-2">
                         <img 
@@ -276,7 +276,7 @@ const PostDetails: React.FC = () => {
                             )}
                         </div>
                         </div>
-                        <TextExpander text={reply.comment_text} limit={50} className="text-gray-500 dark:text-gray-400 text-sm" />
+                        <TextExpander text={reply.comment_text} limit={50} className="text-gray-500 dark:text-gray-400 text-sm whitespace-pre-wrap" />
                         {reply.image && (
                             <div className="mt-2">
                                 <img 
