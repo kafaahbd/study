@@ -137,6 +137,29 @@ export const forumService = {
   },
 
   /**
+   * ইউজার আনব্লক করা
+   */
+  unblockUser: async (userId: string) => {
+    const response = await axios.post(
+      `${API_URL}/unblock`,
+      { blocked_user_id: userId },
+      getAuthHeader()
+    );
+    return response.data;
+  },
+
+  /**
+   * ব্লকড ইউজারদের তালিকা
+   */
+  getBlockedUsers: async () => {
+    const response = await axios.get(
+      `${API_URL}/blocked-users`,
+      getAuthHeader()
+    );
+    return response.data;
+  },
+
+  /**
    * ১০. নির্দিষ্ট ইউজারের পোস্ট ফেচ করা
    */
   getUserPosts: async (userId: string) => {

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getUserExamHistory } from "../services/examService";
 import { forumService } from "../services/forumService";
 import SEO from "../components/SEO";
+import ConfirmModal from "../components/ConfirmModal";
 import { getProfileColor, getTimeAgo } from "../typescriptfile/utils";
 import { 
      Phone, GraduationCap, Layers, Calendar, 
@@ -23,6 +24,7 @@ const Profile = () => {
     const [profileUser, setProfileUser] = useState<any>(null);
 	const [stats, setStats] = useState<any[]>([]);
 	const [userPosts, setUserPosts] = useState<any[]>([]);
+	const [blockedUsers, setBlockedUsers] = useState<any[]>([]);
 	const [isStatsLoading, setIsStatsLoading] = useState(true);
 	const [isPostsLoading, setIsPostsLoading] = useState(true);
     const [isProfileLoading, setIsProfileLoading] = useState(!isOwnProfile);
@@ -94,9 +96,20 @@ const Profile = () => {
             }
         };
 
+        const fetchBlockedUsers = async () => {
+            if (!isOwnProfile) return;
+            try {
+                const data = await forumService.getBlockedUsers();
+                setBlockedUsers(data);
+            } catch (err) {
+                console.error("Error fetching blocked users:", err);
+            }
+        };
+
         fetchProfileData();
         fetchStats();
         fetchUserPosts();
+        fetchBlockedUsers();
 
 		if (currentUser && isOwnProfile) {
 			setFormData({
@@ -130,6 +143,8 @@ const Profile = () => {
 		}
 	};
 
+    const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+
     const handleBlock = async () => {
         if (!userId) return;
         try {
@@ -138,6 +153,16 @@ const Profile = () => {
             setTimeout(() => navigate("/forum"), 1500);
         } catch {
             setToast({ msg: "Failed to block", type: "error" });
+        }
+    };
+
+    const handleUnblock = async (blockedUserId: string) => {
+        try {
+            await forumService.unblockUser(blockedUserId);
+            setBlockedUsers(prev => prev.filter(u => u.id !== blockedUserId));
+            setToast({ msg: lang === "bn" ? "ইউজার আনব্লক করা হয়েছে" : "User unblocked", type: "success" });
+        } catch {
+            setToast({ msg: "Failed to unblock", type: "error" });
         }
     };
 
@@ -222,6 +247,16 @@ const Profile = () => {
 				url={`/profile/${profileUser.id}`}
 			/>
 
+            <ConfirmModal 
+                isOpen={isBlockModalOpen} 
+                onClose={() => setIsBlockModalOpen(false)} 
+                onConfirm={handleBlock} 
+                title={lang === "bn" ? "ইউজার ব্লক করবেন?" : "Block User?"} 
+                message={lang === "bn" ? "এই ইউজারকে ব্লক করলে তার কোনো পোস্ট আপনি দেখতে পাবেন না।" : "If you block this user, you won't be able to see their posts."}
+                confirmText={lang === "bn" ? "ব্লক করুন" : "Block"}
+                type="danger"
+            />
+
             {/* Toast UI */}
             <AnimatePresence>
                 {toast && (
@@ -272,7 +307,7 @@ const Profile = () => {
                             </>
                         ) : (
                             <button
-                                onClick={handleBlock}
+                                onClick={() => setIsBlockModalOpen(true)}
                                 className="flex-1 md:flex-none px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl md:rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm flex items-center gap-2"
                             >
                                 <ShieldAlert size={16} />
@@ -469,6 +504,39 @@ const Profile = () => {
                                 </div>
                             )}
                         </div>
+
+                        {/* Blocked Users Section (Only for own profile) */}
+                        {isOwnProfile && blockedUsers.length > 0 && (
+                            <div className="space-y-4 mt-8">
+                                <h3 className="text-base md:text-lg font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3 px-2">
+                                    <ShieldAlert className="text-red-600" size={20} />
+                                    {lang === "bn" ? "ব্লক লিস্ট" : "Blocked Users"}
+                                </h3>
+                                <div className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-[2rem] p-5 md:p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                                    <div className="space-y-3">
+                                        {blockedUsers.map((blockedUser) => (
+                                            <div key={blockedUser.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/30 rounded-xl">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`h-8 w-8 rounded-lg bg-gradient-to-tr ${getProfileColor(blockedUser.name)} flex items-center justify-center text-white font-black text-xs border border-white dark:border-gray-700 uppercase shadow-sm`}>
+                                                        {blockedUser.name[0]}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-black text-gray-800 dark:text-gray-200 text-sm">{blockedUser.name}</p>
+                                                        <p className="text-[10px] text-gray-400 font-bold uppercase">@{blockedUser.username}</p>
+                                                    </div>
+                                                </div>
+                                                <button 
+                                                    onClick={() => handleUnblock(blockedUser.id)}
+                                                    className="px-4 py-1.5 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-bold hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
+                                                >
+                                                    {lang === "bn" ? "আনব্লক" : "Unblock"}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 					</div>
 				</div>
 
