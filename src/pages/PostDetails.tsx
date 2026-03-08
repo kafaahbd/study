@@ -8,6 +8,27 @@ import ConfirmModal from '../components/ConfirmModal';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getProfileColor, getTimeAgo } from '../typescriptfile/utils';
 
+const CommentText = ({ text, replyToName, className }: { text: string, replyToName?: string, className?: string }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const words = text.split(' ');
+    
+    const displayText = isExpanded ? text : words.slice(0, 120).join(' ') + (words.length > 120 ? '...' : '');
+
+    return (
+        <div className={className}>
+            <p className="leading-relaxed break-words overflow-hidden">
+                {replyToName && <span className="text-blue-500 font-bold mr-1 italic">@{replyToName}</span>}
+                {displayText}
+            </p>
+            {words.length > 120 && (
+                <button onClick={() => setIsExpanded(!isExpanded)} className="text-blue-500 text-xs font-bold mt-1">
+                    {isExpanded ? 'See less' : 'See more'}
+                </button>
+            )}
+        </div>
+    );
+};
+
 const PostDetails: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const navigate = useNavigate();
@@ -182,7 +203,7 @@ const PostDetails: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed break-words overflow-hidden">{c.comment_text}</p>
+                <CommentText text={c.comment_text} className="text-gray-600 dark:text-gray-300" />
                 <div className="flex items-center gap-4 mt-3">
                     {user && (
                       <button 
@@ -221,12 +242,7 @@ const PostDetails: React.FC = () => {
                             )}
                         </div>
                         </div>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed break-words">
-                        {reply.reply_to_name && (
-                            <span className="text-blue-500 font-bold mr-1 italic">@{reply.reply_to_name}</span>
-                        )}
-                        {reply.comment_text}
-                        </p>
+                        <CommentText text={reply.comment_text} replyToName={reply.reply_to_name} className="text-gray-500 dark:text-gray-400 text-sm" />
                         {user && (
                         <button 
                             onClick={() => setReplyTo({ parentId: c.id, replyId: reply.id, mentionName: reply.author_name })} 

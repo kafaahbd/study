@@ -72,24 +72,24 @@ const Study: React.FC = () => {
                 <div className={`absolute inset-0 bg-gradient-to-br ${course.color} opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-[0.07] rounded-3xl lg:rounded-[3rem] transition-opacity`}></div>
 
                 {/* Icon Container */}
-                <div className={`w-20 h-20 lg:w-28 lg:h-28 mx-auto bg-gradient-to-br ${course.color} rounded-3xl flex items-center justify-center mb-6 lg:mb-8 shadow-lg transform group-hover:rotate-6 transition-transform`}>
-                  <span className="text-4xl lg:text-6xl drop-shadow-md">{course.icon}</span>
+                <div className={`w-16 h-16 lg:w-20 lg:h-20 mx-auto bg-gradient-to-br ${course.color} rounded-2xl flex items-center justify-center mb-4 lg:mb-6 shadow-lg transform group-hover:rotate-6 transition-transform`}>
+                  <span className="text-3xl lg:text-4xl drop-shadow-md">{course.icon}</span>
                 </div>
 
                 {/* Content */}
-                <h2 className="text-2xl lg:text-4xl font-black text-gray-800 dark:text-gray-100 mb-3 text-center">
+                <h2 className="text-xl lg:text-2xl font-black text-gray-800 dark:text-gray-100 mb-2 text-center">
                   {t(`study.${course.key}`)}
                 </h2>
                 
                 <div className="flex justify-center items-center gap-2">
                   {course.path === "#" ? (
-                    <span className="px-4 py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs lg:text-sm font-bold rounded-full uppercase tracking-wider">
+                    <span className="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[10px] lg:text-xs font-bold rounded-full uppercase tracking-wider">
                       {t("study.coming.soon")}
                     </span>
                   ) : (
-                    <span className="text-green-600 dark:text-green-400 text-sm lg:text-lg font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                    <span className="text-green-600 dark:text-green-400 text-xs lg:text-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
                       {lang === "bn" ? "প্রবেশ করুন" : "Get Started"}
-                      <i className="fas fa-chevron-right text-xs lg:text-sm"></i>
+                      <i className="fas fa-chevron-right text-[10px] lg:text-xs"></i>
                     </span>
                   )}
                 </div>

@@ -16,7 +16,8 @@ const SignUp = () => {
     username: "",
     name: "",
     email: "",
-    phone: "", // ফোন নম্বর এখানে স্টোর হবে
+    phone: "",
+    hide_phone: false,
     study_level: "SSC" as "SSC" | "HSC",
     group: "Science" as "Science" | "Arts" | "Commerce",
     exam_year: "", 
@@ -214,10 +215,14 @@ const SignUp = () => {
                       {lang === 'bn' ? 'ফোন নম্বর' : 'Phone Number'}
                     </label>
                     <input
-                      type="text" name="phone" value={formData.phone} onChange={handleChange} required
+                      type="text" name="phone" value={formData.phone} onChange={handleChange}
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-gray-800/50 border-2 border-transparent focus:border-green-500/20 rounded-xl dark:text-white transition-all outline-none font-medium text-sm"
                       placeholder="017XXXXXXXX"
                     />
+                    <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                      <input type="checkbox" name="hide_phone" checked={formData.hide_phone} onChange={(e) => setFormData({...formData, hide_phone: e.target.checked})} className="rounded text-green-600" />
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{lang === 'bn' ? 'ফোন নম্বর গোপন রাখুন' : 'Hide phone number'}</span>
+                    </label>
                   </div>
                 </div>
 

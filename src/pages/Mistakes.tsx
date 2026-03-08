@@ -161,7 +161,7 @@ const Mistakes: React.FC = () => {
                             </div>
 
                             {subjects.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                     {subjects.map((s, idx) => (
                                         <motion.button
                                             key={idx}
@@ -175,10 +175,10 @@ const Mistakes: React.FC = () => {
                                                     <BookOpen size={18} />
                                                 </div>
                                                 <div className="text-left">
-                                                    <h3 className="text-sm font-black text-gray-900 dark:text-white">
+                                                    <h3 className="text-base lg:text-lg font-black text-gray-900 dark:text-white">
                                                         {s.subject_name}
                                                     </h3>
-                                                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">
+                                                    <p className="text-[10px] lg:text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">
                                                         {lang === "bn" ? "ভুল সংশোধন করুন" : "Fix Mistakes"}
                                                     </p>
                                                 </div>

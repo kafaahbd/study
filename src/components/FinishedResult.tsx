@@ -74,27 +74,27 @@ const handleDownloadPdf = () => {
 			{/* PDF Content Area */}
 			<div
 				ref={reportTemplateRef}
-				className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-5 lg:p-8 rounded-3xl shadow-xl transition-colors text-gray-900 dark:text-gray-100"
+				className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-4 lg:p-8 rounded-3xl shadow-xl transition-colors text-gray-900 dark:text-gray-100"
 			>
 				{/* PDF Header */}
-				<div className="text-center border-b-2 border-green-500 pb-6 mb-8">
+				<div className="text-center border-b-2 border-green-500 pb-4 mb-6">
 					<img
 						src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png"
 						alt="Kafa'ah"
-						className="h-12 mx-auto mb-2"
+						className="h-10 mx-auto mb-2"
 					/>
-					<h2 className="text-2xl font-black text-gray-800 dark:text-white uppercase tracking-tighter">
+					<h2 className="text-xl font-black text-gray-800 dark:text-white uppercase tracking-tighter">
 						{lang === "bn" ? "পরীক্ষার ফলাফল" : "Exam Performance"}
 					</h2>
 				</div>
 
 				{/* User Score Summary */}
-				<div className="grid grid-cols-2 gap-4 mb-10">
-					<div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-2xl text-center border border-green-100 dark:border-green-800">
-						<p className="text-sm font-bold text-green-600 uppercase mb-1">
+				<div className="grid grid-cols-2 gap-3 mb-6">
+					<div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-2xl text-center border border-green-100 dark:border-green-800">
+						<p className="text-xs font-bold text-green-600 uppercase mb-1">
 							{lang === "bn" ? "সঠিক" : "Correct"}
 						</p>
-						<p className="text-4xl font-black text-green-700 dark:text-green-400">
+						<p className="text-2xl font-black text-green-700 dark:text-green-400">
 							{result.correct} / {result.total}
 						</p>
 					</div>

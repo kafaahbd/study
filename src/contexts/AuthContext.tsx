@@ -21,6 +21,7 @@ interface User {
     profile_color?: string;
     verified: boolean;
     created_at: string;
+    hide_phone: boolean;
 }
 
 interface RegisterData {

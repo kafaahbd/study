@@ -37,7 +37,7 @@ const QuestionCard: React.FC<Props> = ({
       {Object.entries(question.options).map(([key, value]) => (
         <label
           key={key}
-          className={`block p-4 border rounded-lg cursor-pointer transition 
+          className={`block p-3 md:p-4 border rounded-lg cursor-pointer transition 
             ${userAnswer === key ? "border-green-500" : "border-gray-200 dark:border-gray-700"}
             ${getOptionClass(key)}`}
         >
@@ -51,7 +51,7 @@ const QuestionCard: React.FC<Props> = ({
               disabled={disabled}
               className="w-4 h-4 text-green-600"
             />
-            <span className="ml-3 text-2xl text-gray-700 dark:text-gray-300">
+            <span className="ml-3 text-lg md:text-2xl text-gray-700 dark:text-gray-300">
               {key}. <Latex>{value as string}</Latex>
             </span>
           </div>

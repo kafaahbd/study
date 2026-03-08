@@ -39,6 +39,7 @@ const Profile = () => {
 	const [formData, setFormData] = useState({
 		name: "",
 		phone: "",
+        hide_phone: false,
 		study_level: "SSC" as "SSC" | "HSC",
 		group: "Science" as "Science" | "Arts" | "Commerce",
 		exam_year: "",
@@ -121,6 +122,7 @@ const Profile = () => {
 			setFormData({
 				name: currentUser.name,
 				phone: currentUser.phone || "",
+                hide_phone: currentUser.hide_phone || false,
 				study_level: currentUser.study_level,
 				group: currentUser.group,
 				exam_year: currentUser.exam_year || "",
@@ -334,36 +336,36 @@ const Profile = () => {
 									@{profileUser.username}
 								</p>
 
-								<div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-2 text-left px-1">
+								<div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-3 text-left px-1">
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<Phone size={10} /> Phone
+										<span className="text-[10px] md:text-[11px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<Phone size={12} /> Phone
 										</span>
-										<span className="font-bold text-gray-700 dark:text-gray-300 text-xs">
+										<span className="font-bold text-gray-700 dark:text-gray-300 text-sm md:text-base">
 											{profileUser.phone || "N/A"}
 										</span>
 									</div>
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<GraduationCap size={10} /> Level
+										<span className="text-[10px] md:text-[11px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<GraduationCap size={12} /> Level
 										</span>
-										<span className="font-bold text-gray-700 dark:text-gray-300 text-xs">
+										<span className="font-bold text-gray-700 dark:text-gray-300 text-sm md:text-base">
 											{profileUser.study_level}
 										</span>
 									</div>
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<Layers size={10} /> Group
+										<span className="text-[10px] md:text-[11px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<Layers size={12} /> Group
 										</span>
-										<span className="font-bold text-gray-700 dark:text-gray-300 text-xs">
+										<span className="font-bold text-gray-700 dark:text-gray-300 text-sm md:text-base">
 											{getGroupName(profileUser.group)}
 										</span>
 									</div>
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<Calendar size={10} /> Exam Year
+										<span className="text-[10px] md:text-[11px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<Calendar size={12} /> Exam Year
 										</span>
-										<span className="font-bold text-blue-600 dark:text-blue-400 text-xs">
+										<span className="font-bold text-blue-600 dark:text-blue-400 text-sm md:text-base">
 											{profileUser.exam_year || "Not Set"}
 										</span>
 									</div>
@@ -558,6 +560,10 @@ const Profile = () => {
 													setFormData({ ...formData, phone: e.target.value })
 												}
 											/>
+                                            <label className="flex items-center gap-2 mt-2 cursor-pointer">
+                                                <input type="checkbox" name="hide_phone" checked={formData.hide_phone} onChange={(e) => setFormData({...formData, hide_phone: e.target.checked})} className="rounded text-green-600" />
+                                                <span className="text-[10px] text-gray-500 dark:text-gray-400">{lang === 'bn' ? 'ফোন নম্বর গোপন রাখুন' : 'Hide phone number'}</span>
+                                            </label>
 										</div>
 										<div>
 											<label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase ml-2">

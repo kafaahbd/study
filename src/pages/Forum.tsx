@@ -296,7 +296,7 @@ const Forum: React.FC = () => {
             </AnimatePresence>
 
             {/* Feed List */}
-            <div className="space-y-4 md:space-y-8">
+            <div className="space-y-3 md:space-y-8">
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-20">
                         <div className="relative">
