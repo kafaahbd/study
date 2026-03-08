@@ -8,6 +8,7 @@ import {
     Send, Layers, GraduationCap, ChevronDown, Check, ArrowLeft, Loader2
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getProfileColor } from "../typescriptfile/utils";
 
 const CreatePost: React.FC = () => {
     const { user } = useAuth();
@@ -115,7 +116,7 @@ const CreatePost: React.FC = () => {
             <div className="max-w-2xl mx-auto p-4">
                 {/* User Info */}
                 <div className="flex items-center gap-4 mb-6">
-                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/30">
+                    <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/30 border-2 border-white dark:border-gray-700`}>
                         {user?.name?.[0].toUpperCase()}
                     </div>
                     <div>

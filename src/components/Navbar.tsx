@@ -6,28 +6,15 @@ import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, MessageSquare, Zap, Menu } from 'lucide-react';
+import { getProfileColor } from '../typescriptfile/utils';
 
 const Navbar: React.FC = () => {
   const { t } = useLanguage();
   const location = useLocation();
   const { user, confirmLogout } = useAuth();
   const [navHidden, setNavHidden] = useState(false);
-  const lastScrollY = useRef(0);
 
   const isActive = (path: string) => location.pathname === path;
-
-  // Threshold-based scroll hide — no jitter
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-      const diff = currentY - lastScrollY.current;
-      if (diff > 6 && currentY > 80) setNavHidden(true);
-      else if (diff < -6) setNavHidden(false);
-      lastScrollY.current = currentY;
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const navLinks = [
     { path: '/', icon: BookOpen, label: t('nav.study'), color: 'green' },
@@ -51,7 +38,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* ── TOP HEADER ── */}
-      <nav className="fixed top-0 w-full z-[100] backdrop-blur-xl bg-white/80 dark:bg-gray-950/80 border-b border-gray-200/40 dark:border-gray-800/40 shadow-[0_1px_12px_rgba(0,0,0,0.05)]">
+      <nav className="fixed top-0 w-full z-[100] backdrop-blur-xl bg-gray-900/80 border-b border-gray-800/40 shadow-[0_1px_12px_rgba(0,0,0,0.05)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
 
@@ -88,7 +75,7 @@ const Navbar: React.FC = () => {
                         {user.name}
                       </p>
                     </span>
-                    <div className="relative h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-black shadow-lg shadow-green-200 dark:shadow-none transition-all group-hover:scale-110 group-hover:rotate-3">
+                    <div className={`relative h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-br ${getProfileColor(user.name)} flex items-center justify-center text-white font-black shadow-lg shadow-green-200 dark:shadow-none transition-all group-hover:scale-110 group-hover:rotate-3 border-2 border-white dark:border-gray-800`}>
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                   </Link>
@@ -120,68 +107,56 @@ const Navbar: React.FC = () => {
 
       {/* ── MOBILE BOTTOM NAV ── */}
       <AnimatePresence>
-        {!navHidden ? (
-          <motion.div
-            key="bottom-nav"
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 260, mass: 0.6 }}
-            className="md:hidden fixed bottom-0 left-0 right-0 z-[100]"
-            style={{ padding: '0 12px calc(12px + env(safe-area-inset-bottom, 0px))' }}
-          >
-            {/* Light mode pill */}
+        <motion.div
+          key="bottom-nav"
+          initial={{ x: 0 }}
+          animate={{ x: navHidden ? '-100%' : 0 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          className="md:hidden fixed bottom-0 left-0 right-0 z-[100] flex"
+          style={{ padding: '0 12px calc(12px + env(safe-area-inset-bottom, 0px))' }}
+        >
+          <div className="flex-1">
             <div
-              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px] dark:hidden"
+              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px]"
               style={{
-                background: 'rgba(255,255,255,0.88)',
-                backdropFilter: 'blur(24px) saturate(180%)',
-                WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-                border: '1px solid rgba(255,255,255,0.5)',
-                boxShadow: '0 -1px 0 rgba(0,0,0,0.02), 0 8px 32px rgba(0,0,0,0.08)',
-              }}
-            >
-              <NavItems navLinks={navLinks} isActive={isActive} activeColors={activeColors} user={user} />
-            </div>
-            {/* Dark mode pill */}
-            <div
-              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px] dark:flex"
-              style={{
-                background: 'rgba(10,10,20,0.88)',
+                background: 'rgba(17, 24, 39, 0.88)', // bg-gray-900
                 backdropFilter: 'blur(24px) saturate(160%)',
                 WebkitBackdropFilter: 'blur(24px) saturate(160%)',
                 border: '1px solid rgba(255,255,255,0.08)',
                 boxShadow: '0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.4)',
               }}
             >
-              <NavItems navLinks={navLinks} isActive={isActive} activeColors={activeColors} user={user} />
+              <NavItems navLinks={navLinks} isActive={isActive} activeColors={activeColors} user={user} setNavHidden={setNavHidden} navHidden={navHidden} />
             </div>
-          </motion.div>
-        ) : (
+          </div>
+        </motion.div>
+
+        {navHidden && (
           <motion.button
             key="peek-btn"
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.8 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -50, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             onClick={() => setNavHidden(false)}
-            className="md:hidden fixed bottom-5 right-4 z-[110] h-10 w-10 rounded-xl flex items-center justify-center"
+            className="md:hidden fixed bottom-4 left-0 z-[110] h-12 w-10 rounded-r-2xl flex items-center justify-center"
             style={{
-              background: 'rgba(255,255,255,0.92)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.6)',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+              background: 'rgba(17, 24, 39, 0.88)',
+              backdropFilter: 'blur(24px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderLeft: 'none',
+              boxShadow: '4px 0 16px rgba(0,0,0,0.3)',
             }}
             aria-label="Show navigation"
           >
-            <Menu size={18} strokeWidth={2.5} className="text-gray-700" />
+            <i className="fas fa-chevron-right text-gray-400 text-lg" />
           </motion.button>
         )}
       </AnimatePresence>
 
-      {/* Content clearance for bottom nav — only when nav is visible */}
-      <div className={`md:hidden transition-all duration-500 ease-in-out ${navHidden ? 'h-0' : 'h-[80px]'}`} />
+      {/* Content clearance for bottom nav */}
+      <div className="md:hidden h-[80px]" />
     </>
   );
 };
@@ -192,11 +167,15 @@ const NavItems = ({
   isActive,
   activeColors,
   user,
+  setNavHidden,
+  navHidden
 }: {
   navLinks: { path: string; icon: React.ElementType; label: string; color: string }[];
   isActive: (p: string) => boolean;
   activeColors: Record<string, { bg: string; icon: string; label: string; dot: string }>;
   user: { name: string } | null;
+  setNavHidden: (hidden: boolean) => void;
+  navHidden: boolean;
 }) => (
   <>
     {navLinks.map(({ path, icon: Icon, label, color }) => {
@@ -258,23 +237,15 @@ const NavItems = ({
       );
     })}
 
-    {user && (
-      <>
-        <div className="w-px h-7 bg-gray-200/70 dark:bg-gray-700/60 mx-0.5 rounded-full flex-shrink-0" />
-        <motion.div
-          whileTap={{ scale: 0.85 }}
-          transition={{ type: 'spring', damping: 16, stiffness: 420 }}
-          className="flex-shrink-0 ml-1"
-        >
-          <Link to="/profile" className="relative block">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-green-400 via-emerald-500 to-teal-500 flex items-center justify-center text-white font-black text-[15px] shadow-md shadow-emerald-200/40 dark:shadow-none ring-[2px] ring-white/70 dark:ring-gray-800/80">
-              {user.name.charAt(0).toUpperCase()}
-            </div>
-            <span className="absolute -top-0.5 -right-0.5 h-[11px] w-[11px] rounded-full bg-emerald-400 border-2 border-white dark:border-gray-950" />
-          </Link>
-        </motion.div>
-      </>
-    )}
+    {/* Hide Arrow Button (1/4 width) */}
+    <div className="w-px h-7 bg-gray-700/60 mx-0.5 rounded-full flex-shrink-0" />
+    <button
+      onClick={() => setNavHidden(true)}
+      className="relative flex flex-col items-center justify-center py-2 rounded-[20px] select-none w-1/4 max-w-[40px]"
+      style={{ WebkitTapHighlightColor: 'transparent' }}
+    >
+      <i className="fas fa-chevron-left text-gray-400 text-lg" />
+    </button>
   </>
 );
 

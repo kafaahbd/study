@@ -88,3 +88,44 @@ export const formatTime = (seconds: number): string => {
   const secs = seconds % 60;
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
+
+export const getProfileColor = (name: string): string => {
+  const colors = [
+    "from-blue-500 to-indigo-500",
+    "from-emerald-500 to-teal-500",
+    "from-rose-500 to-pink-500",
+    "from-amber-500 to-orange-500",
+    "from-purple-500 to-fuchsia-500",
+    "from-cyan-500 to-blue-500",
+    "from-red-500 to-rose-500",
+    "from-lime-500 to-green-500"
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+};
+
+export const getTimeAgo = (dateString: string, lang: "bn" | "en"): string => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  const mins = Math.floor(diffInSeconds / 60);
+  const hours = Math.floor(mins / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 3) {
+    return date.toLocaleDateString(lang === "bn" ? "bn-BD" : "en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+
+  if (days > 0) return `${days}d`;
+  if (hours > 0) return `${hours}h`;
+  if (mins > 0) return `${mins}m`;
+  return lang === "bn" ? "এখনই" : "Just now";
+};

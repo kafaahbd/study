@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getUserExamHistory } from "../services/examService";
 import { forumService } from "../services/forumService";
 import SEO from "../components/SEO";
+import { getProfileColor, getTimeAgo } from "../typescriptfile/utils";
 import { 
      Phone, GraduationCap, Layers, Calendar, 
     History, LayoutDashboard, LogOut, Edit3, 
@@ -203,17 +204,6 @@ const Profile = () => {
 				)
 			: 0;
 
-	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString(
-			lang === "bn" ? "bn-BD" : "en-US",
-			{
-				year: "numeric",
-				month: "long",
-				day: "numeric",
-			},
-		);
-	};
-
 	const getGroupName = (group: string) => {
 		const groups: Record<string, string> = {
 			Science: lang === "bn" ? "বিজ্ঞান" : "Science",
@@ -224,7 +214,7 @@ const Profile = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 pt-0 pb-10 md:pt-4 md:pb-8 px-3 md:px-4 transition-colors font-sans">
+		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 pt-0 pb-10 md:pt-2 md:pb-4 px-3 md:px-4 transition-colors font-sans">
 			<SEO 
 				title={`${profileUser.name} - Kafa'ah`} 
 				description={lang === "bn" ? "প্রোফাইল তথ্য এবং পোস্ট দেখুন।" : "View profile information and posts."}
@@ -246,7 +236,7 @@ const Profile = () => {
 
 			<div className="w-full max-w-5xl mx-auto">
 				{/* Header */}
-				<div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-6 md:mb-8">
+				<div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-6">
 					<div>
 						<h1 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
 							{isOwnProfile ? t("profile.title") : profileUser.name}
@@ -302,7 +292,7 @@ const Profile = () => {
 						>
 							<div className="absolute top-0 left-0 w-full h-16 md:h-20 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-10"></div>
 							<div className="relative">
-								<div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-2xl md:rounded-3xl mx-auto flex items-center justify-center text-white text-2xl md:text-3xl font-black mb-3 border-4 border-white dark:border-gray-700 shadow-lg">
+								<div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-tr ${getProfileColor(profileUser.name)} rounded-2xl md:rounded-3xl mx-auto flex items-center justify-center text-white text-2xl md:text-3xl font-black mb-3 border-4 border-white dark:border-gray-700 shadow-lg`}>
 									{profileUser.name.charAt(0)}
 								</div>
 								<h2 className="text-lg md:text-xl font-black text-gray-900 dark:text-white">
@@ -398,7 +388,7 @@ const Profile = () => {
                                                         {exam.subject_name}
                                                     </p>
                                                     <p className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase">
-                                                        {formatDate(exam.created_at)} • {exam.time_taken ? (
+                                                        {getTimeAgo(exam.created_at, lang)} • {exam.time_taken ? (
                                                             lang === 'bn' 
                                                                 ? `${Math.floor(exam.time_taken / 60)}মি. ${exam.time_taken % 60}সে.`
                                                                 : `${Math.floor(exam.time_taken / 60)}m ${exam.time_taken % 60}s`
@@ -442,7 +432,7 @@ const Profile = () => {
                                     >
                                         <div className="flex justify-between items-start mb-4">
                                             <div className="flex gap-3">
-                                                <div className="h-10 w-10 rounded-xl bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-blue-600 font-black text-base border dark:border-gray-700 uppercase">
+                                                <div className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${getProfileColor(profileUser.name)} flex items-center justify-center text-white font-black text-base border-2 border-white dark:border-gray-700 uppercase shadow-sm`}>
                                                     {profileUser.name[0]}
                                                 </div>
                                                 <div>
@@ -450,6 +440,7 @@ const Profile = () => {
                                                     <div className="flex items-center gap-1.5 mt-1.5">
                                                         <span className="text-[8px] font-black text-blue-500 bg-blue-50 dark:bg-blue-900/20 px-1.5 py-0.5 rounded-md uppercase">{post.category}</span>
                                                         <span className="text-[8px] font-black text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 px-1.5 py-0.5 rounded-md uppercase">{post.batch}</span>
+                                                        <span className="text-[9px] font-bold text-gray-400 ml-1">{getTimeAgo(post.created_at, lang)}</span>
                                                     </div>
                                                 </div>
                                             </div>

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfirmModal from "../components/ConfirmModal";
+import { getProfileColor, getTimeAgo } from "../typescriptfile/utils";
 
 const Forum: React.FC = () => {
     const { user } = useAuth();
@@ -176,7 +177,7 @@ const Forum: React.FC = () => {
                 className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-[35px] shadow-sm border border-gray-200 dark:border-gray-700 p-3 md:p-4 mb-5 md:mb-8 cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 transition-all"
             >
                 <div className="flex gap-3 md:gap-4 items-center">
-                    <div className="h-9 w-9 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-black text-sm md:text-xl shadow-md shadow-blue-500/20 shrink-0">
+                    <div className={`h-9 w-9 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-br ${getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-sm md:text-xl shadow-md shadow-blue-500/20 shrink-0 border-2 border-white dark:border-gray-700`}>
                         {user?.name?.[0].toUpperCase() || "?"}
                     </div>
                     <div className="flex-1 bg-gray-50 dark:bg-gray-900/50 rounded-xl md:rounded-2xl px-4 py-2.5 md:py-3 border border-gray-100 dark:border-gray-800">
@@ -323,7 +324,7 @@ const Forum: React.FC = () => {
                                         <div className="flex gap-3 md:gap-4">
                                             <div 
                                                 onClick={() => navigate(`/profile/${post.user_id}`)}
-                                                className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-blue-600 font-black text-base md:text-lg border dark:border-gray-700 uppercase cursor-pointer"
+                                                className={`h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-tr ${getProfileColor(post.author_name)} flex items-center justify-center text-white font-black text-base md:text-lg border-2 border-white dark:border-gray-700 uppercase cursor-pointer shadow-sm`}
                                             >
                                                 {post.author_name?.[0]}
                                             </div>
@@ -337,6 +338,7 @@ const Forum: React.FC = () => {
                                                 <div className="flex items-center gap-1.5 md:gap-2 mt-1.5 md:mt-2">
                                                     <span className="text-[8px] md:text-[9px] font-black text-blue-500 bg-blue-50 dark:bg-blue-900/20 px-1.5 md:px-2 py-0.5 rounded-md uppercase">{post.category}</span>
                                                     <span className="text-[8px] md:text-[9px] font-black text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 px-1.5 md:px-2 py-0.5 rounded-md uppercase">{post.batch}</span>
+                                                    <span className="text-[9px] font-bold text-gray-400 ml-1">{getTimeAgo(post.created_at, lang)}</span>
                                                 </div>
                                             </div>
                                         </div>
