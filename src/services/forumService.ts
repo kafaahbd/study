@@ -39,10 +39,10 @@ export const forumService = {
   /**
    * ২. নতুন পোস্ট তৈরি করা
    */
-  createPost: async (content: string, category: string, batch: string, image?: string) => {
+  createPost: async (content: string, category: string, batch: string) => {
     const response = await axios.post(
       `${API_URL}/posts`,
-      { content, category, batch, image },
+      { content, category, batch },
       getAuthHeader()
     );
     return response.data;
@@ -75,15 +75,14 @@ export const forumService = {
    * @param parentId - যদি এটি একটি রিপ্লাই হয়, তবে মেইন কমেন্টের ID দিন
    * @param replyToId - যদি এটি কোনো নির্দিষ্ট রিপ্লাইয়ের ওপর রিপ্লাই হয়, তবে সেই রিপ্লাইয়ের ID দিন
    */
-  addComment: async (postId: string, commentText: string, parentId: string | null = null, replyToId: string | null = null, image?: string) => {
+  addComment: async (postId: string, commentText: string, parentId: string | null = null, replyToId: string | null = null) => {
     const response = await axios.post(
       `${API_URL}/comments`,
       { 
         post_id: postId, 
         comment_text: commentText,
         parent_id: parentId,
-        reply_to_id: replyToId,
-        image
+        reply_to_id: replyToId
       },
       getAuthHeader()
     );

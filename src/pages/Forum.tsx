@@ -12,7 +12,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import ConfirmModal from "../components/ConfirmModal";
 import TextExpander from "../components/TextExpander";
-import ImageViewer from "../components/ImageViewer";
+
 import { getProfileColor, getTimeAgo } from "../typescriptfile/utils";
 
 const Forum: React.FC = () => {
@@ -23,7 +23,6 @@ const Forum: React.FC = () => {
     // UI States
     const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     // --- Filtering States ---
     const [activeCategory, setActiveCategory] = useState<string>("All");
@@ -161,13 +160,6 @@ const Forum: React.FC = () => {
                 onConfirm={confirmDelete}
                 title={lang === "bn" ? "পোস্ট ডিলিট করবেন?" : "Delete Post?"}
             />
-
-            {selectedImage && (
-                <ImageViewer 
-                    src={selectedImage} 
-                    onClose={() => setSelectedImage(null)} 
-                />
-            )}
 
             {/* Toast UI */}
             <AnimatePresence>
@@ -400,16 +392,6 @@ const Forum: React.FC = () => {
                                     
                                     <TextExpander text={post.content} limit={150} className="text-gray-700 dark:text-gray-300 text-sm md:text-[16px] leading-relaxed mb-5 md:mb-7 font-medium whitespace-pre-wrap" />
                                     
-                                    {post.image && (
-                                        <div className="mb-5 md:mb-7">
-                                            <img 
-                                                src={post.image} 
-                                                alt="Post content" 
-                                                onClick={() => setSelectedImage(post.image)}
-                                                className="w-full h-80 object-cover rounded-2xl cursor-pointer hover:opacity-95 transition-opacity" 
-                                            />
-                                        </div>
-                                    )}
                                     <div className="flex items-center gap-6 md:gap-8 pt-4 md:pt-6 border-t border-gray-50 dark:border-gray-700/30">
                                         <button onClick={() => handleToggleReact(post.id)}
                                             className={`flex items-center gap-2 text-xs md:text-sm font-black transition-all ${post.is_reacted ? "text-red-500" : "text-gray-400"}`}

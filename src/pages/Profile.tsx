@@ -29,22 +29,19 @@ const Profile = () => {
 	const [isStatsLoading, setIsStatsLoading] = useState(true);
 	const [isPostsLoading, setIsPostsLoading] = useState(true);
     const [isProfileLoading, setIsProfileLoading] = useState(!isOwnProfile);
-    const [profileColor, setProfileColorState] = useState(localStorage.getItem('profileColor') || 'bg-blue-500');
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [isUpdating, setIsUpdating] = useState(false);
     const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
 
-	// formData তে exam_year যুক্ত করা হয়েছে
-	const [formData, setFormData] = useState({
-		name: "",
-		phone: "",
+    const [formData, setFormData] = useState({
+        name: "",
+        phone: "",
         hide_phone: false,
-		study_level: "SSC" as "SSC" | "HSC",
-		group: "Science" as "Science" | "Arts" | "Commerce",
-		exam_year: "",
-        profile_color: localStorage.getItem('profileColor') || 'bg-blue-500'
-	});
+        study_level: "SSC" as "SSC" | "HSC",
+        group: "Science" as "Science" | "Arts" | "Commerce",
+        exam_year: "",
+    });
 
     useEffect(() => {
         setVisiblePosts(userPosts.slice(0, postsToShow));
@@ -52,12 +49,6 @@ const Profile = () => {
 
     const handleShowMore = () => {
         setPostsToShow(prev => prev + 4);
-    };
-
-    const handleColorChange = (color: string) => {
-        setProfileColorState(color);
-        localStorage.setItem('profileColor', color);
-        setFormData(prev => ({ ...prev, profile_color: color }));
     };
 
 	useEffect(() => {
@@ -119,15 +110,14 @@ const Profile = () => {
         fetchUserPosts();
 
 		if (currentUser && isOwnProfile) {
-			setFormData({
-				name: currentUser.name,
-				phone: currentUser.phone || "",
+            setFormData({
+                name: currentUser.name,
+                phone: currentUser.phone || "",
                 hide_phone: currentUser.hide_phone || false,
-				study_level: currentUser.study_level,
-				group: currentUser.group,
-				exam_year: currentUser.exam_year || "",
-				profile_color: currentUser.profile_color || "#3b82f6",
-			});
+                study_level: currentUser.study_level,
+                group: currentUser.group,
+                exam_year: currentUser.exam_year || "",
+            });
 		}
 	}, [userId, currentUser, isOwnProfile]);
 
@@ -326,7 +316,7 @@ const Profile = () => {
 						>
 							<div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-10"></div>
 							<div className="relative">
-								<div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-tr ${getProfileColor(profileUser.name)} rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-black mb-3 border-4 border-white dark:border-gray-700 shadow-lg`}>
+								<div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-tr ${profileUser.profile_color || getProfileColor(profileUser.name)} rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-black mb-3 border-4 border-white dark:border-gray-700 shadow-lg`}>
 									{profileUser.name.charAt(0)}
 								</div>
 								<h2 className="text-lg font-black text-gray-900 dark:text-white">
@@ -467,7 +457,7 @@ const Profile = () => {
                                     >
                                         <div className="flex justify-between items-start mb-4">
                                             <div className="flex gap-3">
-                                                <div className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${profileColor} flex items-center justify-center text-white font-black text-base border-2 border-white dark:border-gray-700 uppercase shadow-sm`}>
+                                                <div className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${profileUser.profile_color || getProfileColor(profileUser.name)} flex items-center justify-center text-white font-black text-base border-2 border-white dark:border-gray-700 uppercase shadow-sm`}>
                                                     {profileUser.name[0]}
                                                 </div>
                                                 <div>
@@ -621,24 +611,7 @@ const Profile = () => {
 											</select>
 										</div>
 									</div>
-                                    
-                                    <div>
-										<label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase ml-2">
-											Profile Color
-										</label>
-                                        <div className="flex gap-2 mt-2">
-                                            {['bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500'].map(color => (
-                                                <button 
-                                                    key={color}
-                                                    type="button"
-                                                    onClick={() => handleColorChange(color)}
-                                                    className={`w-8 h-8 rounded-full ${color} ${formData.profile_color === color ? 'ring-2 ring-offset-2 ring-black dark:ring-white' : ''}`}
-                                                />
-                                            ))}
-                                        </div>
-									</div>
-
-									<div className="flex gap-3 md:gap-4 mt-6 md:mt-8">
+                                    <div className="flex gap-3 md:gap-4 mt-6 md:mt-8">
 										<button
 											type="button"
 											onClick={() => setIsEditing(false)}
