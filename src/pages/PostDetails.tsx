@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { forumService } from '../services/forumService';
 import { useAuth } from '../contexts/AuthContext';
-import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2, Eye, EyeOff } from 'lucide-react';
+import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -15,7 +15,6 @@ const PostDetails: React.FC = () => {
   const { lang } = useLanguage();
   const [post, setPost] = useState<any>(null);
   const [commentText, setCommentText] = useState('');
-  const [showNav, setShowNav] = useState(false);
   const [showReplies, setShowReplies] = useState<Record<string, boolean>>({});
   
   // parentId হবে মূল কমেন্টের আইডি (গ্রুপিংয়ের জন্য)
@@ -44,15 +43,6 @@ const PostDetails: React.FC = () => {
     }, 0);
     return () => clearTimeout(timer);
   }, [loadPostData]);
-
-  useEffect(() => {
-    if (!showNav) {
-      document.body.classList.add("hide-mobile-nav");
-    } else {
-      document.body.classList.remove("hide-mobile-nav");
-    }
-    return () => document.body.classList.remove("hide-mobile-nav");
-  }, [showNav]);
 
   const handlePostDeleteConfirm = async () => {
     try {
@@ -192,7 +182,7 @@ const PostDetails: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed break-words">{c.comment_text}</p>
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed break-words overflow-hidden">{c.comment_text}</p>
                 <div className="flex items-center gap-4 mt-3">
                     {user && (
                       <button 
@@ -261,13 +251,6 @@ const PostDetails: React.FC = () => {
         <div className="max-w-3xl mx-auto flex flex-col gap-3">
           {/* Nav Toggle Button */}
           <div className="flex justify-end pr-4">
-            <button 
-              onClick={() => setShowNav(!showNav)}
-              className="bg-white dark:bg-gray-800 p-2 rounded-full shadow-lg border border-gray-100 dark:border-gray-700 text-gray-400 hover:text-blue-500 transition-all"
-              title={showNav ? "Hide Navigation" : "Show Navigation"}
-            >
-              {showNav ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
           </div>
 
           {!user ? (

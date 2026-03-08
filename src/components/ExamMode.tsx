@@ -37,11 +37,11 @@ const ExamMode: React.FC<Props> = ({ state }) => {
           </button>
 
           <div className="flex flex-col items-center">
-             <div className={`text-xl lg:text-2xl font-black tracking-tighter ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-gray-800 dark:text-white'}`}>
-                <i className="fas fa-clock mr-1.5 lg:mr-2"></i>
+             <div className={`text-sm lg:text-lg font-black tracking-tighter ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-gray-800 dark:text-white'}`}>
+                <i className="fas fa-clock mr-1 text-[10px]"></i>
                 {formatTime(timeLeft)}
              </div>
-             <div className="text-[9px] lg:text-[10px] uppercase font-bold text-gray-400">
+             <div className="text-[8px] lg:text-[9px] uppercase font-bold text-gray-400">
                 {lang === "bn" ? "বাকি সময়" : "Time Remaining"}
              </div>
           </div>

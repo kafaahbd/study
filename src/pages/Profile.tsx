@@ -23,10 +23,13 @@ const Profile = () => {
 
     const [profileUser, setProfileUser] = useState<any>(null);
 	const [stats, setStats] = useState<any[]>([]);
-	const [userPosts, setUserPosts] = useState<any[]>([]);
+    const [userPosts, setUserPosts] = useState<any[]>([]);
+    const [visiblePosts, setVisiblePosts] = useState<any[]>([]);
+    const [postsToShow, setPostsToShow] = useState(2);
 	const [isStatsLoading, setIsStatsLoading] = useState(true);
 	const [isPostsLoading, setIsPostsLoading] = useState(true);
     const [isProfileLoading, setIsProfileLoading] = useState(!isOwnProfile);
+    const [profileColor, setProfileColorState] = useState(localStorage.getItem('profileColor') || 'bg-blue-500');
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [isUpdating, setIsUpdating] = useState(false);
@@ -39,7 +42,22 @@ const Profile = () => {
 		study_level: "SSC" as "SSC" | "HSC",
 		group: "Science" as "Science" | "Arts" | "Commerce",
 		exam_year: "",
+        profile_color: localStorage.getItem('profileColor') || 'bg-blue-500'
 	});
+
+    useEffect(() => {
+        setVisiblePosts(userPosts.slice(0, postsToShow));
+    }, [userPosts, postsToShow]);
+
+    const handleShowMore = () => {
+        setPostsToShow(prev => prev + 4);
+    };
+
+    const handleColorChange = (color: string) => {
+        setProfileColorState(color);
+        localStorage.setItem('profileColor', color);
+        setFormData(prev => ({ ...prev, profile_color: color }));
+    };
 
 	useEffect(() => {
         const fetchProfileData = async () => {
@@ -106,6 +124,7 @@ const Profile = () => {
 				study_level: currentUser.study_level,
 				group: currentUser.group,
 				exam_year: currentUser.exam_year || "",
+				profile_color: currentUser.profile_color || "#3b82f6",
 			});
 		}
 	}, [userId, currentUser, isOwnProfile]);
@@ -217,7 +236,7 @@ const Profile = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 pt-0 pb-10 md:pt-2 md:pb-4 px-3 md:px-4 transition-colors font-sans">
+		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 pt-2 pb-6 md:pt-4 md:pb-8 px-3 md:px-6 transition-colors font-sans">
 			<SEO 
 				title={`${profileUser.name} - Kafa'ah`} 
 				description={lang === "bn" ? "প্রোফাইল তথ্য এবং পোস্ট দেখুন।" : "View profile information and posts."}
@@ -249,17 +268,17 @@ const Profile = () => {
 
 			<div className="w-full max-w-5xl mx-auto">
 				{/* Header */}
-				<div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-4 md:mb-6">
+				<div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 mb-4 md:mb-5">
 					<div>
-						<h1 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+						<h1 className="text-2xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight">
 							{isOwnProfile ? t("profile.title") : profileUser.name}
 						</h1>
 						{isOwnProfile && (
                             <button
                                 onClick={() => setIsEditing(true)}
-                                className="mt-1 md:mt-2 flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold hover:underline text-sm"
+                                className="mt-1 flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold hover:underline text-xs"
                             >
-                                <Edit3 size={14} />
+                                <Edit3 size={12} />
                                 {lang === "bn" ? "তথ্য পরিবর্তন করুন" : "Edit Information"}
                             </button>
                         )}
@@ -270,81 +289,81 @@ const Profile = () => {
                             <>
                                 <Link
                                     to="/dashboard"
-                                    className="flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2"
+                                    className="flex-1 md:flex-none px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2"
                                 >
-                                    <LayoutDashboard size={14} />
+                                    <LayoutDashboard size={12} />
                                     {lang === "bn" ? "ড্যাশবোর্ড" : "Dashboard"}
                                 </Link>
                                 <button
                                     onClick={confirmLogout}
-                                    className="flex-1 md:flex-none px-4 md:px-6 py-2.5 md:py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2"
+                                    className="flex-1 md:flex-none px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2"
                                 >
-                                    <LogOut size={14} />
+                                    <LogOut size={12} />
                                     {lang === "bn" ? "লগ আউট" : "Logout"}
                                 </button>
                             </>
                         ) : (
                             <button
                                 onClick={() => setIsBlockModalOpen(true)}
-                                className="flex-1 md:flex-none px-6 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl md:rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm flex items-center gap-2"
+                                className="flex-1 md:flex-none px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm flex items-center gap-2"
                             >
-                                <ShieldAlert size={16} />
+                                <ShieldAlert size={14} />
                                 {lang === "bn" ? "ব্লক করুন" : "Block"}
                             </button>
                         )}
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
 					{/* Identity Card */}
 					<div className="lg:col-span-1">
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
-							className="bg-white dark:bg-gray-800 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-7 shadow-xl border border-gray-100 dark:border-gray-700 text-center relative overflow-hidden"
+							className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-sm border border-gray-100 dark:border-gray-700 text-center relative overflow-hidden"
 						>
-							<div className="absolute top-0 left-0 w-full h-16 md:h-20 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-10"></div>
+							<div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-10"></div>
 							<div className="relative">
-								<div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-tr ${getProfileColor(profileUser.name)} rounded-2xl md:rounded-3xl mx-auto flex items-center justify-center text-white text-2xl md:text-3xl font-black mb-3 border-4 border-white dark:border-gray-700 shadow-lg`}>
+								<div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-tr ${getProfileColor(profileUser.name)} rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-black mb-3 border-4 border-white dark:border-gray-700 shadow-lg`}>
 									{profileUser.name.charAt(0)}
 								</div>
-								<h2 className="text-lg md:text-xl font-black text-gray-900 dark:text-white">
+								<h2 className="text-lg font-black text-gray-900 dark:text-white">
 									{profileUser.name}
 								</h2>
 								<p className="text-blue-600 dark:text-blue-400 font-bold text-[10px] uppercase tracking-widest">
 									@{profileUser.username}
 								</p>
 
-								<div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-3 text-left px-1 md:px-2">
+								<div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-2 text-left px-1">
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<Phone size={12} /> Phone
+										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<Phone size={10} /> Phone
 										</span>
-										<span className="font-bold text-gray-700 dark:text-gray-300 text-sm">
+										<span className="font-bold text-gray-700 dark:text-gray-300 text-xs">
 											{profileUser.phone || "N/A"}
 										</span>
 									</div>
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<GraduationCap size={12} /> Level
+										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<GraduationCap size={10} /> Level
 										</span>
-										<span className="font-bold text-gray-700 dark:text-gray-300 text-sm">
+										<span className="font-bold text-gray-700 dark:text-gray-300 text-xs">
 											{profileUser.study_level}
 										</span>
 									</div>
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<Layers size={12} /> Group
+										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<Layers size={10} /> Group
 										</span>
-										<span className="font-bold text-gray-700 dark:text-gray-300 text-sm">
+										<span className="font-bold text-gray-700 dark:text-gray-300 text-xs">
 											{getGroupName(profileUser.group)}
 										</span>
 									</div>
 									<div className="flex justify-between items-center">
-										<span className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase flex items-center gap-1.5">
-											<Calendar size={12} /> Exam Year
+										<span className="text-[9px] font-black text-gray-400 uppercase flex items-center gap-1.5">
+											<Calendar size={10} /> Exam Year
 										</span>
-										<span className="font-bold text-blue-600 dark:text-blue-400 text-sm">
+										<span className="font-bold text-blue-600 dark:text-blue-400 text-xs">
 											{profileUser.exam_year || "Not Set"}
 										</span>
 									</div>
@@ -354,24 +373,24 @@ const Profile = () => {
 					</div>
 
 					{/* Stats & History / Posts */}
-					<div className="lg:col-span-2 space-y-6 md:space-y-8">
+					<div className="lg:col-span-2 space-y-4 md:space-y-6">
 						{isOwnProfile && (
-                            <div className="grid grid-cols-2 gap-4 md:gap-6">
-                                <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-2xl md:rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-sm text-center">
-                                    <span className="text-xl md:text-2xl font-black block mb-1 text-gray-900 dark:text-white">
+                            <div className="grid grid-cols-2 gap-3 md:gap-4">
+                                <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm text-center">
+                                    <span className="text-xl font-black block mb-0.5 text-gray-900 dark:text-white">
                                         {isStatsLoading
                                             ? "..."
                                             : totalExams.toString().padStart(2, "0")}
                                     </span>
-                                    <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-blue-500">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-blue-500">
                                         {lang === "bn" ? "মোট পরীক্ষা" : "Exams Taken"}
                                     </span>
                                 </div>
-                                <div className="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-2xl md:rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-sm text-center">
-                                    <span className="text-xl md:text-2xl font-black block mb-1 text-gray-900 dark:text-white">
+                                <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm text-center">
+                                    <span className="text-xl font-black block mb-0.5 text-gray-900 dark:text-white">
                                         {isStatsLoading ? "..." : `${avgScore}%`}
                                     </span>
-                                    <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-purple-500">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-purple-500">
                                         {lang === "bn" ? "গড় স্কোর" : "Avg Score"}
                                     </span>
                                 </div>
@@ -435,8 +454,9 @@ const Profile = () => {
                                 <div className="flex justify-center py-10">
                                     <Loader2 className="animate-spin text-gray-400" />
                                 </div>
-                            ) : userPosts.length > 0 ? (
-                                userPosts.map((post) => (
+                            ) : visiblePosts.length > 0 ? (
+                                <>
+                                {visiblePosts.map((post) => (
                                     <motion.div 
                                         key={post.id}
                                         initial={{ opacity: 0, y: 10 }}
@@ -445,7 +465,7 @@ const Profile = () => {
                                     >
                                         <div className="flex justify-between items-start mb-4">
                                             <div className="flex gap-3">
-                                                <div className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${getProfileColor(profileUser.name)} flex items-center justify-center text-white font-black text-base border-2 border-white dark:border-gray-700 uppercase shadow-sm`}>
+                                                <div className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${profileColor} flex items-center justify-center text-white font-black text-base border-2 border-white dark:border-gray-700 uppercase shadow-sm`}>
                                                     {profileUser.name[0]}
                                                 </div>
                                                 <div>
@@ -475,7 +495,13 @@ const Profile = () => {
                                             </button>
                                         </div>
                                     </motion.div>
-                                ))
+                                ))}
+                                {userPosts.length > visiblePosts.length && (
+                                    <button onClick={handleShowMore} className="w-full py-3 bg-gray-100 dark:bg-gray-800 rounded-xl text-xs font-black text-gray-600 dark:text-gray-400 uppercase tracking-widest hover:bg-gray-200 transition-colors">
+                                        {lang === "bn" ? "আরও দেখুন" : "Show More"}
+                                    </button>
+                                )}
+                                </>
                             ) : (
                                 <div className="text-center py-10 bg-white dark:bg-gray-800 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 text-gray-400 text-sm font-bold">
                                     No posts yet.
@@ -588,6 +614,22 @@ const Profile = () => {
 												<option value="Commerce">Commerce</option>
 											</select>
 										</div>
+									</div>
+                                    
+                                    <div>
+										<label className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase ml-2">
+											Profile Color
+										</label>
+                                        <div className="flex gap-2 mt-2">
+                                            {['bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500'].map(color => (
+                                                <button 
+                                                    key={color}
+                                                    type="button"
+                                                    onClick={() => handleColorChange(color)}
+                                                    className={`w-8 h-8 rounded-full ${color} ${formData.profile_color === color ? 'ring-2 ring-offset-2 ring-black dark:ring-white' : ''}`}
+                                                />
+                                            ))}
+                                        </div>
 									</div>
 
 									<div className="flex gap-3 md:gap-4 mt-6 md:mt-8">

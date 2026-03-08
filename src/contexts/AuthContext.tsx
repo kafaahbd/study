@@ -18,6 +18,7 @@ interface User {
     study_level: "SSC" | "HSC";
     group: "Science" | "Arts" | "Commerce";
     exam_year?: string;
+    profile_color?: string;
     verified: boolean;
     created_at: string;
 }
