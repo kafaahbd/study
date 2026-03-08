@@ -11,16 +11,19 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfirmModal from "../components/ConfirmModal";
+import TextExpander from "../components/TextExpander";
+import ImageViewer from "../components/ImageViewer";
 import { getProfileColor, getTimeAgo } from "../typescriptfile/utils";
 
 const Forum: React.FC = () => {
     const { user } = useAuth();
-    const { lang } = useLanguage(); // 't' রিমুভ করা হয়েছে কারণ এটি ব্যবহৃত হচ্ছিল না
+    const { lang } = useLanguage();
     const navigate = useNavigate();
 
     // UI States
     const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     // --- Filtering States ---
     const [activeCategory, setActiveCategory] = useState<string>("All");
@@ -159,6 +162,13 @@ const Forum: React.FC = () => {
                 title={lang === "bn" ? "পোস্ট ডিলিট করবেন?" : "Delete Post?"}
             />
 
+            {selectedImage && (
+                <ImageViewer 
+                    src={selectedImage} 
+                    onClose={() => setSelectedImage(null)} 
+                />
+            )}
+
             {/* Toast UI */}
             <AnimatePresence>
                 {toast && (
@@ -177,7 +187,7 @@ const Forum: React.FC = () => {
                 className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-[35px] shadow-sm border border-gray-200 dark:border-gray-700 p-3 md:p-4 mb-5 md:mb-8 cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 transition-all"
             >
                 <div className="flex gap-3 md:gap-4 items-center">
-                    <div className={`h-9 w-9 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-tr ${getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-sm md:text-xl shadow-md shadow-blue-500/20 shrink-0 border-2 border-white dark:border-gray-700`}>
+                    <div className={`h-9 w-9 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-tr ${user?.profile_color || getProfileColor(user?.name || "")} flex items-center justify-center text-white font-black text-sm md:text-xl shadow-md shadow-blue-500/20 shrink-0 border-2 border-white dark:border-gray-700`}>
                         {user?.name?.[0].toUpperCase() || "?"}
                     </div>
                     <div className="flex-1 bg-gray-50 dark:bg-gray-900/50 rounded-xl md:rounded-2xl px-4 py-2.5 md:py-3 border border-gray-100 dark:border-gray-800">
@@ -324,7 +334,7 @@ const Forum: React.FC = () => {
                                         <div className="flex gap-3 md:gap-4">
                                             <div 
                                                 onClick={() => navigate(`/profile/${post.user_id}`)}
-                                                className={`h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-tr ${getProfileColor(post.author_name)} flex items-center justify-center text-white font-black text-base md:text-lg border-2 border-white dark:border-gray-700 uppercase cursor-pointer shadow-sm`}
+                                                className={`h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-tr ${post.author_profile_color || getProfileColor(post.author_name)} flex items-center justify-center text-white font-black text-base md:text-lg border-2 border-white dark:border-gray-700 uppercase cursor-pointer shadow-sm`}
                                             >
                                                 {post.author_name?.[0]}
                                             </div>
@@ -387,7 +397,19 @@ const Forum: React.FC = () => {
                                             </AnimatePresence>
                                         </div>
                                     </div>
-                                    <p className="text-gray-700 dark:text-gray-300 text-sm md:text-[16px] leading-relaxed mb-5 md:mb-7 font-medium whitespace-pre-wrap">{post.content}</p>
+                                    
+                                    <TextExpander text={post.content} limit={150} className="text-gray-700 dark:text-gray-300 text-sm md:text-[16px] leading-relaxed mb-5 md:mb-7 font-medium" />
+                                    
+                                    {post.image && (
+                                        <div className="mb-5 md:mb-7">
+                                            <img 
+                                                src={post.image} 
+                                                alt="Post content" 
+                                                onClick={() => setSelectedImage(post.image)}
+                                                className="w-full h-80 object-cover rounded-2xl cursor-pointer hover:opacity-95 transition-opacity" 
+                                            />
+                                        </div>
+                                    )}
                                     <div className="flex items-center gap-6 md:gap-8 pt-4 md:pt-6 border-t border-gray-50 dark:border-gray-700/30">
                                         <button onClick={() => handleToggleReact(post.id)}
                                             className={`flex items-center gap-2 text-xs md:text-sm font-black transition-all ${post.is_reacted ? "text-red-500" : "text-gray-400"}`}

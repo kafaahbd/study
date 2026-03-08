@@ -5,29 +5,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { ArrowLeft, Send, Trash2, X, Clock, CornerDownRight, Share2, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
+import TextExpander from '../components/TextExpander';
+import ImageViewer from '../components/ImageViewer';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getProfileColor, getTimeAgo } from '../typescriptfile/utils';
-
-const CommentText = ({ text, replyToName, className }: { text: string, replyToName?: string, className?: string }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const words = text.split(' ');
-    
-    const displayText = isExpanded ? text : words.slice(0, 120).join(' ') + (words.length > 120 ? '...' : '');
-
-    return (
-        <div className={className}>
-            <p className="leading-relaxed break-words overflow-hidden">
-                {replyToName && <span className="text-blue-500 font-bold mr-1 italic">@{replyToName}</span>}
-                {displayText}
-            </p>
-            {words.length > 120 && (
-                <button onClick={() => setIsExpanded(!isExpanded)} className="text-blue-500 text-xs font-bold mt-1">
-                    {isExpanded ? 'See less' : 'See more'}
-                </button>
-            )}
-        </div>
-    );
-};
 
 const PostDetails: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -38,6 +19,7 @@ const PostDetails: React.FC = () => {
   const [commentText, setCommentText] = useState('');
   const [commentImage, setCommentImage] = useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const [showReplies, setShowReplies] = useState<Record<string, boolean>>({});
   
@@ -160,6 +142,13 @@ const PostDetails: React.FC = () => {
       <ConfirmModal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} onConfirm={handlePostDeleteConfirm} title="Delete Post?" />
       <ConfirmModal isOpen={!!commentToDelete} onClose={() => setCommentToDelete(null)} onConfirm={handleCommentDeleteConfirm} title="Delete Comment?" />
 
+      {selectedImage && (
+          <ImageViewer 
+              src={selectedImage} 
+              onClose={() => setSelectedImage(null)} 
+          />
+      )}
+
       {/* Header */}
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-400 hover:text-blue-500 mb-8 font-black text-[10px] tracking-widest uppercase transition-colors">
         <ArrowLeft size={16} /> Back to Forum
@@ -170,7 +159,7 @@ const PostDetails: React.FC = () => {
         <div className="flex gap-4 mb-4">
           <div 
             onClick={() => navigate(`/profile/${post.user_id}`)}
-            className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${getProfileColor(post.author_name)} text-white flex items-center justify-center font-black text-lg shadow-sm cursor-pointer border-2 border-white dark:border-gray-700`}
+            className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${post.author_profile_color || getProfileColor(post.author_name)} text-white flex items-center justify-center font-black text-lg shadow-sm cursor-pointer border-2 border-white dark:border-gray-700`}
           >
             {post.author_name?.[0]}
           </div>
@@ -195,10 +184,15 @@ const PostDetails: React.FC = () => {
             <Share2 size={16} />
           </button>
         </div>
-        <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed whitespace-pre-wrap">{post.content}</p>
+        <TextExpander text={post.content} limit={150} className="text-gray-700 dark:text-gray-300 text-base leading-relaxed whitespace-pre-wrap" />
         {post.image && (
             <div className="mt-4">
-                <img src={post.image} alt="Post content" className="w-full max-h-96 object-cover rounded-xl" />
+                <img 
+                    src={post.image} 
+                    alt="Post content" 
+                    onClick={() => setSelectedImage(post.image)}
+                    className="w-full max-h-96 object-cover rounded-xl cursor-pointer hover:opacity-95 transition-opacity" 
+                />
             </div>
         )}
       </motion.div>
@@ -211,6 +205,11 @@ const PostDetails: React.FC = () => {
           <div key={c.id} className="space-y-4">
             {/* মেইন কমেন্ট বক্স */}
             <div className="flex gap-4 group">
+              <Link to={`/profile/${c.comment_author_id}`} className="shrink-0">
+                  <div className={`h-8 w-8 rounded-lg bg-gradient-to-tr ${c.author_profile_color || getProfileColor(c.author_name)} flex items-center justify-center text-white font-black text-xs border border-white dark:border-gray-700 shadow-sm`}>
+                      {c.author_name?.[0]}
+                  </div>
+              </Link>
               <div className="flex-1 bg-white dark:bg-gray-800/60 p-5 rounded-[20px] border border-gray-100 dark:border-gray-700 shadow-sm relative group">
                 <div className="flex justify-between items-start mb-2">
                   <Link to={`/profile/${c.comment_author_id}`} className="font-black text-blue-500 text-sm">@{c.author_name}</Link>
@@ -223,10 +222,15 @@ const PostDetails: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <CommentText text={c.comment_text} className="text-gray-600 dark:text-gray-300" />
+                <TextExpander text={c.comment_text} limit={50} className="text-gray-600 dark:text-gray-300" />
                 {c.image && (
                     <div className="mt-2">
-                        <img src={c.image} alt="Comment attachment" className="max-w-xs max-h-48 object-cover rounded-lg" />
+                        <img 
+                            src={c.image} 
+                            alt="Comment attachment" 
+                            onClick={() => setSelectedImage(c.image)}
+                            className="max-w-xs max-h-48 object-cover rounded-lg cursor-pointer hover:opacity-95 transition-opacity" 
+                        />
                     </div>
                 )}
                 <div className="flex items-center gap-4 mt-3">
@@ -255,6 +259,11 @@ const PostDetails: React.FC = () => {
                 <div className="ml-14 space-y-4 border-l-2 border-gray-100 dark:border-gray-800/50 pl-6">
                 {getReplies(c.id).map((reply: any) => (
                     <motion.div initial={{ opacity: 0, x: 5 }} animate={{ opacity: 1, x: 0 }} key={reply.id} className="flex gap-3 group">
+                    <Link to={`/profile/${reply.comment_author_id}`} className="shrink-0">
+                        <div className={`h-6 w-6 rounded-md bg-gradient-to-tr ${reply.author_profile_color || getProfileColor(reply.author_name)} flex items-center justify-center text-white font-black text-[10px] border border-white dark:border-gray-700 shadow-sm`}>
+                            {reply.author_name?.[0]}
+                        </div>
+                    </Link>
                     <div className="flex-1 bg-gray-50/50 dark:bg-gray-800/30 p-4 rounded-[20px] border border-gray-100 dark:border-gray-700">
                         <div className="flex justify-between items-start mb-1">
                         <Link to={`/profile/${reply.comment_author_id}`} className="font-black text-indigo-400 text-xs">@{reply.author_name}</Link>
@@ -267,10 +276,15 @@ const PostDetails: React.FC = () => {
                             )}
                         </div>
                         </div>
-                        <CommentText text={reply.comment_text} replyToName={reply.reply_to_name} className="text-gray-500 dark:text-gray-400 text-sm" />
+                        <TextExpander text={reply.comment_text} limit={50} className="text-gray-500 dark:text-gray-400 text-sm" />
                         {reply.image && (
                             <div className="mt-2">
-                                <img src={reply.image} alt="Reply attachment" className="max-w-xs max-h-40 object-cover rounded-lg" />
+                                <img 
+                                    src={reply.image} 
+                                    alt="Reply attachment" 
+                                    onClick={() => setSelectedImage(reply.image)}
+                                    className="max-w-xs max-h-40 object-cover rounded-lg cursor-pointer hover:opacity-95 transition-opacity" 
+                                />
                             </div>
                         )}
                         {user && (

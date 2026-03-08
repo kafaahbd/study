@@ -89,7 +89,7 @@ const Navbar: React.FC = () => {
                         {user.name}
                       </p>
                     </span>
-                    <div className={`relative h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-tr ${getProfileColor(user.name)} flex items-center justify-center text-white font-black shadow-lg shadow-green-200 dark:shadow-none transition-all group-hover:scale-110 group-hover:rotate-3 border-2 border-white dark:border-gray-800`}>
+                    <div className={`relative h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-tr ${user.profile_color || getProfileColor(user.name)} flex items-center justify-center text-white font-black shadow-lg shadow-green-200 dark:shadow-none transition-all group-hover:scale-110 group-hover:rotate-3 border-2 border-white dark:border-gray-800`}>
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                   </Link>
