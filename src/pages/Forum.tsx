@@ -12,7 +12,6 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import ConfirmModal from "../components/ConfirmModal";
 import TextExpander from "../components/TextExpander";
-
 import { getProfileColor, getTimeAgo } from "../typescriptfile/utils";
 
 const Forum: React.FC = () => {
@@ -320,10 +319,10 @@ const Forum: React.FC = () => {
                         {posts.length > 0 ? (
                             posts.map((post) => (
                                 <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} key={post.id}
-                                    className="bg-white dark:bg-gray-800 rounded-[30px] md:rounded-[40px] shadow-sm border border-gray-100 dark:border-gray-700 p-5 md:p-8 group"
+                                    className="bg-white dark:bg-gray-800 rounded-2xl md:rounded-[40px] shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-8 group"
                                 >
-                                    <div className="flex justify-between items-start mb-4 md:mb-6">
-                                        <div className="flex gap-3 md:gap-4">
+                                    <div className="flex justify-between items-start mb-3 md:mb-6">
+                                        <div className="flex gap-2 md:gap-4">
                                             <div 
                                                 onClick={() => navigate(`/profile/${post.user_id}`)}
                                                 className={`h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl bg-gradient-to-tr ${post.author_profile_color || getProfileColor(post.author_name)} flex items-center justify-center text-white font-black text-base md:text-lg border-2 border-white dark:border-gray-700 uppercase cursor-pointer shadow-sm`}
@@ -337,10 +336,10 @@ const Forum: React.FC = () => {
                                                 >
                                                     {post.author_name}
                                                 </h4>
-                                                <div className="flex items-center gap-1.5 md:gap-2 mt-1.5 md:mt-2">
+                                                <div className="flex items-center gap-1.5 md:gap-2 mt-1 md:mt-2">
                                                     <span className="text-[8px] md:text-[9px] font-black text-blue-500 bg-blue-50 dark:bg-blue-900/20 px-1.5 md:px-2 py-0.5 rounded-md uppercase">{post.category}</span>
                                                     <span className="text-[8px] md:text-[9px] font-black text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 px-1.5 md:px-2 py-0.5 rounded-md uppercase">{post.batch}</span>
-                                                    <span className="text-[9px] font-bold text-gray-400 ml-1">{getTimeAgo(post.created_at, lang)}</span>
+                                                    <span className="text-[8px] md:text-[9px] font-bold text-gray-400 ml-1">{getTimeAgo(post.created_at, lang)}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -348,9 +347,9 @@ const Forum: React.FC = () => {
                                         <div className="relative">
                                             <button 
                                                 onClick={() => setActiveMenu(activeMenu === post.id ? null : post.id)}
-                                                className="text-gray-400 p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-xl transition-all"
+                                                className="text-gray-400 p-1 md:p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-xl transition-all"
                                             >
-                                                <MoreHorizontal size={20} />
+                                                <MoreHorizontal size={18} className="md:w-5 md:h-5" />
                                             </button>
                                             
                                             <AnimatePresence>
@@ -390,23 +389,23 @@ const Forum: React.FC = () => {
                                         </div>
                                     </div>
                                     
-                                    <TextExpander text={post.content} limit={150} className="text-gray-700 dark:text-gray-300 text-sm md:text-[16px] leading-relaxed mb-5 md:mb-7 font-medium whitespace-pre-wrap" />
+                                    <TextExpander text={post.content} limit={150} className="text-gray-700 dark:text-gray-300 text-sm md:text-[16px] leading-relaxed mb-4 md:mb-7 font-medium whitespace-pre-wrap" />
                                     
-                                    <div className="flex items-center gap-6 md:gap-8 pt-4 md:pt-6 border-t border-gray-50 dark:border-gray-700/30">
+                                    <div className="flex items-center gap-6 md:gap-8 pt-3 md:pt-6 border-t border-gray-50 dark:border-gray-700/30">
                                         <button onClick={() => handleToggleReact(post.id)}
-                                            className={`flex items-center gap-2 text-xs md:text-sm font-black transition-all ${post.is_reacted ? "text-red-500" : "text-gray-400"}`}
+                                            className={`flex items-center gap-1.5 md:gap-2 text-xs md:text-sm font-black transition-all ${post.is_reacted ? "text-red-500" : "text-gray-400"}`}
                                         >
-                                            <Heart size={20} className="md:w-[22px] md:h-[22px]" fill={post.is_reacted ? "currentColor" : "none"} /> {post.react_count || 0}
+                                            <Heart size={18} className="md:w-[22px] md:h-[22px]" fill={post.is_reacted ? "currentColor" : "none"} /> {post.react_count || 0}
                                         </button>
                                         <button onClick={() => navigate(`/post/${post.id}`)}
-                                            className="flex items-center gap-2 text-xs md:text-sm font-black text-gray-400 hover:text-blue-600 transition-colors"
+                                            className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm font-black text-gray-400 hover:text-blue-600 transition-colors"
                                         >
-                                            <MessageSquare size={20} className="md:w-[22px] md:h-[22px]" /> {post.comment_count || 0}
+                                            <MessageSquare size={18} className="md:w-[22px] md:h-[22px]" /> {post.comment_count || 0}
                                         </button>
                                         <button onClick={() => handleShare(post.id)}
-                                            className="flex items-center gap-2 text-xs md:text-sm font-black text-gray-400 hover:text-green-600 transition-colors ml-auto"
+                                            className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm font-black text-gray-400 hover:text-green-600 transition-colors ml-auto"
                                         >
-                                            <Share2 size={18} className="md:w-5 md:h-5" />
+                                            <Share2 size={16} className="md:w-5 md:h-5" />
                                         </button>
                                     </div>
                                 </motion.div>

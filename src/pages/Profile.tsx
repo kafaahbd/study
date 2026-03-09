@@ -360,6 +360,14 @@ const Profile = () => {
 										</span>
 									</div>
 								</div>
+                                
+                                {/* Blocked Users Link (Moved below profile info) */}
+                                {isOwnProfile && (
+                                    <Link to="/blocked-users" className="flex items-center justify-center gap-2 w-full py-3 mt-5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-100 transition-colors">
+                                        <ShieldAlert size={16} />
+                                        {lang === "bn" ? "ব্লক লিস্ট দেখুন" : "View Blocked Users"}
+                                    </Link>
+                                )}
 							</div>
 						</motion.div>
 					</div>
@@ -500,14 +508,6 @@ const Profile = () => {
                                 </div>
                             )}
                         </div>
-
-                        {/* Blocked Users Link (Only for own profile) */}
-                        {isOwnProfile && (
-                            <Link to="/blocked-users" className="flex items-center justify-center gap-2 w-full py-3 mt-8 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-red-100 transition-colors">
-                                <ShieldAlert size={16} />
-                                {lang === "bn" ? "ব্লক লিস্ট দেখুন" : "View Blocked Users"}
-                            </Link>
-                        )}
 					</div>
 				</div>
 

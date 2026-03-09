@@ -47,7 +47,7 @@ const ReviewMode: React.FC<Props> = ({ state }) => {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 pt-2 pb-24 md:pb-6 px-2 md:px-4 transition-colors duration-500">
       {/* Header Area */}
-      <div className="w-full md:w-[70%] mx-auto flex items-center justify-between mb-4 md:mb-8 px-2">
+      <div className="w-full lg:w-[85%] xl:w-[75%] mx-auto flex items-center justify-between mb-4 md:mb-8 px-2">
         <button 
           onClick={handleBack} 
           className="flex items-center text-gray-500 hover:text-red-500 transition-colors font-bold text-[10px] md:text-sm"
@@ -76,87 +76,118 @@ const ReviewMode: React.FC<Props> = ({ state }) => {
 
       {/* Main Review Card */}
       <main className="flex justify-center">
-        <div className="w-full md:w-[70%] bg-white dark:bg-gray-900 p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-gray-100 dark:border-gray-800 relative overflow-hidden animate-glow-pulse dark:animate-dark-glow-pulse">
+        <div className={`w-full lg:w-[85%] xl:w-[75%] grid grid-cols-1 ${hasChecked && practiceMessage ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} gap-3 md:gap-4 transition-all duration-500`}>
           
-          {/* Subtle Background Accent */}
-          <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-red-50 dark:bg-red-900/10 rounded-full -mr-12 -mt-12 md:-mr-16 md:-mt-16 transition-all"></div>
+          {/* Left Column: Question & Options */}
+          <div className="bg-white dark:bg-gray-900 p-4 md:p-8 rounded-2xl md:rounded-[2rem] border border-gray-100 dark:border-gray-800 relative overflow-hidden animate-glow-pulse dark:animate-dark-glow-pulse shadow-xl">
+            {/* Subtle Background Accent */}
+            <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-red-50 dark:bg-red-900/10 rounded-full -mr-12 -mt-12 md:-mr-16 md:-mt-16 transition-all"></div>
 
-          {/* Question Header */}
-          <div className="relative mb-4 md:mb-8">
-            <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
-              <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded-md md:rounded-lg text-[10px] md:text-sm font-bold text-gray-500">
-                #{reviewIndex + 1}
-              </span>
-              <div className="h-[1px] md:h-[2px] flex-1 bg-gray-100 dark:bg-gray-800"></div>
+            {/* Question Header */}
+            <div className="relative mb-4 md:mb-6">
+              <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+                <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded-md md:rounded-lg text-[10px] md:text-xs font-bold text-gray-500">
+                  #{reviewIndex + 1}
+                </span>
+                <div className="h-[1px] md:h-[2px] flex-1 bg-gray-100 dark:bg-gray-800"></div>
+              </div>
+              <h2 className="text-sm md:text-xl font-bold text-gray-800 dark:text-gray-100 leading-relaxed">
+                <Latex>{question.question}</Latex>
+              </h2>
             </div>
-            <h2 className="text-base md:text-2xl font-bold text-gray-800 dark:text-gray-100 leading-relaxed">
-              <Latex>{question.question}</Latex>
-            </h2>
+
+            {/* Options Section */}
+            <div className="relative z-10">
+              <QuestionCard
+                question={question}
+                userAnswer={userAnswers[question.id]}
+                onAnswerSelect={handleAnswerSelect}
+                disabled={hasChecked}
+                colorMap={selectedOptionColor}
+              />
+            </div>
+
+            {/* Mobile Explanation Section (Shows below options on small screens) */}
+            <AnimatePresence>
+              {hasChecked && practiceMessage && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: -10, height: 0 }}
+                  className="lg:hidden mt-4 p-4 bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-500 rounded-xl shadow-inner"
+                >
+                  <div className="flex items-center mb-2 text-amber-700 dark:text-amber-500 font-black uppercase text-[9px] tracking-[0.2em]">
+                    <i className="fas fa-lightbulb mr-2"></i>
+                    {lang === "bn" ? "সঠিক ব্যাখ্যা" : "Correct Explanation"}
+                  </div>
+                  <div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium text-xs whitespace-pre-wrap">
+                    <Latex>{practiceMessage}</Latex>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Action Buttons (Desktop only) */}
+            <div className="hidden md:flex flex-col sm:flex-row gap-3 mt-8">
+              {!hasChecked ? (
+                <button
+                  onClick={() => handleReviewCheck(question.id, userAnswers[question.id])}
+                  disabled={!userAnswers[question.id]}
+                  className="w-full py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-30 transition-all font-black text-sm shadow-lg shadow-blue-200 dark:shadow-none active:scale-95"
+                >
+                  {lang === "bn" ? "চেক করুন" : "Check Answer"}
+                </button>
+              ) : (
+                <button
+                  onClick={handleReviewNextOrResult}
+                  className="w-full py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all font-black text-sm shadow-lg shadow-green-200 dark:shadow-none active:scale-95 flex items-center justify-center gap-2"
+                >
+                  {isLastMistake
+                    ? (lang === "bn" ? "ফলাফল দেখুন" : "View Results")
+                    : (lang === "bn" ? "পরবর্তী ভুল" : "Next Mistake")}
+                  <i className={`fas ${isLastMistake ? 'fa-flag-checkered' : 'fa-chevron-right'}`}></i>
+                </button>
+              )}
+            </div>
+
+            {/* Back Button under card */}
+            <div className="mt-4 text-center">
+              <button
+                onClick={handleBack}
+                className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-red-500 transition-colors"
+              >
+                {lang === "bn" ? "পেছনে যান" : "Go Back"}
+              </button>
+            </div>
           </div>
 
-          {/* Options Section */}
-          <div className="relative z-10">
-            <QuestionCard
-              question={question}
-              userAnswer={userAnswers[question.id]}
-              onAnswerSelect={handleAnswerSelect}
-              disabled={hasChecked}
-              colorMap={selectedOptionColor}
-            />
-          </div>
-
-          {/* Explanation Section */}
+          {/* Right Column: Desktop Explanation Section */}
           <AnimatePresence>
             {hasChecked && practiceMessage && (
               <motion.div 
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                className="mt-4 md:mt-8 p-4 md:p-6 bg-amber-50 dark:bg-amber-900/10 border-l-4 border-amber-500 rounded-xl md:rounded-2xl shadow-inner"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ type: "spring", damping: 25, stiffness: 120 }}
+                className="hidden lg:block bg-amber-50/80 dark:bg-amber-900/10 p-6 xl:p-8 rounded-[2rem] border border-amber-200/50 dark:border-amber-800/50 shadow-xl backdrop-blur-sm"
               >
-                <div className="flex items-center mb-2 md:mb-3 text-amber-700 dark:text-amber-500 font-black uppercase text-[9px] md:text-xs tracking-[0.2em]">
-                  <i className="fas fa-lightbulb mr-2"></i>
-                  {lang === "bn" ? "সঠিক ব্যাখ্যা" : "Correct Explanation"}
+                <div className="flex items-center mb-6 pb-4 border-b border-amber-200 dark:border-amber-800/50">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center text-amber-600 dark:text-amber-400 mr-4 shadow-inner">
+                    <i className="fas fa-lightbulb text-lg"></i>
+                  </div>
+                  <h3 className="text-amber-800 dark:text-amber-500 font-black uppercase tracking-widest text-sm">
+                    {lang === "bn" ? "সঠিক ব্যাখ্যা" : "Explanation"}
+                  </h3>
                 </div>
-                <div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium text-[11px] md:text-base whitespace-pre-wrap">
-                  <Latex>{practiceMessage}</Latex>
+                <div className="prose prose-amber dark:prose-invert max-w-none">
+                  <div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium text-sm xl:text-base whitespace-pre-wrap">
+                    <Latex>{practiceMessage}</Latex>
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* Action Buttons (Desktop only) */}
-          <div className="hidden md:flex flex-col sm:flex-row gap-4 mt-10">
-            {!hasChecked ? (
-              <button
-                onClick={() => handleReviewCheck(question.id, userAnswers[question.id])}
-                disabled={!userAnswers[question.id]}
-                className="w-full py-4 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 disabled:opacity-30 transition-all font-black text-lg shadow-lg shadow-blue-200 dark:shadow-none active:scale-95"
-              >
-                {lang === "bn" ? "চেক করুন" : "Check Answer"}
-              </button>
-            ) : (
-              <button
-                onClick={handleReviewNextOrResult}
-                className="w-full py-4 bg-green-600 text-white rounded-2xl hover:bg-green-700 transition-all font-black text-lg shadow-lg shadow-green-200 dark:shadow-none active:scale-95 flex items-center justify-center gap-2"
-              >
-                {isLastMistake
-                  ? (lang === "bn" ? "ফলাফল দেখুন" : "View Results")
-                  : (lang === "bn" ? "পরবর্তী ভুল" : "Next Mistake")}
-                <i className={`fas ${isLastMistake ? 'fa-flag-checkered' : 'fa-chevron-right'}`}></i>
-              </button>
-            )}
-          </div>
-
-          {/* Back Button under card */}
-          <div className="mt-4 text-center">
-            <button
-              onClick={handleBack}
-              className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-red-500 transition-colors"
-            >
-              {lang === "bn" ? "পেছনে যান" : "Go Back"}
-            </button>
-          </div>
         </div>
       </main>
 
