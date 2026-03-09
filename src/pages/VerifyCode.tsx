@@ -112,24 +112,24 @@ const VerifyCode = () => {
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-md w-full"
       >
-        <div className="bg-white dark:bg-gray-900 p-8 md:p-10 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-gray-800 relative overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-gray-800 relative overflow-hidden">
           
           {/* Header */}
-          <div className="text-center mb-10">
-            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border ${isPasswordReset ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-100' : 'bg-green-50 dark:bg-green-900/20 border-green-100'}`}>
-              <i className={`fas ${isPasswordReset ? 'fa-key text-orange-600' : 'fa-shield-alt text-green-600'} text-2xl`}></i>
+          <div className="text-center mb-6 md:mb-10">
+            <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 border ${isPasswordReset ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-100' : 'bg-green-50 dark:bg-green-900/20 border-green-100'}`}>
+              <i className={`fas ${isPasswordReset ? 'fa-key text-orange-600' : 'fa-shield-alt text-green-600'} text-xl md:text-2xl`}></i>
             </div>
-            <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">
+            <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white tracking-tight">
               {isPasswordReset ? (lang === 'bn' ? 'কোডটি দিন' : 'Enter Code') : (t('verify.title') || 'Verify Account')}
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 font-medium text-sm mt-2">
+            <p className="text-gray-500 dark:text-gray-400 font-medium text-xs md:text-sm mt-2">
               {lang === 'bn' ? 'আমরা এই ইমেইলে একটি কোড পাঠিয়েছি:' : 'We sent a code to:'} <br/>
               <span className="text-gray-900 dark:text-gray-200 font-bold">{email}</span>
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="flex justify-between gap-2 md:gap-3">
+          <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+            <div className="flex justify-between gap-1.5 md:gap-3">
               {code.map((digit, index) => (
                 <input
                   key={index}
@@ -140,7 +140,7 @@ const VerifyCode = () => {
                   value={digit}
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
-                  className={`w-full h-14 md:h-16 text-center text-2xl font-black bg-slate-50 dark:bg-gray-800 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-gray-700 dark:text-white transition-all outline-none ${isPasswordReset ? 'focus:border-orange-500' : 'focus:border-green-500'}`}
+                  className={`w-full h-12 md:h-16 text-center text-xl md:text-2xl font-black bg-slate-50 dark:bg-gray-800 border-2 border-transparent rounded-xl md:rounded-2xl focus:bg-white dark:focus:bg-gray-700 dark:text-white transition-all outline-none ${isPasswordReset ? 'focus:border-orange-500' : 'focus:border-green-500'}`}
                   autoFocus={index === 0}
                 />
               ))}
@@ -149,9 +149,9 @@ const VerifyCode = () => {
             {error && (
               <motion.div 
                 initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                className="p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-r-xl"
+                className="p-3 md:p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-r-xl"
               >
-                <p className="text-red-700 dark:text-red-400 text-xs font-bold flex items-center">
+                <p className="text-red-700 dark:text-red-400 text-[10px] md:text-xs font-bold flex items-center">
                   <i className="fas fa-exclamation-circle mr-2"></i>
                   {error}
                 </p>
@@ -161,7 +161,7 @@ const VerifyCode = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-4 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl transition-all disabled:opacity-50 flex items-center justify-center gap-3 ${isPasswordReset ? 'bg-gradient-to-r from-orange-600 to-red-500 shadow-orange-500/20' : 'bg-gradient-to-r from-green-600 to-green-500 shadow-green-500/20'}`}
+              className={`w-full py-3.5 md:py-4 text-white rounded-xl md:rounded-2xl font-black uppercase tracking-widest shadow-xl transition-all disabled:opacity-50 flex items-center justify-center gap-3 ${isPasswordReset ? 'bg-gradient-to-r from-orange-600 to-red-500 shadow-orange-500/20' : 'bg-gradient-to-r from-green-600 to-green-500 shadow-green-500/20'}`}
             >
               {isLoading ? (
                 <i className="fas fa-spinner fa-spin"></i>
@@ -174,12 +174,12 @@ const VerifyCode = () => {
             </button>
           </form>
 
-          <div className="mt-10 text-center border-t border-gray-50 dark:border-gray-800 pt-6">
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-3">
+          <div className="mt-8 md:mt-10 text-center border-t border-gray-50 dark:border-gray-800 pt-5 md:pt-6">
+            <p className="text-gray-500 dark:text-gray-400 text-xs md:text-sm font-medium mb-2 md:mb-3">
               {lang === 'bn' ? 'কোড পাননি?' : "Didn't receive the code?"}
             </p>
             
-            <p className="text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase tracking-wider mb-4 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 rounded-xl inline-block">
+            <p className="text-amber-600 dark:text-amber-400 text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-3 md:mb-4 px-3 md:px-4 py-1.5 md:py-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg md:rounded-xl inline-block">
               <i className="fas fa-info-circle mr-2"></i>
               {lang === 'bn' ? 'আপনার স্প্যাম (Spam) ফোল্ডারটি চেক করুন' : 'Please check your Spam folder'}
             </p>
@@ -189,7 +189,7 @@ const VerifyCode = () => {
                 onClick={handleResend}
                 type="button"
                 disabled={resendLoading}
-                className={`${isPasswordReset ? 'text-orange-600' : 'text-green-600'} dark:text-blue-400 font-black uppercase text-xs tracking-widest hover:underline underline-offset-8 disabled:opacity-50 transition-all`}
+                className={`${isPasswordReset ? 'text-orange-600' : 'text-green-600'} dark:text-blue-400 font-black uppercase text-[10px] md:text-xs tracking-widest hover:underline underline-offset-8 disabled:opacity-50 transition-all`}
               >
                 {resendLoading ? (
                   <span className="flex items-center gap-2">

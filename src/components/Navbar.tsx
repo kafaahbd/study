@@ -25,6 +25,8 @@ const Navbar: React.FC = () => {
     setNavHidden(shouldHide);
   }, [location.pathname]);
 
+  const isExamOrMistake = location.pathname.includes('/exam') || location.pathname.includes('/mistakes');
+
   const isActive = (path: string) => location.pathname === path;
 
   const navLinks = [
@@ -139,7 +141,7 @@ const Navbar: React.FC = () => {
           </div>
         </motion.div>
 
-        {navHidden && (
+        {navHidden && !isExamOrMistake && (
           <motion.button
             key="peek-btn"
             initial={{ x: -50, opacity: 0 }}

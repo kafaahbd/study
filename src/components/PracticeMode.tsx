@@ -38,12 +38,12 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 	const handleBack = () => navigate(-1);
 
 	return (
-		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-2 px-2 sm:px-4">
+		<div className="min-h-screen bg-slate-50 dark:bg-gray-900 pt-2 pb-24 md:pb-8 px-2 sm:px-4">
 			{/* Header Section */}
-			<div className="max-w-3xl mx-auto flex items-center justify-between mb-3">
+			<div className="max-w-3xl mx-auto flex items-center justify-between mb-2 md:mb-3">
 				<button
 					onClick={handleBack}
-					className="group flex items-center text-gray-500 hover:text-green-600 transition-colors font-medium text-xs"
+					className="group flex items-center text-gray-500 hover:text-green-600 transition-colors font-medium text-[10px] md:text-xs"
 				>
 					<i className="fas fa-arrow-left mr-1 group-hover:-translate-x-1 transition-transform"></i>
 					{lang === "bn" ? "পেছনে" : "Back"}
@@ -52,22 +52,22 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 				<img
 					src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png"
 					alt="Kafa'ah"
-					className="h-6 md:h-10 object-contain"
+					className="h-5 md:h-10 object-contain"
 				/>
 
-				<div className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-[9px] font-bold tracking-wider uppercase">
+				<div className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-[8px] md:text-[9px] font-bold tracking-wider uppercase">
 					{lang === "bn" ? "প্র্যাকটিস" : "Practice"}
 				</div>
 			</div>
 
 			{/* Progress Section */}
-			<div className="max-w-3xl mx-auto mb-4">
-				<div className="flex justify-between items-end mb-1">
-					<h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+			<div className="max-w-3xl mx-auto mb-3 md:mb-4">
+				<div className="flex justify-between items-end mb-0.5 md:mb-1">
+					<h3 className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">
 						{lang === "bn" ? "প্রশ্ন নম্বর" : "Question"}{" "}
 						{currentQuestionIndex + 1}
 					</h3>
-					<span className="text-[10px] font-bold text-green-600">
+					<span className="text-[9px] md:text-[10px] font-bold text-green-600">
 						{Math.round(progress)}%
 					</span>
 				</div>
@@ -82,13 +82,13 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 
 			{/* Main Question Card Container */}
 			<main className="max-w-7xl mx-auto">
-				<div className={`grid grid-cols-1 ${hasChecked && practiceMessage ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} gap-4 transition-all duration-500`}>
+				<div className={`grid grid-cols-1 ${hasChecked && practiceMessage ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} gap-3 md:gap-4 transition-all duration-500`}>
 					
 					{/* Left Side: Question & Options */}
-					<div className={`bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-4 md:p-10 rounded-2xl md:rounded-3xl shadow-lg shadow-gray-200/50 dark:shadow-none transition-all duration-300 ${!hasChecked || !practiceMessage ? 'max-w-3xl mx-auto w-full' : ''}`}>
+					<div className={`bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-4 md:p-10 rounded-xl md:rounded-3xl shadow-lg shadow-gray-200/50 dark:shadow-none transition-all duration-300 ${!hasChecked || !practiceMessage ? 'max-w-3xl mx-auto w-full' : ''}`}>
 						{/* Question Title */}
-						<div className="mb-4">
-							<h2 className="text-base md:text-2xl font-semibold text-gray-800 dark:text-gray-100 leading-relaxed">
+						<div className="mb-3 md:mb-4">
+							<h2 className="text-sm md:text-2xl font-semibold text-gray-800 dark:text-gray-100 leading-relaxed">
 								<Latex>{currentQuestion?.question}</Latex>
 							</h2>
 						</div>
@@ -110,13 +110,13 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 										initial={{ opacity: 0, y: 10, scale: 0.95 }}
 										animate={{ opacity: 1, y: 0, scale: 1 }}
 										transition={{ type: "spring", damping: 20, stiffness: 100 }}
-										className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-xl overflow-hidden shadow-inner"
+										className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-lg overflow-hidden shadow-inner"
 									>
-										<div className="flex items-center mb-2 text-blue-700 dark:text-blue-400 font-black uppercase text-[10px] tracking-[0.2em]">
+										<div className="flex items-center mb-1 text-blue-700 dark:text-blue-400 font-black uppercase text-[9px] tracking-[0.2em]">
 											<i className="fas fa-info-circle mr-1"></i>
 											{lang === "bn" ? "ব্যাখ্যা" : "Explanation"}
 										</div>
-										<div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium text-xs whitespace-pre-wrap">
+										<div className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium text-[11px] whitespace-pre-wrap">
 											<Latex>{practiceMessage}</Latex>
 										</div>
 									</motion.div>
@@ -124,8 +124,8 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 							</AnimatePresence>
 						</div>
 
-						{/* Action Buttons */}
-						<div className="flex flex-col sm:flex-row gap-3 mt-6">
+						{/* Action Buttons (Desktop only) */}
+						<div className="hidden md:flex flex-col sm:flex-row gap-3 mt-6">
 							{!hasChecked ? (
 								<button
 									onClick={() =>
@@ -157,6 +157,16 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 								</button>
 							)}
 						</div>
+
+						{/* Back Button under card */}
+						<div className="mt-4 text-center">
+							<button
+								onClick={handleBack}
+								className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-green-600 transition-colors"
+							>
+								{lang === "bn" ? "পেছনে যান" : "Go Back"}
+							</button>
+						</div>
 					</div>
 
 					{/* Right Side: Explanation (Visible only on PC) */}
@@ -181,6 +191,38 @@ const PracticeMode: React.FC<Props> = ({ state }) => {
 					</AnimatePresence>
 				</div>
 			</main>
+
+			{/* Sticky Mobile Button */}
+			<div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-t border-gray-100 dark:border-gray-800 z-50">
+				{!hasChecked ? (
+					<button
+						onClick={() =>
+							handleCheckAnswer(
+								currentQuestion.id,
+								userAnswers[currentQuestion.id],
+							)
+						}
+						disabled={!userAnswers[currentQuestion?.id]}
+						className="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-indigo-500/20 disabled:opacity-30 active:scale-95 transition-all"
+					>
+						{lang === "bn" ? "উত্তর চেক করুন" : "Check Answer"}
+					</button>
+				) : (
+					<button
+						onClick={handleNextOrResult}
+						className="w-full py-3.5 bg-green-600 text-white rounded-xl font-black uppercase tracking-widest text-xs shadow-lg shadow-green-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+					>
+						{isLast
+							? lang === "bn"
+								? "ভুল সংশোধন করুন"
+								: "Fix Mistakes"
+							: lang === "bn"
+								? "পরবর্তী প্রশ্ন"
+								: "Next Question"}
+						<i className={`fas ${isLast ? "fa-flag-checkered" : "fa-arrow-right"}`}></i>
+					</button>
+				)}
+			</div>
 		</div>
 	);
 };

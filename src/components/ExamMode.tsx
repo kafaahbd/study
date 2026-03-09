@@ -26,31 +26,31 @@ const ExamMode: React.FC<Props> = ({ state }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-4 lg:py-6 px-3 lg:px-4 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-2 md:py-6 px-2 md:px-4 transition-colors">
       
       {/* Sticky Top Header with Timer and Progress */}
-      <div className="sticky top-0 z-50 w-full mb-6 lg:mb-8 pt-1 lg:pt-2">
-        <div className="w-full lg:w-[70%] mx-auto bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-3 lg:p-4 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 flex items-center justify-between">
-          <button onClick={handleBack} className="text-gray-500 hover:text-red-500 font-bold flex items-center gap-1 text-sm">
+      <div className="sticky top-0 z-50 w-full mb-4 md:mb-8 pt-1 md:pt-2">
+        <div className="w-full lg:w-[70%] mx-auto bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 flex items-center justify-between">
+          <button onClick={handleBack} className="text-gray-500 hover:text-red-500 font-bold flex items-center gap-1 text-[10px] md:text-sm">
             <i className="fas fa-times-circle"></i>
             <span className="hidden sm:inline">{lang === "bn" ? "বাতিল" : "Cancel"}</span>
           </button>
 
           <div className="flex flex-col items-center">
-             <div className={`text-sm lg:text-lg font-black tracking-tighter ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-gray-800 dark:text-white'}`}>
-                <i className="fas fa-clock mr-1 text-[10px]"></i>
+             <div className={`text-xs md:text-lg font-black tracking-tighter ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-gray-800 dark:text-white'}`}>
+                <i className="fas fa-clock mr-1 text-[8px] md:text-[10px]"></i>
                 {formatTime(timeLeft)}
              </div>
-             <div className="text-[8px] lg:text-[9px] uppercase font-bold text-gray-400">
+             <div className="text-[7px] md:text-[9px] uppercase font-bold text-gray-400">
                 {lang === "bn" ? "বাকি সময়" : "Time Remaining"}
              </div>
           </div>
 
           <div className="text-right">
-             <div className="text-xs lg:text-sm font-black text-green-600">
+             <div className="text-[10px] md:text-sm font-black text-green-600">
                 {answeredCount} / {questions.length}
              </div>
-             <div className="text-[9px] lg:text-[10px] uppercase font-bold text-gray-400">
+             <div className="text-[7px] md:text-[10px] uppercase font-bold text-gray-400">
                 {lang === "bn" ? "পূরণকৃত" : "Answered"}
              </div>
           </div>
@@ -59,16 +59,16 @@ const ExamMode: React.FC<Props> = ({ state }) => {
 
       {/* Main Exam Content */}
       <main className="w-full lg:w-[70%] mx-auto">
-        <div className="bg-white dark:bg-gray-900 p-5 lg:p-10 rounded-3xl lg:rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-gray-800">
+        <div className="bg-white dark:bg-gray-900 p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-gray-800">
           
-          <div className="flex items-center gap-3 lg:gap-4 mb-6 lg:mb-10">
-            <h2 className="text-xl lg:text-2xl font-black text-gray-800 dark:text-white uppercase tracking-tight">
+          <div className="flex items-center gap-2 md:gap-4 mb-4 md:mb-10">
+            <h2 className="text-base md:text-2xl font-black text-gray-800 dark:text-white uppercase tracking-tight">
               {lang === "bn" ? "প্রশ্নপত্র" : "Question Paper"}
             </h2>
-            <div className="h-[2px] flex-1 bg-gray-100 dark:bg-gray-800"></div>
+            <div className="h-[1px] md:h-[2px] flex-1 bg-gray-100 dark:bg-gray-800"></div>
           </div>
 
-          <div className="space-y-8 lg:space-y-12">
+          <div className="space-y-6 md:space-y-12">
             {questions.map((q, idx: number) => (
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -79,11 +79,11 @@ const ExamMode: React.FC<Props> = ({ state }) => {
               >
                 {/* Question Number Badge */}
                 <div className="flex flex-col md:flex-row items-start gap-2 md:gap-3 lg:gap-4">
-                  <span className="flex-none w-8 h-8 lg:w-10 lg:h-10 bg-slate-100 dark:bg-gray-800 text-slate-500 dark:text-gray-400 rounded-xl flex items-center justify-center font-black text-base lg:text-lg group-hover:bg-green-600 group-hover:text-white transition-colors">
+                  <span className="flex-none w-6 h-6 md:w-10 md:h-10 bg-slate-100 dark:bg-gray-800 text-slate-500 dark:text-gray-400 rounded-lg md:rounded-xl flex items-center justify-center font-black text-xs md:text-lg group-hover:bg-green-600 group-hover:text-white transition-colors">
                     {idx + 1}
                   </span>
                   <div className="flex-1 w-full">
-                    <p className="text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-200 mb-3 lg:mb-6 leading-relaxed pt-0.5 lg:pt-1">
+                    <p className="text-sm md:text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 md:mb-6 leading-relaxed pt-0.5 md:pt-1">
                       <Latex>{q.question}</Latex>
                     </p>
                     <QuestionCard
@@ -99,19 +99,28 @@ const ExamMode: React.FC<Props> = ({ state }) => {
           </div>
 
           {/* Submit Section */}
-          <div className="mt-12 lg:mt-16 pt-8 lg:pt-10 border-t border-gray-100 dark:border-gray-800 text-center">
-            <p className="text-gray-400 text-[10px] lg:text-sm mb-4 lg:mb-6 font-medium italic">
+          <div className="mt-8 md:mt-16 pt-6 md:pt-10 border-t border-gray-100 dark:border-gray-800 text-center">
+            <p className="text-gray-400 text-[9px] md:text-sm mb-3 md:mb-6 font-medium italic">
               {lang === "bn" 
                 ? "সবগুলো প্রশ্ন চেক করে সাবমিট করুন" 
                 : "Please review all questions before submitting."}
             </p>
             <button
               onClick={handleSubmitExam}
-              className="px-8 lg:px-12 py-4 lg:py-5 bg-green-600 text-white rounded-2xl text-lg lg:text-xl font-black hover:bg-green-700 shadow-xl shadow-green-200 dark:shadow-none transition-all active:scale-95 hover:-translate-y-1"
+              className="w-full md:w-auto px-8 md:px-12 py-3.5 md:py-5 bg-green-600 text-white rounded-xl md:rounded-2xl text-base md:text-xl font-black hover:bg-green-700 shadow-xl shadow-green-200 dark:shadow-none transition-all active:scale-95 hover:-translate-y-1"
             >
               <i className="fas fa-paper-plane mr-2"></i>
               {lang === "bn" ? "পরীক্ষা জমা দিন" : "Submit Exam"}
             </button>
+
+            <div className="mt-4">
+              <button
+                onClick={handleBack}
+                className="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-red-500 transition-colors"
+              >
+                {lang === "bn" ? "পেছনে যান" : "Go Back"}
+              </button>
+            </div>
           </div>
         </div>
 

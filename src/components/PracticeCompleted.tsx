@@ -34,26 +34,26 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
 };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 px-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-2 md:py-8 px-2 md:px-4">
       {/* Navigation & Actions */}
-      <div className="max-w-4xl mx-auto flex items-center justify-between mb-8">
-        <button onClick={handleBack} className="flex items-center text-green-600 font-bold hover:opacity-75">
-          <i className="fas fa-arrow-left mr-2"></i>
+      <div className="max-w-4xl mx-auto flex items-center justify-between mb-4 md:mb-8 px-2">
+        <button onClick={handleBack} className="flex items-center text-green-600 font-bold hover:opacity-75 text-xs md:text-base">
+          <i className="fas fa-arrow-left mr-1 md:mr-2"></i>
           {lang === "bn" ? "পেছনে" : "Back"}
         </button>
         
-        <div className="flex gap-3">
+        <div className="flex gap-2 md:gap-3">
           <button 
-    onClick={handleDownloadPdf}
-    className="flex items-center gap-2 px-5 py-2 bg-red-500 text-white rounded-full font-bold shadow-lg hover:bg-red-600 transition-all active:scale-95"
->
-    <i className="fas fa-file-pdf"></i>
-    {lang === "bn" ? "PDF ডাউনলোড" : "Download PDF"}
-</button>
+            onClick={handleDownloadPdf}
+            className="flex items-center gap-1 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-red-500 text-white rounded-full font-bold shadow-lg hover:bg-red-600 transition-all active:scale-95 text-[10px] md:text-sm"
+          >
+            <i className="fas fa-file-pdf"></i>
+            {lang === "bn" ? "PDF ডাউনলোড" : "Download PDF"}
+          </button>
           <img
             src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png"
             alt="Kafa'ah"
-            className="h-10 hidden sm:block"
+            className="h-6 md:h-10 hidden sm:block"
           />
         </div>
       </div>
@@ -61,50 +61,50 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
       {/* Result Container (PDF Reference) */}
       <div 
         ref={reportTemplateRef} 
-        className="max-w-4xl mx-auto bg-white dark:bg-gray-900 p-6 md:p-10 rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-gray-800"
+        className="max-w-4xl mx-auto bg-white dark:bg-gray-900 p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-gray-800"
       >
         {/* PDF Header */}
-        <div className="text-center border-b-2 border-green-500 pb-6 mb-8">
-          <img src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png" alt="Logo" className="h-10 mx-auto mb-3" />
-          <h1 className="text-3xl font-black text-gray-800 dark:text-white uppercase tracking-tight">
+        <div className="text-center border-b-2 border-green-500 pb-4 md:pb-6 mb-4 md:mb-8">
+          <img src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png" alt="Logo" className="h-6 md:h-10 mx-auto mb-2 md:mb-3" />
+          <h1 className="text-xl md:text-3xl font-black text-gray-800 dark:text-white uppercase tracking-tight">
             {lang === "bn" ? "প্র্যাকটিস রেজাল্ট" : "Practice Summary"}
           </h1>
         </div>
 
         {/* Score Summary */}
-        <div className="flex justify-center mb-10">
-          <div className="bg-green-50 dark:bg-green-900/20 px-10 py-6 rounded-3xl text-center border border-green-100 dark:border-green-800">
-            <div className="text-6xl font-black text-green-600 mb-1">
-              {result.correct} <span className="text-2xl text-gray-400">/ {result.total}</span>
+        <div className="flex justify-center mb-6 md:mb-10">
+          <div className="bg-green-50 dark:bg-green-900/20 px-6 md:px-10 py-4 md:py-6 rounded-2xl md:rounded-3xl text-center border border-green-100 dark:border-gray-800">
+            <div className="text-3xl md:text-6xl font-black text-green-600 mb-0.5 md:mb-1">
+              {result.correct} <span className="text-lg md:text-2xl text-gray-400">/ {result.total}</span>
             </div>
-            <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">
+            <p className="text-[10px] md:text-sm font-bold text-gray-500 uppercase tracking-widest">
               {lang === "bn" ? "সঠিক উত্তর" : "Correct Answers"}
             </p>
           </div>
         </div>
 
         {/* Detailed Results */}
-        <div className="space-y-8">
+        <div className="space-y-6 md:space-y-8">
           {result.results.map((item, idx: number) => (
             <div key={idx} className={`border-l-4 ${
               item.everWrong && item.isCorrect ? "border-yellow-400" :
               !item.isCorrect ? "border-red-500" :
               "border-green-500"
-            } pl-6 py-2 transition-all`}>
-              <div className="flex justify-between items-start mb-4">
-                <p className="text-xl font-bold text-gray-800 dark:text-gray-100">
+            } pl-4 md:pl-6 py-1 md:py-2 transition-all`}>
+              <div className="flex justify-between items-start mb-2 md:mb-4">
+                <p className="text-sm md:text-xl font-bold text-gray-800 dark:text-gray-100">
                   {idx + 1}. <Latex>{item.question}</Latex>
                 </p>
                 {item.everWrong && item.isCorrect && (
-                  <span className="flex-none ml-2 px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-[10px] font-black rounded-full uppercase italic">
+                  <span className="flex-none ml-2 px-2 md:px-3 py-0.5 md:py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-[8px] md:text-[10px] font-black rounded-full uppercase italic">
                     {lang === "bn" ? "সংশোধিত" : "Corrected"}
                   </span>
                 )}
               </div>
 
-              <div className="space-y-3">
-                <div className={`flex items-center gap-2 text-lg ${item.isCorrect ? "text-green-600 font-medium" : "text-red-600 font-bold"}`}>
-                  <i className={`fas ${item.isCorrect ? 'fa-check-circle' : 'fa-times-circle'}`}></i>
+              <div className="space-y-2 md:space-y-3">
+                <div className={`flex items-center gap-2 text-sm md:text-lg ${item.isCorrect ? "text-green-600 font-medium" : "text-red-600 font-bold"}`}>
+                  <i className={`fas ${item.isCorrect ? 'fa-check-circle' : 'fa-times-circle'} text-xs md:text-base`}></i>
                   <p>
                     {lang === "bn" ? "আপনার উত্তর:" : "Your answer:"}{" "}
                     <Latex>{`${item.userAnswer ?? ""}. ${item.userAnswer && item.options[item.userAnswer] ? item.options[item.userAnswer] : ""}`}</Latex>
@@ -112,8 +112,8 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
                 </div>
 
                 {!item.isCorrect && (
-                  <div className="flex items-center gap-2 text-lg text-green-600 font-medium bg-green-50 dark:bg-green-900/10 p-2 rounded-lg border border-dashed border-green-200">
-                    <i className="fas fa-check-double"></i>
+                  <div className="flex items-center gap-2 text-sm md:text-lg text-green-600 font-medium bg-green-50 dark:bg-green-900/10 p-2 rounded-lg border border-dashed border-green-200">
+                    <i className="fas fa-check-double text-xs md:text-base"></i>
                     <p>
                       {lang === "bn" ? "সঠিক উত্তর:" : "Correct answer:"}{" "}
                       <Latex>{`${item.correctAnswer}. ${item.options[item.correctAnswer] || ""}`}</Latex>
@@ -122,7 +122,7 @@ const PracticeCompleted: React.FC<Props> = ({ state }) => {
                 )}
                 
                 {item.explanation && (
-                  <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl text-sm italic text-gray-600 dark:text-gray-400 border-l-2 border-indigo-400">
+                  <div className="mt-2 md:mt-3 p-3 md:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl text-xs md:text-sm italic text-gray-600 dark:text-gray-400 border-l-2 border-indigo-400">
                      <Latex>{item.explanation}</Latex>
                   </div>
                 )}
