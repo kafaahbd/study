@@ -44,7 +44,7 @@
 
         // নতুন URL তৈরি: রুটে '?/' দিয়ে শুরু
         var newUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-                     repoPath + '/?/' + encodedPath;
+                     repoPath + '/' + encodedPath;
 
         // রিডাইরেক্ট
         l.replace(newUrl);
