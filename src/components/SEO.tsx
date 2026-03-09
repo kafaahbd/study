@@ -11,16 +11,21 @@ interface SEOProps {
 const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
   const siteTitle = "Kafa'ah Study Corner";
   const fullTitle = `${title} | ${siteTitle}`;
-  const defaultDesc = "Kafa'ah Study Corner – বাংলাদেশের সেরা অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। SSC, HSC ও এডমিশন প্রস্তুতির জন্য অধ্যায়ভিত্তিক পরীক্ষা, তাৎক্ষণিক ফলাফল ও ব্যাখ্যা। Kafa'ah Bangladesh এর একটি উদ্যোগ ইনশাআল্লাহ।";
-  const defaultImage = "https://study.kafaahbd.com/stufy.jpg";
+  const defaultDesc = "বাংলাদেশের সেরা অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। SSC, HSC ও এডমিশন প্রস্তুতির জন্য অধ্যায়ভিত্তিক পরীক্ষা, তাৎক্ষণিক ফলাফল ও ব্যাখ্যা।";
+  const defaultImage = "https://study.kafaahbd.com/study.jpg"; // বানান চেক করুন (study.jpg)
   const siteUrl = "https://study.kafaahbd.com";
+
+  // নিশ্চিত করা হচ্ছে ইউআরএল এর শুরুতে যেন ডবল স্ল্যাশ না পড়ে
+  const cleanUrl = url?.startsWith('/') ? url : `/${url || ''}`;
+  const finalUrl = url ? `${siteUrl}${cleanUrl}` : siteUrl;
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description || defaultDesc} />
       
-      {/* Open Graph */}
+      {/* Open Graph / Facebook */}
+      <meta property="og:url" content={finalUrl} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description || defaultDesc} />
       <meta property="og:image" content={image || defaultImage} />
@@ -28,15 +33,18 @@ const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:type" content="image/jpeg" />
-      <meta property="og:image:alt" content="Kafa'ah Study Corner Preview" />
+      <meta property="og:image:alt" content={title} />
       <meta property="og:locale" content="bn_BD" />
-      <meta property="og:url" content={url ? `${siteUrl}${url}` : siteUrl} />
       <meta property="og:type" content="website" />
       
       {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description || defaultDesc} />
       <meta name="twitter:image" content={image || defaultImage} />
+
+      {/* Canonical Link */}
+      <link rel="canonical" href={finalUrl} />
     </Helmet>
   );
 };
