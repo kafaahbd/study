@@ -232,7 +232,7 @@ const Profile = () => {
 			<SEO 
 				title={`${profileUser.name} - Kafa'ah`} 
 				description={lang === "bn" ? "প্রোফাইল তথ্য এবং পোস্ট দেখুন।" : "View profile information and posts."}
-				image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+				image="https://study.kafaahbd.com/stufy.jpg"
 				url={`/profile/${profileUser.id}`}
 			/>
 

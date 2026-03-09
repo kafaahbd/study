@@ -69,7 +69,7 @@ const AdmissionCorner: React.FC = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 lg:py-12 px-3 lg:px-4 transition-colors">
       <SEO 
         title={lang === "bn" ? "এডমিশন কর্নার - কাফআহ" : "Admission Corner - Kafa'ah"} 
-        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/admis.jpg"
+        image="https://study.kafaahbd.com/admis.jpg"
         url="/admission"
       />
 

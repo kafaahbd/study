@@ -150,7 +150,7 @@ const Forum: React.FC = () => {
         <div className="max-w-3xl mx-auto pt-0 pb-10 md:pt-4 md:pb-10 px-3 md:px-4 min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
             <SEO 
                 title={lang === "bn" ? "ফোরাম - কাফআহ" : "Forum - Kafa'ah"} 
-                image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/forum.jpg"
+                image="https://study.kafaahbd.com/forum.jpg"
                 url="/forum"
             />
             <ConfirmModal

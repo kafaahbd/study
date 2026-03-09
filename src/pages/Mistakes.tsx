@@ -139,7 +139,7 @@ const Mistakes: React.FC = () => {
             <SEO 
                 title={lang === "bn" ? "ভুল সংশোধন কেন্দ্র - কাফআহ" : "Mistake Lab - Kafa'ah"} 
                 description={lang === "bn" ? "আপনার ভুল করা প্রশ্নগুলো প্র্যাকটিস করে নিজেকে আরও দক্ষ করে তুলুন।" : "Practice the questions you got wrong and improve your skills."}
-                image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/exam.jpg"
+                image="https://study.kafaahbd.com/exam.jpg"
                 url="/mistakes"
             />
             <div className="max-w-6xl mx-auto">

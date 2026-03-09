@@ -71,7 +71,7 @@ const Login = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col items-center justify-start lg:justify-center px-4 pt-4 lg:pt-0 transition-colors">
       <SEO 
         title={lang === "bn" ? "লগইন - কাফআহ" : "Login - Kafa'ah"} 
-        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+        image="https://study.kafaahbd.com/stufy.jpg"
         url="/login"
       />
       <motion.div

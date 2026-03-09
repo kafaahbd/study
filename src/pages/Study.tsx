@@ -37,7 +37,7 @@ const Study: React.FC = () => {
       
       <SEO 
         title={lang === "bn" ? "হোম - কাফআহ স্টাডি কর্নার" : "Home - Kafa'ah Study Corner"} 
-        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/stufy.jpg"
+        image="https://study.kafaahbd.com/stufy.jpg"
         url="/"
       />
 

@@ -74,7 +74,7 @@ const ExamCenter: React.FC = () => {
       <SEO 
         title={pageTitle}
         description={pageDescription}
-        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/exam.jpg"
+        image="https://study.kafaahbd.com/exam.jpg"
         url={`/exam?group=${groupParam}&subject=${subjectParam}`}
       />
 

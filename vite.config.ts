@@ -72,8 +72,8 @@ export default defineConfig({
     minify: "terser",
     terserOptions: {
       compress: {
-        drop_console: true, // প্রোডাকশনে console.log রিমুভ করবে
-        drop_debugger: true,
+        drop_console: false, // প্রোডাকশনে console.log রিমুভ করবে
+        drop_debugger: false,
       },
     } as any,
   },

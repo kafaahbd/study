@@ -16,11 +16,11 @@ import 'katex/dist/katex.min.css';
   }
 })()
 
-const basename = '/'; // আপনার GitHub Pages রিপোজিটরি নাম
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter basename={basename}>
+    <BrowserRouter >
       <HelmetProvider>
         <ThemeProvider>
           <LanguageProvider>

@@ -62,7 +62,7 @@ const Dashboard = () => {
       <SEO 
         title={lang === "bn" ? "ড্যাশবোর্ড - কাফআহ" : "Dashboard - Kafa'ah"} 
         description={lang === "bn" ? "আপনার পরীক্ষার পরিসংখ্যান এবং অগ্রগতি দেখুন।" : "View your exam statistics and progress."}
-        image="https://raw.githubusercontent.com/kafaahbd/Eng2/refs/heads/main/studyy.jpg"
+        image="https://study.kafaahbd.com/stufy.jpg"
         url="/dashboard"
       />
       <div className="max-w-6xl mx-auto">
