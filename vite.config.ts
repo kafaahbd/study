@@ -9,11 +9,11 @@ export default defineConfig({
 		VitePWA({
 			registerType: "autoUpdate",
 			manifest: {
-				name: "Kafaah",
-				short_name: "Kafaah",
+				name: "Study Corner Kafaah",
+				short_name: "Study Corner",
 				description: "Islamic Study Platform",
-				theme_color: "#0f172a",
-				background_color: "#ffffff",
+				theme_color: "#70c7dd",
+				background_color: "#70c7dd",
 				display: "standalone",
 				start_url: "/",
 				icons: [
