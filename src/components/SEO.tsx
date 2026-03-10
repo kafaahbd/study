@@ -6,16 +6,18 @@ interface SEOProps {
   description?: string;
   image?: string;
   url?: string;
+  keywords?: string; // এটি অলরেডি ছিল
 }
 
-const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
+// keywords কে এখানে রিসিভ করতে হবে
+const SEO: React.FC<SEOProps> = ({ title, description, image, url, keywords }) => {
   const siteTitle = "Kafa'ah Study Corner";
   const fullTitle = `${title} | ${siteTitle}`;
   const defaultDesc = "বাংলাদেশের সেরা অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। SSC, HSC ও এডমিশন প্রস্তুতির জন্য অধ্যায়ভিত্তিক পরীক্ষা, তাৎক্ষণিক ফলাফল ও ব্যাখ্যা।";
-  const defaultImage = "https://study.kafaahbd.com/study.jpg"; // বানান চেক করুন (study.jpg)
+  const defaultImage = "https://study.kafaahbd.com/study.jpg"; 
   const siteUrl = "https://study.kafaahbd.com";
 
-  // নিশ্চিত করা হচ্ছে ইউআরএল এর শুরুতে যেন ডবল স্ল্যাশ না পড়ে
+  // ইউআরএল ক্লিনিং লজিক
   const cleanUrl = url?.startsWith('/') ? url : `/${url || ''}`;
   const finalUrl = url ? `${siteUrl}${cleanUrl}` : siteUrl;
 
@@ -23,6 +25,9 @@ const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description || defaultDesc} />
+      
+      {/* Keywords Meta Tag - এটি মিসিং ছিল */}
+      {keywords && <meta name="keywords" content={keywords} />}
       
       {/* Open Graph / Facebook */}
       <meta property="og:url" content={finalUrl} />
@@ -45,6 +50,9 @@ const SEO: React.FC<SEOProps> = ({ title, description, image, url }) => {
 
       {/* Canonical Link */}
       <link rel="canonical" href={finalUrl} />
+      
+      {/* Robots Tag - Search Engine এর জন্য */}
+      <meta name="robots" content="index, follow" />
     </Helmet>
   );
 };

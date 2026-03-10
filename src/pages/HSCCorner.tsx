@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import ScrollAnimation from "../components/ScrollAnimation";
@@ -14,9 +15,9 @@ interface Group {
   icon: string;
   subjects: Subject[];
   gradient: string;
-  hoverText: string;   // নতুন ফিল্ড: হোভার টেক্সট কালার
-  hoverBorder: string; // নতুন ফিল্ড: হোভার বর্ডার কালার
-  bgIcon: string;      // নতুন ফিল্ড: হোভার আইকন ব্যাকগ্রাউন্ড
+  hoverText: string;
+  hoverBorder: string;
+  bgIcon: string;
 }
 
 const HSCCorner: React.FC = () => {
@@ -84,72 +85,76 @@ const HSCCorner: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 lg:py-12 px-3 lg:px-4 transition-colors">
+    <div className="min-h-screen bg-[#FDFDFF] dark:bg-[#0B1120] py-4 lg:py-10 px-2 lg:px-6 transition-colors">
       <SEO 
         title={lang === "bn" ? "এইচএসসি কর্নার - কাফআহ" : "HSC Corner - Kafa'ah"} 
         image="https://study.kafaahbd.com/hsc.jpg"
         url="/hsc"
       />
 
-      <div className="w-full lg:w-[95%] mx-auto">
-        {/* Header Section */}
+      <div className="w-full lg:w-[92%] max-w-6xl mx-auto">
+        {/* Header Section - PC size reduced from 7xl to 5xl */}
         <header className="mb-8 lg:mb-12">
           <Link
             to="/"
-            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-4 lg:mb-6"
+            className="group inline-flex items-center text-[10px] font-black text-slate-400 dark:text-gray-500 hover:text-emerald-600 transition-colors mb-4 uppercase tracking-[0.2em]"
           >
-            <i className="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
+            <i className="fas fa-chevron-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
             {t("study.back")}
           </Link>
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-6 lg:pb-8">
-            <div>
-              <h1 className="text-3xl lg:text-5xl font-black text-gray-900 dark:text-white mb-2 lg:mb-3 tracking-tight">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div className="space-y-1 lg:space-y-2">
+              <h1 className="text-3xl lg:text-5xl font-black text-gray-900 dark:text-white tracking-tighter leading-tight">
                 {t("study.hsc.title")}
+                <span className="text-emerald-600">.</span>
               </h1>
-              <p className="text-base lg:text-lg text-gray-600 dark:text-gray-400 font-medium">
+              <p className="text-sm lg:text-lg text-gray-500 dark:text-gray-400 font-medium max-w-lg leading-relaxed">
                 {t("study.hsc.subtitle")}
               </p>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-black uppercase tracking-widest border border-blue-200 dark:border-blue-800">
+            
+            <div className="inline-flex items-center self-start gap-2 px-4 py-2 bg-white dark:bg-gray-800/50 shadow-sm border border-slate-200 dark:border-gray-700 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] text-slate-600 dark:text-slate-300">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               Academic 2026
             </div>
           </div>
         </header>
 
-        {/* Groups Grid */}
-        <div className="grid lg:grid-cols-2 gap-8">
+        {/* Groups Grid - Spacing adjusted for PC */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
           {groups.map((group, groupIdx) => (
             <ScrollAnimation key={groupIdx}>
-              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300 h-full flex flex-col">
+              <div className="group bg-white dark:bg-[#151C2C] rounded-[1.5rem] lg:rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-gray-800/50 overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-emerald-500/5 flex flex-col h-full">
                 
-                {/* Group Header */}
-                <div className={`bg-gradient-to-br ${group.gradient} p-6 text-white`}>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-3xl shadow-inner">
+                {/* Group Header - Balanced Padding */}
+                <div className={`bg-gradient-to-br ${group.gradient} p-5 lg:p-7 text-white relative overflow-hidden`}>
+                  <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                  
+                  <div className="flex items-center space-x-4 lg:space-x-5 relative z-10">
+                    <div className="w-12 h-12 lg:w-16 lg:h-16 bg-white/10 backdrop-blur-xl rounded-xl lg:rounded-2xl flex items-center justify-center text-2xl lg:text-3xl border border-white/20">
                       {group.icon}
                     </div>
-                    <h2 className="text-2xl font-black tracking-tight">{group.name}</h2>
+                    <h2 className="text-xl lg:text-2xl font-black tracking-tight">{group.name}</h2>
                   </div>
                 </div>
 
-                {/* Subjects List */}
-                <div className="p-3 lg:p-6 space-y-2 lg:space-y-3 flex-grow">
+                {/* Subjects List - Padding reduced for better fit */}
+                <div className="p-2 lg:p-6 space-y-1.5 lg:space-y-2 flex-grow">
                   {group.subjects.map((subject, subIdx) => (
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      className={`flex items-center justify-between p-3 lg:p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/50 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all group/sub`}
+                      className={`flex items-center justify-between p-3 lg:p-4 rounded-xl lg:rounded-2xl bg-slate-50 dark:bg-gray-800/30 border border-transparent ${group.hoverBorder} hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-300 group/sub`}
                     >
-                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors text-sm lg:text-base`}>
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${group.hoverText} transition-colors text-[14px] lg:text-base`}>
                         {subject.name}
                       </span>
-                      <div className={`w-7 h-7 lg:w-8 lg:h-8 rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm ${group.bgIcon} group-hover/sub:text-white transition-all`}>
-                        <i className="fas fa-chevron-right text-[10px]"></i>
+                      <div className={`w-7 h-7 lg:w-9 lg:h-9 rounded-lg lg:rounded-xl bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm border border-slate-100 dark:border-gray-600 ${group.bgIcon} group-hover/sub:text-white group-hover/sub:border-transparent transition-all`}>
+                        <i className="fas fa-arrow-right text-[10px] lg:text-[12px] -rotate-45 group-hover/sub:rotate-0 transition-transform"></i>
                       </div>
                     </Link>
                   ))}
@@ -159,35 +164,36 @@ const HSCCorner: React.FC = () => {
           ))}
         </div>
 
-        {/* Improved Support Box */}
+        {/* Support Box - More compact on PC */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-10 lg:mt-16 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-900 dark:to-black rounded-3xl lg:rounded-[2.5rem] p-6 lg:p-12 text-center relative overflow-hidden shadow-2xl"
+          className="mt-12 lg:mt-20 bg-[#0F172A] rounded-[2rem] lg:rounded-[3rem] p-6 lg:p-16 text-center relative overflow-hidden shadow-2xl"
         >
-          {/* Decorative background circle */}
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px]"></div>
+          <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]"></div>
           
-          <div className="relative z-10">
-            <div className="w-16 h-16 lg:w-20 lg:h-20 bg-blue-500/20 text-blue-400 rounded-2xl lg:rounded-3xl flex items-center justify-center text-2xl lg:text-3xl mx-auto mb-4 lg:mb-6 border border-blue-500/30">
-              <i className="fas fa-rocket"></i>
+          <div className="relative z-10 space-y-4 lg:space-y-6">
+            <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-b from-emerald-400 to-teal-600 text-white rounded-2xl lg:rounded-3xl flex items-center justify-center text-2xl lg:text-3xl mx-auto shadow-xl shadow-emerald-500/20">
+              <i className="fas fa-kaaba"></i>
             </div>
-            <h3 className="text-xl lg:text-3xl font-black text-white mb-3 lg:mb-4 uppercase tracking-tight">
-              {lang === "bn" ? "নতুন কন্টেন্ট আসছে!" : "New Content Coming Soon!"}
-            </h3>
-            <p className="text-sm lg:text-base text-gray-400 font-medium max-w-2xl mx-auto mb-6 lg:mb-8">
-              {lang === "bn"
-                ? "ইনশাআল্লাহ্, এইচএসসি-র প্রতিটি বিষয়ের প্রশ্নব্যাংক এবং মডেল টেস্ট দ্রুত আপডেট করা হচ্ছে। আমাদের সাথেই থাকুন।"
-                : "InshaAllah, question banks and model tests for every HSC subject are being updated rapidly. Stay tuned with us."}
-            </p>
-            <div className="flex flex-wrap justify-center gap-3 lg:gap-4">
-              <div className="px-5 lg:px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-[10px] lg:text-xs font-bold tracking-widest uppercase">
-                Free Access
-              </div>
-              <div className="px-5 lg:px-6 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full text-gray-300 text-[10px] lg:text-xs font-bold tracking-widest uppercase">
-                Interactive Tests
-              </div>
+            <div className="space-y-2">
+              <h3 className="text-2xl lg:text-4xl font-black text-white tracking-tighter">
+                {lang === "bn" ? "নতুন কন্টেন্ট আসছে ইনশাআল্লাহ্" : "New Content Coming Soon!"}
+              </h3>
+              <p className="text-sm lg:text-lg text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
+                {lang === "bn"
+                  ? "এইচএসসি-র প্রতিটি বিষয়ের সেরা প্রস্তুতি নিশ্চিত করতে আমাদের টিম কাজ করছে।"
+                  : "Our team is working to ensure the best preparation for every HSC subject."}
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 lg:gap-4 pt-4">
+               {['Free Access', 'Premium UI', 'Interactive', 'Fast Loading'].map((tag) => (
+                 <span key={tag} className="px-4 lg:px-6 py-2 lg:py-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-emerald-400 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.15em]">
+                   {tag}
+                 </span>
+               ))}
             </div>
           </div>
         </motion.div>

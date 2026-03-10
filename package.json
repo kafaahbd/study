@@ -21,7 +21,8 @@
         "react-helmet-async": "^2.0.5",
         "react-latex-next": "^3.0.0",
         "react-router-dom": "^7.13.1",
-        "terser": "^5.46.0"
+        "terser": "^5.46.0",
+        "vite-plugin-pwa": "^1.2.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.1",

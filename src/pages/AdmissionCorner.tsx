@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import ScrollAnimation from "../components/ScrollAnimation";
@@ -13,21 +14,21 @@ interface Category {
   name: string;
   icon: string;
   gradient: string;
-  accent: string;      // text color class
-  hoverBorder: string; // hover border color class
+  accent: string;
+  hoverBorder: string;
   subjects: Subject[];
 }
 
 const AdmissionCorner: React.FC = () => {
   const { t, lang } = useLanguage();
 
-  const categories: Category[] = [
+  const categories: Category[] = useMemo(() => [
     {
       name: t("study.admission.engineering"),
       icon: "⚙️",
-      gradient: "from-blue-600 to-cyan-600",
-      accent: "group-hover/sub:text-blue-600 dark:group-hover/sub:text-blue-400",
-      hoverBorder: "hover:border-blue-500/30",
+      gradient: "from-emerald-600 to-teal-700",
+      accent: "group-hover/sub:text-emerald-600 dark:group-hover/sub:text-emerald-400",
+      hoverBorder: "hover:border-emerald-500/30",
       subjects: [
         { name: t("study.admission.physics"), path: "/exam?group=admission&subject=engineering-physics" },
         { name: t("study.admission.chemistry"), path: "/exam?group=admission&subject=engineering-chemistry" },
@@ -38,9 +39,9 @@ const AdmissionCorner: React.FC = () => {
     {
       name: t("study.admission.medical"),
       icon: "🏥",
-      gradient: "from-red-500 to-rose-600",
-      accent: "group-hover/sub:text-red-600 dark:group-hover/sub:text-red-400",
-      hoverBorder: "hover:border-red-500/30",
+      gradient: "from-rose-600 to-red-700",
+      accent: "group-hover/sub:text-rose-600 dark:group-hover/sub:text-rose-400",
+      hoverBorder: "hover:border-rose-500/30",
       subjects: [
         { name: t("study.admission.physics"), path: "/exam?group=admission&subject=medical-physics" },
         { name: t("study.admission.chemistry"), path: "/exam?group=admission&subject=medical-chemistry" },
@@ -52,9 +53,9 @@ const AdmissionCorner: React.FC = () => {
     {
       name: t("study.admission.university"),
       icon: "🏛️",
-      gradient: "from-purple-600 to-fuchsia-600",
-      accent: "group-hover/sub:text-purple-600 dark:group-hover/sub:text-purple-400",
-      hoverBorder: "hover:border-purple-500/30",
+      gradient: "from-amber-600 to-orange-700",
+      accent: "group-hover/sub:text-amber-600 dark:group-hover/sub:text-amber-400",
+      hoverBorder: "hover:border-amber-500/30",
       subjects: [
         { name: t("study.admission.bangla"), path: "/exam?group=admission&subject=university-bangla" },
         { name: t("study.admission.english"), path: "/exam?group=admission&subject=university-english" },
@@ -63,88 +64,95 @@ const AdmissionCorner: React.FC = () => {
         { name: t("study.hsc.subjects.economics"), path: "/exam?group=admission&subject=university-economics" },
       ],
     },
-  ];
+  ], [t]);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-900 py-8 lg:py-12 px-3 lg:px-4 transition-colors">
+    <div className="min-h-screen bg-[#FDFCF8] dark:bg-gray-950 py-8 lg:py-12 px-4 transition-colors relative overflow-hidden">
+      {/* Decorative Islamic Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/islamic-exercise.png')]"></div>
+
       <SEO 
         title={lang === "bn" ? "এডমিশন কর্নার - কাফআহ" : "Admission Corner - Kafa'ah"} 
         image="https://study.kafaahbd.com/admis.jpg"
         url="/admission"
       />
 
-      <div className="w-full lg:w-[95%] mx-auto">
-        {/* Header Section */}
-        <header className="mb-10 lg:mb-16">
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Navigation & Header */}
+        <header className="mb-10 lg:mb-14">
           <Link
             to="/"
-            className="group inline-flex items-center text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 transition-colors mb-4 lg:mb-6"
+            className="group inline-flex items-center text-[10px] uppercase tracking-widest font-black text-gray-400 dark:text-gray-500 hover:text-emerald-600 transition-colors mb-6"
           >
-            <i className="fas fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
+            <i className="fas fa-chevron-left mr-2 group-hover:-translate-x-1 transition-transform"></i>
             {t("study.back")}
           </Link>
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 lg:gap-6 border-b border-gray-200 dark:border-gray-800 pb-6 lg:pb-10">
-            <div>
-              <h1 className="text-3xl lg:text-6xl font-black text-gray-900 dark:text-white mb-2 lg:mb-4 tracking-tight">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-gray-100 dark:border-gray-900 pb-8">
+            <div className="max-w-2xl">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/30 rounded-full mb-4"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter">Gateway to Excellence</span>
+              </motion.div>
+              <h1 className="text-4xl lg:text-6xl font-serif font-black text-gray-900 dark:text-white mb-4 tracking-tight">
                 {t("study.admission.title")}
               </h1>
-              <p className="text-base lg:text-xl text-gray-600 dark:text-gray-400 font-medium">
+              <p className="text-base lg:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
                 {t("study.admission.subtitle")}
               </p>
-            </div>
-            <div className="hidden md:flex flex-col items-end">
-              <span className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Status</span>
-              <div className="px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm flex items-center gap-2">
-                <span className="h-2 w-2 bg-amber-500 rounded-full animate-pulse"></span>
-                <span className="text-xs font-bold text-gray-700 dark:text-gray-300 tracking-tighter uppercase">Curriculum 2026 Ready</span>
-              </div>
             </div>
           </div>
         </header>
 
         {/* Categories Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {categories.map((category, idx) => (
             <ScrollAnimation key={idx}>
-              <div className="group bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-500 h-full flex flex-col">
+              <div className="group bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] h-full flex flex-col relative overflow-hidden">
                 
-                {/* Header */}
-                <div className={`bg-gradient-to-br ${category.gradient} p-6 lg:p-8 text-white relative`}>
-                  <div className="absolute top-0 right-0 p-4 lg:p-6 opacity-20 text-4xl lg:text-6xl transform group-hover:scale-110 transition-transform">
-                    {category.icon}
+                {/* Header with Geometric Touch */}
+                <div className={`bg-gradient-to-br ${category.gradient} p-8 text-white relative`}>
+                  <div className="absolute top-0 right-0 w-24 h-24 opacity-10 transform translate-x-8 -translate-y-8">
+                     <svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 0 L100 50 L50 100 L0 50 Z"/></svg>
                   </div>
                   <div className="relative z-10">
-                    <span className="text-[10px] lg:text-sm font-black uppercase tracking-[0.2em] opacity-80 mb-1 lg:mb-2 block">Admission</span>
-                    <h2 className="text-xl lg:text-2xl font-black">{category.name}</h2>
+                    <div className="text-3xl mb-3 drop-shadow-md">{category.icon}</div>
+                    <h2 className="text-2xl font-black tracking-tight">{category.name}</h2>
+                    <div className="h-1 w-8 bg-white/30 rounded-full mt-2"></div>
                   </div>
                 </div>
 
                 {/* Subjects List */}
-                <div className="p-4 lg:p-6 space-y-2 flex-grow">
+                <div className="p-5 lg:p-6 space-y-2.5 flex-grow">
                   {category.subjects.map((subject, subIdx) => (
                     <Link
                       key={subIdx}
                       to={subject.path}
-                      className={`flex items-center justify-between p-3 lg:p-4 rounded-2xl bg-slate-50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-800 border border-transparent ${category.hoverBorder} hover:shadow-md transition-all group/sub`}
+                      className={`flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 dark:bg-gray-800/20 hover:bg-white dark:hover:bg-gray-800 border border-transparent ${category.hoverBorder} hover:shadow-sm transition-all group/sub active:scale-[0.98]`}
                     >
-                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${category.accent} transition-colors text-sm lg:text-base`}>
+                      <span className={`font-bold text-gray-700 dark:text-gray-300 ${category.accent} transition-colors text-sm lg:text-[15px]`}>
                         {subject.name}
                       </span>
-                      <i className={`fas fa-chevron-right text-[10px] text-gray-300 ${category.accent}`}></i>
+                      <motion.div 
+                        initial={{ x: 0 }}
+                        whileHover={{ x: 3 }}
+                        className={`w-6 h-6 rounded-full flex items-center justify-center bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 ${category.accent}`}
+                      >
+                        <i className="fas fa-chevron-right text-[8px]"></i>
+                      </motion.div>
                     </Link>
                   ))}
                 </div>
 
                 {/* Footer Badge */}
-                <div className="px-4 lg:px-6 pb-4 lg:pb-6">
-                  <div className="bg-gray-50 dark:bg-gray-800/80 rounded-2xl p-2.5 lg:p-3 flex items-center gap-2 lg:gap-3 border border-gray-100 dark:border-gray-700">
-                    <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-xl bg-white dark:bg-gray-900 shadow-sm flex items-center justify-center">
-                      <i className={`fas fa-bolt text-[10px] lg:text-xs ${category.accent.split(' ')[0].replace('group-hover/sub:', '')}`}></i>
-                    </div>
-                    <span className="text-[9px] lg:text-[10px] font-black uppercase tracking-tighter text-gray-500 dark:text-gray-400">
-                      Tests & Sheets coming soon
-                    </span>
+                <div className="px-6 pb-6">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest border-t border-gray-50 dark:border-gray-800 pt-4">
+                    <i className="fas fa-lock text-[8px]"></i>
+                    Premium Content Loading
                   </div>
                 </div>
               </div>
@@ -152,39 +160,39 @@ const AdmissionCorner: React.FC = () => {
           ))}
         </div>
 
-        {/* Feature Highlights */}
-        <div className="mt-12 lg:mt-20 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+        {/* Feature Highlights - Slim & Modern */}
+        <div className="mt-16 lg:mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
           {[
-            { icon: "fa-calendar-check", label: lang === 'bn' ? "এডমিশন ক্যালেন্ডার" : "Calendar", color: "text-blue-500" },
-            { icon: "fa-vial", label: lang === 'bn' ? "লাইভ মডেল টেস্ট" : "Live Tests", color: "text-purple-500" },
-            { icon: "fa-chart-pie", label: lang === 'bn' ? "পারফরম্যান্স রিপোর্ট" : "Analysis", color: "text-emerald-500" },
-          ].map((feature, i) => (
-            <motion.div 
-              key={i}
-              whileHover={{ y: -5 }}
-              className="bg-white dark:bg-gray-900 p-6 lg:p-8 rounded-3xl lg:rounded-[2rem] border border-gray-100 dark:border-gray-800 flex items-center gap-4 lg:gap-6 shadow-sm"
-            >
-              <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-lg lg:text-xl ${feature.color}`}>
-                <i className={`fas ${feature.icon}`}></i>
+            { icon: "fa-calendar-alt", label: "Calendar", color: "bg-blue-50 text-blue-600 dark:bg-blue-900/20" },
+            { icon: "fa-vial", label: "Model Test", color: "bg-purple-50 text-purple-600 dark:bg-purple-900/20" },
+            { icon: "fa-file-alt", label: "Analysis", color: "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20" },
+            { icon: "fa-headset", label: "Support", color: "bg-amber-50 text-amber-600 dark:bg-amber-900/20" },
+          ].map((f, i) => (
+            <div key={i} className="flex flex-col items-center p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[2rem] text-center shadow-sm">
+              <div className={`w-12 h-12 rounded-2xl ${f.color} flex items-center justify-center mb-3`}>
+                <i className={`fas ${f.icon}`}></i>
               </div>
-              <div>
-                <h3 className="text-sm lg:text-base font-black text-gray-900 dark:text-white uppercase tracking-tighter">{feature.label}</h3>
-                <span className="text-[9px] lg:text-[10px] font-bold text-gray-400 uppercase tracking-widest italic">Upcoming</span>
-              </div>
-            </motion.div>
+              <span className="text-xs font-black text-gray-800 dark:text-white uppercase tracking-tighter">{f.label}</span>
+            </div>
           ))}
         </div>
 
-        {/* Support Note */}
-        <div className="mt-10 lg:mt-16 bg-green-50/50 dark:bg-blue-900/10 rounded-3xl lg:rounded-[2.5rem] p-6 lg:p-10 border border-green-100 dark:border-blue-900/30 text-center">
-          <div className="w-12 h-12 lg:w-16 lg:h-16 bg-white dark:bg-gray-900 rounded-2xl lg:rounded-3xl flex items-center justify-center text-xl lg:text-2xl mx-auto mb-4 lg:mb-6 shadow-sm">
-             <i className="fas fa-info-circle text-green-600 dark:text-blue-400"></i>
+        {/* Support Note - Premium Islamic Quote Style */}
+        <div className="mt-16 lg:mt-24 relative">
+          <div className="absolute inset-0 bg-emerald-600/5 dark:bg-emerald-400/5 rounded-[3rem] -rotate-1 scale-105"></div>
+          <div className="relative bg-white dark:bg-gray-900 border border-emerald-100 dark:border-emerald-900/30 rounded-[3rem] p-10 lg:p-16 text-center shadow-xl shadow-emerald-900/5">
+            <div className="w-12 h-[2px] bg-emerald-500 mx-auto mb-8"></div>
+            <p className="text-xl lg:text-3xl font-serif text-gray-800 dark:text-gray-200 leading-relaxed italic max-w-4xl mx-auto">
+               "{lang === "bn"
+                ? "ইঞ্জিনিয়ারিং, মেডিকেল ও ইউনিভার্সিটি এডমিশনের জন্য সম্পূর্ণ প্রস্তুতি খুব শীঘ্রই আসছে ইনশাআল্লাহ।"
+                : "Complete preparation for Engineering, Medical, and University Admission will be available very soon InshaAllah."}"
+            </p>
+            <div className="mt-8 flex items-center justify-center gap-2">
+               <div className="w-2 h-2 rotate-45 bg-emerald-500"></div>
+               <div className="w-2 h-2 rotate-45 bg-emerald-200 dark:bg-emerald-800"></div>
+               <div className="w-2 h-2 rotate-45 bg-emerald-500"></div>
+            </div>
           </div>
-          <p className="text-base lg:text-xl text-gray-700 dark:text-gray-300 font-medium max-w-3xl mx-auto leading-relaxed italic">
-            "{lang === "bn"
-              ? "ইঞ্জিনিয়ারিং, মেডিকেল ও ইউনিভার্সিটি এডমিশনের জন্য সম্পূর্ণ প্রস্তুতি খুব শীঘ্রই আসছে ইনশাআল্লাহ।"
-              : "Complete preparation for Engineering, Medical, and University Admission will be available very soon InshaAllah."}"
-          </p>
         </div>
       </div>
     </div>

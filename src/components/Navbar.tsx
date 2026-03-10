@@ -1,247 +1,189 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import LanguageToggle from './LanguageToggle';
 import ThemeToggle from './ThemeToggle';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, MessageSquare, Zap } from 'lucide-react';
+import { BookOpen, MessageSquare, Zap, Settings, User, LogOut, X, Menu } from 'lucide-react';
 import { getProfileColor } from '../typescriptfile/utils';
 
 const Navbar: React.FC = () => {
   const { t } = useLanguage();
   const location = useLocation();
   const { user, confirmLogout } = useAuth();
-  const [navHidden, setNavHidden] = useState(false);
-
-  useEffect(() => {
-    // Only auto-hide on mobile
-    if (window.innerWidth >= 768) {
-        setNavHidden(false);
-        return;
-    }
-    const autoHidePaths = ['/exam', '/post/', '/mistakes', '/practice', '/result', '/create-post'];
-    const shouldHide = autoHidePaths.some(path => location.pathname.includes(path));
-    setNavHidden(shouldHide);
-  }, [location.pathname]);
-
-  const isExamOrMistake = location.pathname.includes('/exam') || location.pathname.includes('/mistakes');
+  const [showSettings, setShowSettings] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
-  const navLinks = [
-    { path: '/', icon: BookOpen, label: t('nav.study'), color: 'green' },
-    { path: '/forum', icon: MessageSquare, label: t('nav.forum'), color: 'blue' },
-    { path: '/mistakes', icon: Zap, label: t('nav.mistakes'), color: 'purple' },
-  ];
+  const navLinks = useMemo(() => [
+    { path: '/', icon: BookOpen, label: t('nav.study'), color: 'emerald' },
+    { path: '/forum', icon: MessageSquare, label: t('nav.forum'), color: 'amber' },
+    { path: '/mistakes', icon: Zap, label: t('nav.mistakes'), color: 'rose' },
+  ], [t]);
 
-  const activeColors: Record<string, { bg: string; icon: string; label: string; dot: string }> = {
-    green:  { bg: 'bg-emerald-50 dark:bg-emerald-950/40',  icon: 'text-emerald-600 dark:text-emerald-400', label: 'text-emerald-700 dark:text-emerald-300', dot: 'bg-emerald-500' },
-    blue:   { bg: 'bg-blue-50 dark:bg-blue-950/40',        icon: 'text-blue-600 dark:text-blue-400',       label: 'text-blue-700 dark:text-blue-300',       dot: 'bg-blue-500'    },
-    purple: { bg: 'bg-violet-50 dark:bg-violet-950/40',    icon: 'text-violet-600 dark:text-violet-400',   label: 'text-violet-700 dark:text-violet-300',   dot: 'bg-violet-500'  },
+  const activeColors: Record<string, { bg: string; icon: string; label: string }> = {
+    emerald: { bg: 'bg-emerald-50 dark:bg-emerald-500/10', icon: 'text-emerald-600 dark:text-emerald-400', label: 'text-emerald-700 dark:text-emerald-300' },
+    amber:   { bg: 'bg-amber-50 dark:bg-amber-500/10',   icon: 'text-amber-600 dark:text-amber-400',   label: 'text-amber-700 dark:text-amber-300' },
+    rose:    { bg: 'bg-rose-50 dark:bg-rose-500/10',     icon: 'text-rose-600 dark:text-rose-400',     label: 'text-rose-700 dark:text-rose-300' },
   };
-
-  const desktopLinkClass = (path: string) => `
-    flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300
-    ${isActive(path)
-      ? 'bg-green-100 text-green-700 dark:bg-blue-900/40 dark:text-blue-400 shadow-sm'
-      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'}
-  `;
-
-  const isExamPage = location.pathname.includes('/exam');
 
   return (
     <>
-      {/* ── TOP HEADER ── */}
-      {!isExamPage && (
-        <nav className="fixed top-0 w-full z-[100] backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200/50 dark:border-gray-800/40 shadow-[0_1px_12px_rgba(0,0,0,0.05)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16 md:h-20">
-
-            <div className="flex items-center gap-5 md:gap-8">
-              <Link to="/" className="flex-shrink-0 group">
+      {/* ── UNIFIED NAVBAR (Mobile & Desktop) ── */}
+      <nav className="fixed top-0 w-full z-[100] backdrop-blur-md bg-white/80 dark:bg-gray-950/80 border-b border-gray-100 dark:border-gray-900 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex justify-between items-center h-16 md:h-20">
+            
+            {/* 1. Left: Logo & Links */}
+            <div className="flex items-center gap-4 md:gap-8">
+              <Link to="/" className="flex-shrink-0">
                 <img
                   src="https://raw.githubusercontent.com/kafaahbd/kafaah/refs/heads/main/pics/kafaah.png"
-                  alt="Kafa'ah"
-                  className="h-10 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105"
+                  alt="Logo"
+                  className="h-9 md:h-11 w-auto"
                 />
               </Link>
-              <div className="hidden md:flex items-center gap-1">
-                {navLinks.map(({ path, icon: Icon, label }) => (
-                  <Link key={path} to={path} className={desktopLinkClass(path)}>
-                    <Icon size={18} />
-                    <span>{label}</span>
-                  </Link>
-                ))}
+
+              {/* Mobile & Desktop Integrated Links */}
+              <div className="flex items-center gap-1 md:gap-2">
+                {navLinks.map(({ path, icon: Icon, label, color }) => {
+                  const active = isActive(path);
+                  return (
+                    <Link 
+                      key={path} 
+                      to={path} 
+                      className={`flex items-center gap-1.5 px-3 md:px-4 py-1.5 md:py-2 rounded-xl transition-all ${
+                        active 
+                        ? activeColors[color].bg + ' ' + activeColors[color].icon 
+                        : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-900'
+                      }`}
+                    >
+                      <Icon size={18} strokeWidth={active ? 2.5 : 2} />
+                      <span className={`text-xs md:text-sm font-bold ${active ? 'block' : 'hidden md:block'}`}>
+                        {label}
+                      </span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
-            <div className="flex items-center gap-2 md:gap-6">
-              <div className="flex items-center bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-2xl border border-gray-200/50 dark:border-gray-700/50">
+            {/* 2. Right: User Profile & Settings Toggle */}
+            <div className="flex items-center gap-2">
+              {/* Desktop Only Toggles */}
+              <div className="hidden md:flex items-center bg-gray-100 dark:bg-gray-900 p-1 rounded-xl mr-2">
                 <LanguageToggle />
-                <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1" />
                 <ThemeToggle />
               </div>
 
-              {user ? (
-                <div className="flex items-center gap-3 md:gap-4">
-                  <Link to="/profile" className="flex items-center gap-3 group">
-                    <span className="hidden lg:block text-right">
-                      <p className="text-sm font-black text-gray-800 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
-                        {user.name}
-                      </p>
-                    </span>
-                    <div className={`relative h-9 w-9 md:h-10 md:w-10 rounded-xl bg-gradient-to-tr ${user.profile_color || getProfileColor(user.name)} flex items-center justify-center text-white font-black shadow-lg shadow-green-200 dark:shadow-none transition-all group-hover:scale-110 group-hover:rotate-3 border-2 border-white dark:border-gray-800`}>
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
-                  </Link>
-                  <button
-                    onClick={confirmLogout}
-                    className="flex items-center justify-center h-9 w-9 md:h-10 md:w-auto md:px-5 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 rounded-xl font-bold text-sm hover:bg-red-600 hover:text-white dark:hover:bg-red-500 transition-all active:scale-95"
-                    title={t('nav.logout')}
-                  >
-                    <i className="fas fa-sign-out-alt md:mr-2" />
-                    <span className="hidden md:inline">{t('nav.logout')}</span>
-                  </button>
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="px-5 py-2.5 bg-green-600 dark:bg-blue-600 text-white font-black text-sm rounded-xl shadow-lg shadow-green-200 dark:shadow-none active:scale-95 transition-all hover:bg-green-700 flex items-center"
-                >
-                  <i className="fas fa-user-circle mr-2 text-lg" />
-                  {t('nav.login')}
-                </Link>
-              )}
+              {/* Profile/Settings Icon for Mobile (Drawer Trigger) */}
+              <button 
+                onClick={() => setShowSettings(true)}
+                className="flex items-center gap-2 p-1 md:p-1.5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200/50 dark:border-gray-800 active:scale-90 transition-all"
+              >
+                {user ? (
+                  <div className={`h-8 w-8 rounded-lg bg-gradient-to-tr ${user.profile_color || getProfileColor(user.name)} flex items-center justify-center text-white text-xs font-black shadow-sm`}>
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                ) : (
+                  <div className="h-8 w-8 flex items-center justify-center text-gray-500">
+                    <User size={20} />
+                  </div>
+                )}
+                <Settings size={18} className="text-gray-400 mr-1 hidden md:block" />
+                <Menu size={20} className="text-gray-500 md:hidden mr-1" />
+              </button>
             </div>
           </div>
         </div>
       </nav>
-      )}
 
-      {/* Exact spacer — no extra white space */}
-      {!isExamPage && <div className="h-16 md:h-20" />}
+      {/* Spacer to avoid content overlap */}
+      <div className="h-16 md:h-20" />
 
-      {/* ── MOBILE BOTTOM NAV ── */}
+      {/* ── SETTINGS DRAWER (Mobile) ── */}
       <AnimatePresence>
-        <motion.div
-          key="bottom-nav"
-          initial={{ x: 0 }}
-          animate={{ x: navHidden ? '-100%' : 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="md:hidden fixed bottom-0 left-0 right-0 z-[100] flex"
-          style={{ padding: '0 12px calc(12px + env(safe-area-inset-bottom, 0px))' }}
-        >
-          <div className="flex-1">
-            <div
-              className="relative flex items-center justify-around px-2 py-1.5 rounded-[24px] bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 shadow-lg dark:shadow-[0_-1px_0_rgba(0,0,0,0.3),0_8px_32px_rgba(0,0,0,0.4)]"
+        {showSettings && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setShowSettings(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[110]" 
+            />
+            <motion.div 
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-full w-[80%] max-w-[320px] bg-white dark:bg-gray-950 z-[120] shadow-2xl p-6 border-l border-gray-100 dark:border-gray-900"
             >
-              <NavItems navLinks={navLinks} isActive={isActive} activeColors={activeColors} setNavHidden={setNavHidden} />
-            </div>
-          </div>
-        </motion.div>
+              <div className="flex justify-between items-center mb-10">
+                <h3 className="text-xl font-black text-gray-900 dark:text-white">Settings</h3>
+                <button onClick={() => setShowSettings(false)} className="p-2 bg-gray-100 dark:bg-gray-900 rounded-full text-gray-500 hover:rotate-90 transition-transform">
+                  <X size={20}/>
+                </button>
+              </div>
 
-        {navHidden && !isExamOrMistake && (
-          <motion.button
-            key="peek-btn"
-            initial={{ x: -50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -50, opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            onClick={() => setNavHidden(false)}
-            className="md:hidden fixed bottom-4 left-0 z-[110] h-12 w-10 rounded-r-2xl flex items-center justify-center bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-l-0 border-gray-200/50 dark:border-white/10 shadow-lg"
-            aria-label="Show navigation"
-          >
-            <i className="fas fa-chevron-right text-gray-400 text-lg" />
-          </motion.button>
+              <div className="space-y-6">
+                {/* User Section */}
+                {user ? (
+                   <div className="p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-100 dark:border-emerald-900/50">
+                     <div className="flex items-center gap-3 mb-3">
+                        <div className={`h-10 w-10 rounded-xl bg-gradient-to-tr ${user.profile_color || getProfileColor(user.name)} flex items-center justify-center text-white font-bold`}>
+                            {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-900 dark:text-white leading-tight">{user.name}</p>
+                          <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Active Student</p>
+                        </div>
+                     </div>
+                     <Link to="/profile" onClick={() => setShowSettings(false)} className="block w-full text-center py-2 bg-white dark:bg-gray-900 rounded-lg text-xs font-black text-emerald-600 shadow-sm">
+                       View Profile
+                     </Link>
+                   </div>
+                ) : (
+                  <Link to="/login" onClick={() => setShowSettings(false)} className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl font-bold text-gray-700 dark:text-gray-300">
+                    <User size={20} /> Login / Register
+                  </Link>
+                )}
+
+                {/* Preference Section */}
+                <div className="space-y-3">
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Preferences</p>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
+                      <span className="text-sm font-bold text-gray-600 dark:text-gray-400">Language</span>
+                      <LanguageToggle />
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-xl">
+                      <span className="text-sm font-bold text-gray-600 dark:text-gray-400">Dark Mode</span>
+                      <ThemeToggle />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Logout */}
+                {user && (
+                  <div className="pt-6 border-t border-gray-100 dark:border-gray-800">
+                    <button 
+                      onClick={() => { setShowSettings(false); confirmLogout(); }}
+                      className="w-full flex items-center gap-3 p-4 text-rose-500 font-bold hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-2xl transition-all"
+                    >
+                      <LogOut size={20} /> Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+              
+              {/* Bottom Decoration */}
+              <div className="absolute bottom-8 left-0 right-0 text-center opacity-10">
+                 <p className="text-[10px] font-black tracking-[0.3em]">KAFA'AH STUDY</p>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
   );
 };
-
-// Extracted nav items to avoid duplication between light/dark containers
-const NavItems = ({
-  navLinks,
-  isActive,
-  activeColors,
-  setNavHidden
-}: {
-  navLinks: { path: string; icon: React.ElementType; label: string; color: string }[];
-  isActive: (p: string) => boolean;
-  activeColors: Record<string, { bg: string; icon: string; label: string; dot: string }>;
-  setNavHidden: (hidden: boolean) => void;
-}) => (
-  <>
-    {navLinks.map(({ path, icon: Icon, label, color }) => {
-      const active = isActive(path);
-      const c = activeColors[color];
-      return (
-        <Link
-          key={path}
-          to={path}
-          className="relative flex-1 flex flex-col items-center gap-[1px] py-2 rounded-[20px] select-none"
-          style={{ WebkitTapHighlightColor: 'transparent' }}
-        >
-          <AnimatePresence>
-            {active && (
-              <motion.div
-                layoutId={`nav-bg-${color}`}
-                className={`absolute inset-0 rounded-[20px] ${c.bg}`}
-                initial={{ opacity: 0, scale: 0.82 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.82 }}
-                transition={{ type: 'spring', damping: 30, stiffness: 350, mass: 0.8 }}
-              />
-            )}
-          </AnimatePresence>
-
-          <motion.div
-            className="relative z-10"
-            animate={active ? { scale: 1.15, y: -1 } : { scale: 1, y: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 400, mass: 0.6 }}
-          >
-            <Icon
-              size={20}
-              strokeWidth={active ? 2.5 : 1.8}
-              className={`transition-colors duration-200 ${active ? c.icon : 'text-gray-400 dark:text-gray-500'}`}
-            />
-          </motion.div>
-
-          <motion.span
-            className={`relative z-10 text-[9px] font-black uppercase tracking-[0.06em] transition-colors duration-200 ${active ? c.label : 'text-gray-400 dark:text-gray-500'}`}
-            animate={{ opacity: active ? 1 : 0.7 }}
-            transition={{ duration: 0.2 }}
-          >
-            {label}
-          </motion.span>
-
-          <AnimatePresence>
-            {active && (
-              <motion.span
-                layoutId="nav-dot"
-                className={`absolute bottom-1 w-[4px] h-[4px] rounded-full ${c.dot}`}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0 }}
-                transition={{ type: 'spring', damping: 20, stiffness: 400, mass: 0.5 }}
-              />
-            )}
-          </AnimatePresence>
-        </Link>
-      );
-    })}
-
-    {/* Hide Arrow Button (1/4 width) */}
-    <div className="w-px h-7 bg-gray-700/60 mx-0.5 rounded-full flex-shrink-0" />
-    <button
-      onClick={() => setNavHidden(true)}
-      className="relative flex flex-col items-center justify-center py-2 rounded-[20px] select-none w-1/4 max-w-[40px]"
-      style={{ WebkitTapHighlightColor: 'transparent' }}
-    >
-      <i className="fas fa-chevron-left text-gray-400 text-lg" />
-    </button>
-  </>
-);
 
 export default Navbar;
