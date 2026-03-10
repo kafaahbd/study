@@ -1,130 +1,218 @@
 <!doctype html>
 <html lang="en" prefix="og: http://ogp.me/ns#">
-  <head>
-    <meta charset="UTF-8" />
-    <!-- Start Single Page Apps for GitHub Pages -->
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // https://github.com/rafrex/spa-github-pages
-      // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
-      // ----------------------------------------------------------------------
-      // This script checks to see if a redirect is present in the query string
-      // and converts it back into a single page app route before rendering the
-      // content of the page. When our custom 404.html page encounters a route
-      // it doesn't recognize, it redirects the browser to the index.html page
-      // with the script we have below, and then this script converts it back
-      // into the correct route.
-      (function(l) {
-        if (l.search) {
-          var q = {};
-          l.search.slice(1).split('&').forEach(function(v) {
-            var a = v.split('=');
-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-          });
-          if (q.p !== undefined) {
-            window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + (q.p || '') +
-              (q.q ? ('?' + q.q) : '') +
-              l.hash
-            );
-          }
-        }
-      }(window.location));
-    </script>
-    <!-- End Single Page Apps for GitHub Pages -->
-    <link rel="icon" type="image/png" sizes="32x32" href="https://study.kafaahbd.com/favicon.png">
-    <link rel="apple-touch-icon" href="https://study.kafaahbd.com/apple-touch-icon.png">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO মেটা ট্যাগ -->
-    <title>Kafa'ah Study Corner | SSC, HSC & Admission Preparation Bangladesh</title>
-    <meta
-      name="description"
-      content="Kafa'ah Study Corner – বাংলাদেশের শিক্ষার্থীদের জন্য সেরা অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। SSC, HSC, মেডিকেল ও ইঞ্জিনিয়ারিং এডমিশন প্রস্তুতির জন্য অধ্যায়ভিত্তিক পরীক্ষা, তাৎক্ষণিক ফলাফল ও ব্যাখ্যা। Kafa'ah Bangladesh এর একটি বিশেষ উদ্যোগ ইনশাআল্লাহ।"
-    />
-    <meta
-      name="keywords"
-      content="Kafa'ah Study Corner, Kafa'ah Bangladesh, Kafaah Study, SSC preparation, HSC preparation, medical admission, engineering admission, model test, online exam, free model test, study corner, kafaah, study.kafaahbd.com, কাকাআহ স্টাডি কর্নার, কাকাআহ বাংলাদেশ"
-    />
-    <meta name="author" content="Kafa'ah Islamic and Multiproject Company" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://study.kafaahbd.com" />
+	<head>
+		<meta charset="UTF-8" />
+		<!-- Start Single Page Apps for GitHub Pages -->
+		<script type="text/javascript">
+			// Single Page Apps for GitHub Pages
+			// https://github.com/rafrex/spa-github-pages
+			// Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+			// ----------------------------------------------------------------------
+			// This script checks to see if a redirect is present in the query string
+			// and converts it back into a single page app route before rendering the
+			// content of the page. When our custom 404.html page encounters a route
+			// it doesn't recognize, it redirects the browser to the index.html page
+			// with the script we have below, and then this script converts it back
+			// into the correct route.
+			(function (l) {
+				if (l.search) {
+					var q = {};
+					l.search
+						.slice(1)
+						.split("&")
+						.forEach(function (v) {
+							var a = v.split("=");
+							q[a[0]] = a.slice(1).join("=").replace(/~and~/g, "&");
+						});
+					if (q.p !== undefined) {
+						window.history.replaceState(
+							null,
+							null,
+							l.pathname.slice(0, -1) +
+								(q.p || "") +
+								(q.q ? "?" + q.q : "") +
+								l.hash,
+						);
+					}
+				}
+			})(window.location);
+		</script>
+		<!-- End Single Page Apps for GitHub Pages -->
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="16x16"
+			href="https://study.kafaahbd.com/favicon-16.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="https://study.kafaahbd.com/favicon-32.png"
+		/>
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="48x48"
+			href="https://study.kafaahbd.com/favicon-48.png"
+		/>
+		<link
+			rel="apple-touch-icon"
+			href="https://study.kafaahbd.com/apple-touch-icon.png"
+		/>
+		<meta name="theme-color" content="#0f172a" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Open Graph মেটা ট্যাগ (Facebook, Messenger, LinkedIn, WhatsApp) -->
-    <meta property="og:site_name" content="Kafa'ah Study Corner" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://study.kafaahbd.com" />
-    <meta
-      property="og:title"
-      content="Kafa'ah Study Corner | SSC, HSC & Admission Preparation Bangladesh"
-    />
-    <meta
-      property="og:description"
-      content="SSC, HSC ও এডমিশন প্রস্তুতির জন্য ফ্রি অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। Kafa'ah Bangladesh এর একটি উদ্যোগ ইনশাআল্লাহ।"
-    />
-    <meta
-      property="og:image"
-      content="https://study.kafaahbd.com/stufy.jpg"
-    />
-    <meta property="og:image:secure_url" content="https://study.kafaahbd.com/stufy.jpg" />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Kafa'ah Study Corner Preview" />
-    <meta property="og:locale" content="bn_BD" />
-    
-    <!-- Facebook App ID (Optional, but helps with tracking/insights) -->
-    <!-- <meta property="fb:app_id" content="YOUR_APP_ID" /> -->
+		<!-- SEO মেটা ট্যাগ -->
+		<title>
+			Kafa'ah Study Corner | SSC, HSC & Admission Preparation Bangladesh
+		</title>
+		<meta
+			name="description"
+			content="Kafa'ah Study Corner – বাংলাদেশের শিক্ষার্থীদের জন্য সেরা অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। SSC, HSC, মেডিকেল ও ইঞ্জিনিয়ারিং এডমিশন প্রস্তুতির জন্য অধ্যায়ভিত্তিক পরীক্ষা, তাৎক্ষণিক ফলাফল ও ব্যাখ্যা। Kafa'ah Bangladesh এর একটি বিশেষ উদ্যোগ ইনশাআল্লাহ।"
+		/>
+		<meta
+			name="keywords"
+			content="Kafa'ah Study Corner, Kafa'ah Bangladesh, Kafaah Study, SSC preparation, HSC preparation, medical admission, engineering admission, model test, online exam, free model test, study corner, kafaah, study.kafaahbd.com, কাকাআহ স্টাডি কর্নার, কাকাআহ বাংলাদেশ"
+		/>
+		<meta name="author" content="Kafa'ah Islamic and Multiproject Company" />
+		<meta name="robots" content="index, follow" />
+		<link rel="canonical" href="https://study.kafaahbd.com" />
 
-    <!-- Twitter Card মেটা ট্যাগ -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Kafa'ah Study Corner | SSC, HSC & Admission Preparation Bangladesh"
-    />
-    <meta
-      name="twitter:description"
-      content="অধ্যায়ভিত্তিক মডেল টেস্ট ও পরীক্ষার প্রস্তুতি। সম্পূর্ণ ফ্রি ইনশাআল্লাহ।"
-    />
-    <meta
-      name="twitter:image"
-      content="https://study.kafaahbd.com/stufy.jpg"
-    />
-    <meta name="twitter:site" content="@kafaahbd" />
+		<!-- Open Graph মেটা ট্যাগ (Facebook, Messenger, LinkedIn, WhatsApp) -->
+		<meta property="og:site_name" content="Kafa'ah Study Corner" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://study.kafaahbd.com" />
+		<meta
+			property="og:title"
+			content="Kafa'ah Study Corner | SSC, HSC & Admission Preparation Bangladesh"
+		/>
+		<meta
+			property="og:description"
+			content="SSC, HSC ও এডমিশন প্রস্তুতির জন্য ফ্রি অনলাইন মডেল টেস্ট প্ল্যাটফর্ম। Kafa'ah Bangladesh এর একটি উদ্যোগ ইনশাআল্লাহ।"
+		/>
+		<meta property="og:image" content="https://study.kafaahbd.com/stufy.jpg" />
+		<meta
+			property="og:image:secure_url"
+			content="https://study.kafaahbd.com/stufy.jpg"
+		/>
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Kafa'ah Study Corner Preview" />
+		<meta property="og:locale" content="bn_BD" />
 
-    <!-- Fonts & Icons -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    />
+		<!-- Facebook App ID (Optional, but helps with tracking/insights) -->
+		<!-- <meta property="fb:app_id" content="YOUR_APP_ID" /> -->
 
-    <!-- JSON-LD (Structured Data) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Kafa'ah Study Corner",
-        "url": "https://study.kafaahbd.com",
-        "description": "অধ্যায়ভিত্তিক মডেল টেস্ট ও পরীক্ষার প্রস্তুতি। SSC, HSC ও এডমিশন পরীক্ষার্থীদের জন্য সম্পূর্ণ ফ্রি ইনশাআল্লাহ।"
-      }
-    </script>
-    <script type="module" crossorigin src="/assets/index.D47paEUY.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/react-core.BL0Qr3z4.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor.BPDsB-9E.js">
-    <link rel="modulepreload" crossorigin href="/assets/animations.ChQE5NjC.js">
-    <link rel="modulepreload" crossorigin href="/assets/math-render.D5s5U8Te.js">
-    <link rel="modulepreload" crossorigin href="/assets/network.B5K7MVzt.js">
-    <link rel="modulepreload" crossorigin href="/assets/app-common.Cc35NS_M.js">
-    <link rel="modulepreload" crossorigin href="/assets/app-pages.BgG-6jWg.js">
-    <link rel="stylesheet" crossorigin href="/assets/math-render.CR9lwNx5.css">
-    <link rel="stylesheet" crossorigin href="/assets/index.CwK4jvhe.css">
-  <link rel="manifest" href="/manifest.webmanifest"></head>
-  <body>
-    <div id="root"></div>
-  </body>
+		<!-- Twitter Card মেটা ট্যাগ -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta
+			name="twitter:title"
+			content="Kafa'ah Study Corner | SSC, HSC & Admission Preparation Bangladesh"
+		/>
+		<meta
+			name="twitter:description"
+			content="অধ্যায়ভিত্তিক মডেল টেস্ট ও পরীক্ষার প্রস্তুতি। সম্পূর্ণ ফ্রি ইনশাআল্লাহ।"
+		/>
+		<meta name="twitter:image" content="https://study.kafaahbd.com/stufy.jpg" />
+		<meta name="twitter:site" content="@kafaahbd" />
+
+		<!-- Fonts & Icons -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+		/>
+
+		<!-- JSON-LD (Structured Data) -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Organization",
+				"name": "Kafa'ah Islamic and Multiproject Company",
+				"url": "https://study.kafaahbd.com/",
+				"logo": "https://study.kafaahbd.com/apple-touch-icon.png",
+				"image": "https://study.kafaahbd.com/stufy.jpg",
+				"sameAs": [
+					"https://www.facebook.com/kafaahbd",
+					"https://wa.me/8801837103985"
+				],
+				"description": "প্রযুক্তির মাধ্যমে উম্মাহর সেবায়। ইসলামিক অ্যাপ, এডুকেশন প্ল্যাটফর্ম, এসএসসি/এইচএসসি/এডমিশন পরীক্ষার ব্যবস্থা।"
+			}
+		</script>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				"name": "Kafaah Study Corner",
+				"url": "https://study.kafaahbd.com",
+				"potentialAction": {
+					"@type": "SearchAction",
+					"target": "https://study.kafaahbd.com/search?q={search_term_string}",
+					"query-input": "required name=search_term_string"
+				}
+			}
+		</script>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "BreadcrumbList",
+				"itemListElement": [
+					{
+						"@type": "ListItem",
+						"position": 1,
+						"name": "Home",
+						"item": "https://study.kafaahbd.com"
+					},
+					{
+						"@type": "ListItem",
+						"position": 2,
+						"name": "Login",
+						"item": "https://study.kafaahbd.com/login"
+					},
+					{
+						"@type": "ListItem",
+						"position": 3,
+						"name": "Forum",
+						"item": "https://study.kafaahbd.com/forum"
+					},
+					{
+						"@type": "ListItem",
+						"position": 4,
+						"name": "SSC Corner",
+						"item": "https://study.kafaahbd.com/ssc"
+					},
+					{
+						"@type": "ListItem",
+						"position": 5,
+						"name": "HSC Corner",
+						"item": "https://study.kafaahbd.com/hsc"
+					},
+					{
+						"@type": "ListItem",
+						"position": 6,
+						"name": "Admission Corner",
+						"item": "https://study.kafaahbd.com/admission"
+					}
+				]
+			}
+		</script>
+		<script type="module" crossorigin src="/assets/index.D47paEUY.js"></script>
+		<link rel="modulepreload" crossorigin href="/assets/react-core.BL0Qr3z4.js">
+		<link rel="modulepreload" crossorigin href="/assets/vendor.BPDsB-9E.js">
+		<link rel="modulepreload" crossorigin href="/assets/animations.ChQE5NjC.js">
+		<link rel="modulepreload" crossorigin href="/assets/math-render.D5s5U8Te.js">
+		<link rel="modulepreload" crossorigin href="/assets/network.B5K7MVzt.js">
+		<link rel="modulepreload" crossorigin href="/assets/app-common.Cc35NS_M.js">
+		<link rel="modulepreload" crossorigin href="/assets/app-pages.BgG-6jWg.js">
+		<link rel="stylesheet" crossorigin href="/assets/math-render.CR9lwNx5.css">
+		<link rel="stylesheet" crossorigin href="/assets/index.CwK4jvhe.css">
+	<link rel="manifest" href="/manifest.webmanifest"></head>
+	<body>
+		<div id="root"></div>
+	</body>
 </html>
