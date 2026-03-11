@@ -26,47 +26,10 @@ export const content: Record<string, Record<string, string>> = {
 		"footer.copyright.bn":
 			"© ২০২৫ Kafa’ah Islamic and Multiproject Company. সর্বস্বত্ব সংরক্ষিত। এই ওয়েবসাইট এবং এর সমস্ত কন্টেন্ট Kafa’ah Islamic and Multiproject Company (kafaah.com) এর একচেটিয়া সম্পত্তি। এই কন্টেন্টের কোনো অংশ অনুমতি ছাড়া — কপি, শেয়ার, সংরক্ষণ, বিতরণ, পুনঃপ্রকাশ বা কোনোভাবে ব্যবহৃত করা যাবে না। অননুমোদিত ব্যবহার আন্তর্জাতিক কপিরাইট আইনের অধীনে আইনগত ব্যবস্থা গ্রহণের কারণ হতে পারে",
 
-		// Home
-		"home.hero.tagline": "Technology for Ummah – In Sha Allah",
-		"home.slogan": "Remember that Exception is an example!",
-		"home.mission.title": "Our Mission",
-		"home.mission.text":
-			"To spread Islamic knowledge globally, make education easy and modern through technology, and create safe, authentic digital platforms for the Muslim Ummah.",
-		"home.vision.title": "Our Vision",
-		"home.vision.text":
-			"To build world-class Islamic and educational digital platforms, ensure modern tech solutions for the Muslim Ummah at an international level, and deliver accurate, safe Islamic information to every person in the world.",
-		"home.services.title": "Our Services",
-		"home.services.software": "Software",
-		"home.services.islamicapps": "Islamic Apps",
-		"home.services.learning": "Learning Platforms",
-		"home.services.saas": "SaaS",
-		"home.services.ecommerce": "E-commerce",
-		"home.why.title": "Why Choose Kafa’ah?",
-		"home.why.authentic": "100% Authentic Islamic Content",
-		"home.why.quality": "High Quality, Modern & Secure Development",
-		"home.why.performance": "Fast Performance & Clean UI",
-		"home.why.ethical": "Islamic Ethical Standards",
-		"home.why.affordable": "Affordable & User-Friendly Solutions",
-		"home.why.dedicated": "Skilled & Dedicated Team",
-		"home.cta.title": "Join Us in Building the Future",
-		"home.cta.button": "Join Us Today",
-		"home.ayat.title.en": "Today's Ayat",
-		"home.ayat.button.en": "Next Ayat",
-		"home.ayat.loading.en": "Loading Ayat...",
-		"home.ayat.error.en": "Failed to load ayat",
-		// Projects
-		"projects.quran.title": "Quran Learning App & Web",
-		"projects.quran.progress": "0%",
-		"projects.quran.desc":
-			"Kafa’ah Quran Learning App and WebApp will be created in joint collaboration with Kafa’ah and Doyosoft. It will guide users from the very basics of Quran learning. Starting from Arabic letters and pronunciation, it will gradually teach Hadiths, Surahs, and their verses. With interactive lessons and audio recitations, users will be able to learn at their own pace. Users will be able to test their knowledge through quizzes and tests. By typing on the keyboard or practicing pronunciation aloud, the app will instantly indicate whether the pronunciation is correct. Additionally, users will be able to learn the Arabic language through the app and WebApp. InshaAllah, it will help learners of all levels strengthen their connection with the Quran, Hadiths, and Arabic anytime, anywhere.",
-		"projects.english.title": "English Learning App & Web",
-		"projects.english.progress": "0%",
-		"projects.english.desc":
-			"Kafa’ah English Learning App and WebApp will be created in joint collaboration with Kafa’ah and Doyosoft. It will guide users from the very basics of English learning. From Basic to Advanced levels, users will be able to learn reading, writing, pronunciation, conversation, grammar, vocabulary, and, following Bangladeshi education standards, parts of speech, gap filling, narration, connectors, tenses, idioms, phrases, writing skills, reading comprehension, listening exercises, speaking fluency, and much more in an easy way. Through interactive lessons, audio, and video resources, users will be able to learn at their own pace. Users will be able to test their knowledge through quizzes, tests, and progress tracking. Additionally, speaking and listening practice will allow the app to instantly indicate whether the pronunciation is correct. InshaAllah, it will help learners of all levels improve their English skills.",
-		"projects.study.title": "Study Corner",
-		"projects.study.desc":
-			"Study Corner is a smart learning section of Kafa’ah where students will find everything for SSC, HSC and Admission preparation in one place. Here you can take completely free online exams in any subject — in both Bangla and English InShaAllah.\n Features:\n ✅ SSC, HSC & University Admission Corner\n ✅ Bangla & English versions \n✅ Mostly MCQ-based smart exams\n ✅ Automatic time limit per question \n✅ Instant result & performance feedback\n ✅ Practice mode + real exam mode \n✅ 100% Free (No payment required)\n\n Our goal is to build a platform InShaAllah where students from villages to cities get equal opportunities.\n Practice more, stress less. Learn smart with Kafa’ah Study Corner.",
-		"projects.more": "More coming soon InShaAllah...",
+		
+		//head
+
+		"head.study":"Kafa'ah Study Corner",
 
 		// Study
 		"study.quran": "Quran Courses (coming soon)",
@@ -261,48 +224,10 @@ export const content: Record<string, Record<string, string>> = {
 		"footer.joining": "যোগদানের শর্তাবলী",
 		"footer.terms": "ব্যবহারের শর্তাবলী",
 
-		// Home
-		"home.hero.tagline": "প্রযুক্তি উম্মাহর জন্য – ইন শা আল্লাহ",
-		"home.mission.title": "আমাদের লক্ষ্য",
-		"home.slogan": "মনে রাখবেন যে ব্যতিক্রম একটি উদাহরণ!",
-		"home.mission.text":
-			"ইসলামিক জ্ঞান বিশ্বব্যাপী ছড়িয়ে দেওয়া, শিক্ষাকে প্রযুক্তির মাধ্যমে সহজ ও আধুনিক করে তোলা, এবং মুসলিম উম্মাহর জন্য নিরাপদ, মানসম্মত ও authentic ডিজিটাল প্ল্যাটফর্ম তৈরি করা।",
-		"home.vision.title": "আমাদের দৃষ্টিভঙ্গি",
-		"home.vision.text":
-			"বিশ্বমানের ইসলামিক ও এডুকেশনাল ডিজিটাল প্ল্যাটফর্ম তৈরি করা, মুসলিম উম্মাহর জন্য আন্তর্জাতিক পর্যায়ে আধুনিক টেক সলিউশন নিশ্চিত করা, এবং পৃথিবীর প্রতিটি মানুষের কাছে সহজ, নির্ভুল ও নিরাপদ ইসলামিক তথ্য পৌঁছে দেওয়া।",
-		"home.services.title": "আমাদের সেবাসমূহ",
-		"home.services.software": "সফটওয়্যার",
-		"home.services.islamicapps": "ইসলামিক অ্যাপ",
-		"home.services.learning": "লার্নিং প্ল্যাটফর্ম",
-		"home.services.saas": "SaaS",
-		"home.services.ecommerce": "ই-কমার্স",
-		"home.why.title": "কেন কাফআহ বেছে নেবেন?",
-		"home.why.authentic": "১০০% প্রমাণিত ইসলামিক কন্টেন্ট",
-		"home.why.quality": "উচ্চ মানের, আধুনিক ও নিরাপদ ডেভেলপমেন্ট",
-		"home.why.performance": "দ্রুত পারফরম্যান্স ও ক্লিন UI",
-		"home.why.ethical": "ইসলামিক নৈতিক মানদণ্ড",
-		"home.why.affordable": "সাশ্রয়ী ও ব্যবহারকারী-বান্ধব সমাধান",
-		"home.why.dedicated": "দক্ষ ও নিবেদিত টিম",
-		"home.cta.title": "আমাদের সাথে যোগ দিন ভবিষ্যত গড়তে",
-		"home.cta.button": "আজই যোগ দিন",
-		"home.ayat.title": "আজকের আয়াত",
-		"home.ayat.button": "নতুন আয়াত",
-		"home.ayat.loading": "আয়াত লোড হচ্ছে...",
-		"home.ayat.error": "আয়াত লোড করা যায়নি",
+		
 
-		// Projects
-		"projects.quran.title": "কোরআন লার্নিং অ্যাপ ও ওয়েব",
-		"projects.quran.progress": "০%",
-		"projects.quran.desc":
-			"কাফআহ কোরআন লার্নিং অ্যাপ এবং ওয়েবঅ্যাপ কাফআহ এবং ডয়োসফট-এর যৌথ সহযোগিতায় তৈরি করা হবে। এটি ব্যবহারকারীদের কোরআন শিক্ষার শুরু থেকে গাইড করবে। আলিফ থেকে তা পর্যন্ত অক্ষর এবং উচ্চারণ শেখানো শুরু হবে, ধাপে ধাপে হাদিস, সূরা এবং সূরার আয়াত শেখানো হবে। ইন্টারেক্টিভ লেসন এবং অডিও তেলাওয়াতের মাধ্যমে ব্যবহারকারীরা নিজের গতিতে শিখতে পারবে। ইউজাররা কুইজ এবং টেস্টের মাধ্যমে নিজের জ্ঞান যাচাই করতে পারবে। কীবোর্ড দিয়ে টাইপ করার মাধ্যমে বা মুখে উচ্চারণ করে প্র্যাকটিস করলে অ্যাপ ইনস্ট্যান্ট জানাবে উচ্চারণ সঠিক কি না। চাইলে ব্যবহারকারীরা অ্যাপ এবং WebApp-এর মাধ্যমে আরবি ভাষাও শিখতে পারবে। ইনশাআল্লাহ, এটি সকল স্তরের শিক্ষার্থীদের কোরআন, হাদিস এবং আরবির সঙ্গে সংযোগ শক্তিশালী করতে সাহায্য করবে।",
-		"projects.english.title": "ইংলিশ লার্নিং অ্যাপ ও ওয়েব",
-		"projects.english.progress": "০%",
-		"projects.english.desc":
-			"কাফআহ ইংলিশ লার্নিং অ্যাপ এবং ওয়েবঅ্যাপ কাফআহ এবং ডয়োসফট-এর যৌথ সহযোগিতায় তৈরি করা হবে। এটি ব্যবহারকারীদের ইংরেজি শিক্ষার শুরু থেকে গাইড করবে। বেসিক থেকে অ্যাডভান্সড স্তর পর্যন্ত, ইউজাররা পড়া, লেখা, উচ্চারণ, কথোপকথন, গ্রামার, শব্দভান্ডার এবং বাংলাদেশি এডুকেশন অনুযায়ী parts of speech, gap filling, narration, connectors, tenses, idioms, phrases, writing skills, reading comprehension, listening exercises, speaking fluency এবং আরও অনেক কিছু সহজভাবে শিখতে পারবে। ইন্টারেক্টিভ লেসন, অডিও এবং ভিডিও রিসোর্সের মাধ্যমে ব্যবহারকারীরা নিজের গতিতে শিখতে পারবে। ইউজাররা কুইজ, টেস্ট এবং প্রগ্রেস ট্র্যাকিং-এর মাধ্যমে নিজের জ্ঞান যাচাই করতে পারবে। এছাড়া, স্পিকিং ও লিসেনিং অনুশীলনের মাধ্যমে অ্যাপ ইনস্ট্যান্ট জানাবে উচ্চারণ সঠিক কি না। ইনশাআল্লাহ, এটি সকল স্তরের শিক্ষার্থীদের ইংরেজি দক্ষতা উন্নত করতে সাহায্য করবে।",
-		"projects.study.title": "স্টাডি কর্নার",
-		"projects.study.desc":
-			"স্টাডি কর্নার হলো কাফআহ এর একটি স্মার্ট লার্নিং সেকশন, যেখানে শিক্ষার্থীরা SSC, HSC এবং Admission preparation এর জন্য সবকিছু এক জায়গায় পাবে। এখানে তুমি যেকোনো সাবজেক্টে সম্পূর্ণ ফ্রি অনলাইন এক্সাম দিতে পারবে — Bangla ও English দুই ভাষাতেই InShaAllah। \n Features:\n ✅ SSC, HSC & University Admission Corner\n✅ Bangla & English দুই ভার্সন\n✅ Mostly MCQ-based smart exams\n ✅ Question অনুযায়ী automatic time limit\n ✅ Instant result & performance feedback\n ✅ Practice mode + real exam mode\n✅ 100% Free (No payment required)\n\n আমাদের লক্ষ্য হলো InShaAllah এমন একটা প্ল্যাটফর্ম বানানো, যেখানে গ্রাম থেকে শহর — সব শিক্ষার্থী সমান সুযোগ পাবে।\n Practice more, stress less.Learn smart with Kafa’ah Study Corner.",
-		"projects.more": "আরো শীঘ্রই আসছে ইনশাআল্লাহ...",
+		//head
+		"head.study":"কাফাআহ স্টাডি কর্নার",
 
 		// Study
 		"study.quran": "কোরআন কোর্স (শীঘ্রই আসছে)",

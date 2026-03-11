@@ -1,5 +1,5 @@
 {
-  "name": "Study Corner Kafa'ah",
+  "name": "Kafaah Study Corner",
   "short_name": "Study Corner",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#70c7dd",
-  "background_color": "#70c7dd",
+  "theme_color": "#5ce1ff",
+  "background_color": "#5ce1ff",
   "display": "standalone"
 }

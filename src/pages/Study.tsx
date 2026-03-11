@@ -47,7 +47,7 @@ const Study: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="text-3xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4"
           >
-            {t("nav.study")}
+            {t("head.study")}
           </motion.h1>
           <div className="h-1 w-16 bg-emerald-500 mx-auto rounded-full mb-6"></div>
         </header>
